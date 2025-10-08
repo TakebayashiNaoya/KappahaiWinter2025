@@ -1,20 +1,21 @@
 #pragma once
-
 #include "Level3DRender/LevelRender.h"
 
+class BackGround;
 class Player;
+class GameCamera;
 
 class Game : public IGameObject
 {
 public:
 	Game() {}
 	~Game() {}
-	bool Start();
-	void Update();
-	void Render(RenderContext& rc);
+	bool Start()override final;
+	void Update()override final;
+	void Render(RenderContext& rc)override final;
 
 private:
-	ModelRender m_modelRender;
-	Vector3 m_pos;
+	BackGround* m_backGround = nullptr;
+	Player* m_player = nullptr;
+	GameCamera* m_gameCamera = nullptr;
 };
-
