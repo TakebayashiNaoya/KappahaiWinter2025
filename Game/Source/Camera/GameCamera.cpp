@@ -29,11 +29,11 @@ void GameCamera::Update()
 
 	//Y軸周りの回転
 	Quaternion qRot;
-	qRot.SetRotationDeg(Vector3::AxisY, 1.3f * x);
+	qRot.SetRotationDeg(m_player->GetDirectionFromPlanetCenter(), 1.3f * x);
 	qRot.Apply(m_toCameraPos);
 	//X軸周りの回転。
 	Vector3 axisX;
-	axisX.Cross(Vector3::AxisY, m_toCameraPos);
+	axisX.Cross(m_player->GetDirectionFromPlanetCenter(), m_toCameraPos);
 	axisX.Normalize();
 	qRot.SetRotationDeg(axisX, 1.3f * y);
 	qRot.Apply(m_toCameraPos);
@@ -57,6 +57,9 @@ void GameCamera::Update()
 	//メインカメラに注視点と視点を設定する。
 	g_camera3D->SetTarget(target);
 	g_camera3D->SetPosition(pos);
+
+	//カメラを注視点の周りで回転させる。
+	g_camera3D->RotateOriginTarget(m_player->GetRotation());
 
 	//カメラの更新。
 	g_camera3D->Update();

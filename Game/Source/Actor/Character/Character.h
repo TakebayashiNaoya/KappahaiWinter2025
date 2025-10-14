@@ -6,6 +6,16 @@
 class Character :public IGameObject
 {
 public:
+	const Vector3& GetDirectionFromPlanetCenter() const
+	{
+		return m_directionFromPlanetCenter;
+	}
+
+	const Quaternion& GetRotation() const
+	{
+		return m_rotation;
+	}
+
 	/// <summary>
 	/// キャラクターコントローラーへの参照を取得します。
 	/// </summary>
