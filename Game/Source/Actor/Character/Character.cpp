@@ -40,24 +40,26 @@ void Character::Move(float speed)
 	m_moveSpeed.x = 0.0f;
 	m_moveSpeed.z = 0.0f;
 
+	// スティックの入力を取得。
 	Vector3 stickL = Vector3::Zero;
-	Vector3 forward = Vector3::Zero;
-	Vector3 right = Vector3::Zero;
-
 	stickL.x = g_pad[0]->GetLStickXF();
 	stickL.y = g_pad[0]->GetLStickYF();
 
+	// カメラの向きから正面を取得。
+	Vector3 forward = Vector3::Zero;
 	forward = g_camera3D->GetForward();
-	right = g_camera3D->GetRight();
-
 	forward = ProjectOnPlane(forward, m_directionFromPlanetCenter);
+	//if (forward.LengthSq() > 1e-6f) {
+	forward.Normalize();
+	//}
+
+	// カメラの向きから右を取得。
+	Vector3 right = Vector3::Zero;
+	right = g_camera3D->GetRight();
 	right = ProjectOnPlane(right, m_directionFromPlanetCenter);
-	if (forward.LengthSq() > 1e-6f) {
-		forward.Normalize();
-	}
-	if (right.LengthSq() > 1e-6f) {
-		right.Normalize();
-	}
+	//if (right.LengthSq() > 1e-6f) {
+	right.Normalize();
+	//}
 
 	// 入力方向（接線）を合成
 	Vector3 wish = right * (stickL.x * speed) + forward * (stickL.y * speed);
@@ -65,6 +67,7 @@ void Character::Move(float speed)
 	// 速度に加算
 	m_moveSpeed += wish;
 
+	m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
 
 	Vector3 hitPosition = Vector3::Zero;
 	const bool isHit = PhysicsWorld::GetInstance()->RayTest(m_position, m_planetCenter, hitPosition);
@@ -72,7 +75,7 @@ void Character::Move(float speed)
 		m_position = hitPosition;
 	}
 
-	m_position = m_characterController.Execute(m_moveSpeed, 1.0f / 60.0f);
+
 
 	//forward.y = 0.0f;
 	//right.y = 0.0f;
@@ -90,41 +93,9 @@ void Character::Rotation()
 {
 	if (fabsf(m_moveSpeed.x) >= INPUT_DEADZONE_THRESHOLD || fabsf(m_moveSpeed.z) >= INPUT_DEADZONE_THRESHOLD) {
 		m_rotation.SetRotationYFromDirectionXZ(m_moveSpeed);
+		//m_rotation.SetRotation(m_directionFromPlanetCenter, atan2f(m_moveSpeed.x, m_moveSpeed.z));
 		m_modelRender.SetRotation(m_rotation);
 	}
-
-
-	//// 進行方向を接線へ投影
-	//Vector3 fwd = ProjectOnPlane(m_moveSpeed, m_directionFromPlanetCenter);
-	//if (fwd.LengthSq() < 1e-6f) {
-	//	// ほぼ停止：カメラForwardを接線に投影して使用
-	//	fwd = ProjectOnPlane(g_camera3D->GetForward(), m_directionFromPlanetCenter);
-	//}
-	//fwd.Normalize();
-
-	//// 右手系を構築 → オルソ正規化
-	//Vector3 right = Cross(fwd, m_directionFromPlanetCenter);
-	//right.Normalize();
-	//fwd = Cross(m_directionFromPlanetCenter, right);
-	//fwd.Normalize();
-
-
-	//// ★ Matrixで「列 = right/up/fwd」を作る
-	//Matrix basis;
-	//basis._11 = right.x;	basis._12 = m_directionFromPlanetCenter.x;	basis._13 = fwd.x;	basis._14 = 0.0f;
-	//basis._21 = right.y;	basis._22 = m_directionFromPlanetCenter.y;	basis._23 = fwd.y;  basis._24 = 0.0f;
-	//basis._31 = right.z;	basis._32 = m_directionFromPlanetCenter.z;	basis._33 = fwd.z;  basis._34 = 0.0f;
-	//basis._41 = 0.0f;		basis._42 = 0.0f;							basis._43 = 0.0f;	basis._44 = 1.0f;
-
-	//// 行列 → quat（DirectXMath）
-	//DirectX::XMVECTOR dq = DirectX::XMQuaternionRotationMatrix((DirectX::XMMATRIX)basis);
-	//DirectX::XMFLOAT4 qf;
-	//DirectX::XMStoreFloat4(&qf, dq);
-	//Quaternion target(qf.x, qf.y, qf.z, qf.w);
-
-	//// 補間して適用
-	//m_rotation.Slerp(0.15f, m_rotation, target);
-	//m_modelRender.SetRotation(m_rotation);
 }
 
 /// <summary>
