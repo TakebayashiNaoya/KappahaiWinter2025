@@ -2,10 +2,21 @@
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
 
+#if _DEBUG
+#define AddjustConst
+#else
+#define AddjustConst const
+#endif
+
+namespace
+{
+	AddjustConst float CAMERA_ROTATION_SPEED = 3.0f;
+}
+
 bool GameCamera::Start()
 {
 	//注視点から視点までのベクトルを設定。
-	m_toCameraPos.Set(0.0f, 1000.0f, -1000.0f);
+	m_toCameraPos.Set(0.0f, 300.0f, -400.0f);
 	m_player = FindGO<Player>("Player");
 
 	g_camera3D->SetNear(1.0f);
@@ -16,51 +27,47 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
-	//カメラを更新。
-	//注視点を計算する。
-	Vector3 target = m_player->GetPosition();
-	//プレイヤの足元からちょっと上を注視点とする。
-	target.y += 80.0f;
+	Vector3 playerPos = m_player->GetPosition();
+	Vector3 up = m_player->GetDirectionFromPlanetCenter();
 
-	Vector3 toCameraPosOld = m_toCameraPos;
-	//パッドの入力を使ってカメラを回す。
+	// スティックによるカメラ回転
 	float x = g_pad[0]->GetRStickXF();
 	float y = g_pad[0]->GetRStickYF();
 
-	//Y軸周りの回転
-	Quaternion qRot;
-	qRot.SetRotationDeg(m_player->GetDirectionFromPlanetCenter(), 1.3f * x);
-	qRot.Apply(m_toCameraPos);
-	//X軸周りの回転。
-	Vector3 axisX;
-	axisX.Cross(m_player->GetDirectionFromPlanetCenter(), m_toCameraPos);
-	axisX.Normalize();
-	qRot.SetRotationDeg(axisX, 1.3f * y);
-	qRot.Apply(m_toCameraPos);
-	//カメラの回転の上限をチェックする。
-	//注視点から視点までのベクトルを正規化する。
-	//正規化すると、ベクトルの大きさが１になる。
-	//大きさが１になるということは、ベクトルから強さがなくなり、方向のみの情報となるということ。
-	Vector3 toPosDir = m_toCameraPos;
-	toPosDir.Normalize();
-	if (toPosDir.y < -0.2f) {
-		//カメラが上向きすぎ。
-		m_toCameraPos = toCameraPosOld;
-	}
-	else if (toPosDir.y > 0.9f) {
-		//カメラが下向きすぎ。
-		m_toCameraPos = toCameraPosOld;
+	if (fabsf(x) > 0.01f || fabsf(y) > 0.01f)
+	{
+		Quaternion rotY;
+		rotY.SetRotationDeg(up, CAMERA_ROTATION_SPEED * x);
+		rotY.Apply(m_toCameraPos);
+
+		Vector3 axisX;
+		axisX.Cross(up, m_toCameraPos);
+		axisX.Normalize();
+
+		Quaternion rotX;
+		rotX.SetRotationDeg(axisX, CAMERA_ROTATION_SPEED * y);
+		rotX.Apply(m_toCameraPos);
 	}
 
-	//視点を計算する。
-	Vector3 pos = target + m_toCameraPos;
-	//メインカメラに注視点と視点を設定する。
+	Quaternion playerAdditionalRotation = m_player->GetAdditionalRot();
+	//if (playerAdditionalRotation.a)
+	{
+		// キャラクターの1フレーム間の回転をカメラに適用
+
+		playerAdditionalRotation.Apply(m_toCameraPos);
+	}
+
+	// プレイヤーの位置と回転後の相対ベクトルからカメラの位置を計算
+	Vector3 desiredCameraPos = playerPos + m_toCameraPos;
+
+	// カメラ位置の更新
+	m_cameraPos = desiredCameraPos;
+
+	// 注視点の計算
+	Vector3 target = playerPos + up * 80.0f;
+
+	g_camera3D->SetPosition(m_cameraPos);
 	g_camera3D->SetTarget(target);
-	g_camera3D->SetPosition(pos);
-
-	//カメラを注視点の周りで回転させる。
-	g_camera3D->RotateOriginTarget(m_player->GetRotation());
-
-	//カメラの更新。
+	g_camera3D->SetUp(up);
 	g_camera3D->Update();
 }

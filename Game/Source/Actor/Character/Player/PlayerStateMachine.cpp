@@ -77,10 +77,10 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-				requestStateId = enPlayerState_Jump;
-				return true;
-			}
+			//if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
+			//	requestStateId = enPlayerState_Jump;
+			//	return true;
+			//}
 
 			return false;
 		}
@@ -126,10 +126,10 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-				requestStateId = enPlayerState_Jump;
-				return true;
-			}
+			//if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
+			//	requestStateId = enPlayerState_Jump;
+			//	return true;
+			//}
 
 			return false;
 		}
@@ -175,10 +175,10 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-				requestStateId = enPlayerState_Jump;
-				return true;
-			}
+			//if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
+			//	requestStateId = enPlayerState_Jump;
+			//	return true;
+			//}
 
 			return false;
 		}
@@ -193,9 +193,9 @@ namespace app
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Jump);
 
-			if (GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
-			}
+			//if (GetOwner<Player>()->GetCharacterController().IsOnGround()) {
+			//	GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
+			//}
 		}
 
 
@@ -213,10 +213,10 @@ namespace app
 
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-				requestStateId = enPlayerState_Idle;
-				return true;
-			}
+			//if (GetOwner<Player>()->GetCharacterController().IsOnGround()) {
+			//	requestStateId = enPlayerState_Idle;
+			//	return true;
+			//}
 			return false;
 		}
 	}
