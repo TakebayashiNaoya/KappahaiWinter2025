@@ -18,4 +18,14 @@ private:
 	BackGround* m_backGround = nullptr;
 	Player* m_player = nullptr;
 	GameCamera* m_gameCamera = nullptr;
+
+	FontRender currentPos;
+
+	/// <summary>
+	/// 空を初期化。
+	/// </summary>
+	void InitSky();
+
+	SkyCube* m_skyCube = nullptr;		//スカイキューブ。
+	int m_skyCubeType = enSkyCubeType_Night;
 };
