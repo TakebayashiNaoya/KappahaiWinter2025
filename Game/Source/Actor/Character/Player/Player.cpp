@@ -31,9 +31,6 @@ bool Player::Start()
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
 
-	// キャラクターコントローラーを初期化。
-	m_characterController.Init(CHARACTER_CONTROLLER_SCALE_RADIUS, CHARACTER_CONTROLLER_SCALE_HEIGHT, m_position);
-
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
@@ -42,10 +39,13 @@ bool Player::Start()
 
 void Player::Update()
 {
+	m_beforeDirectionFromPlanetCenter = m_directionFromPlanetCenter;
+	m_beforeMoveSpeed = m_moveSpeed;
 	m_moveSpeed = Vector3::Zero;
+	m_xzAdditionalRot = Quaternion::Identity;
 
-	// 足が付いているかの判定を次のフレームで行いたいため、m_stateMachine->Update();の上に書いている。
-	AddGravity();
+	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
+	CalcDirectionFromPlanetCenter();
 
 	m_stateMachine->Update();
 

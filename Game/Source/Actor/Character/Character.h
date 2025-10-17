@@ -6,23 +6,31 @@
 class Character :public IGameObject
 {
 public:
+	/// <summary>
+	/// 「惑星の中心→キャラ」の向きを取得します。
+	/// </summary>
+	/// <returns>「惑星の中心→キャラ」の向き Vector3 型の参照。</returns>
 	const Vector3& GetDirectionFromPlanetCenter() const
 	{
 		return m_directionFromPlanetCenter;
 	}
 
+	/// <summary>
+	/// 毎フレームのXZ軸回転角度を取得します。
+	/// </summary>
+	const Quaternion& GetAdditionalRot() const
+	{
+		return m_xzAdditionalRot;
+	}
+
+	const Vector3& GetPosition() const
+	{
+		return m_position;
+	}
+
 	const Quaternion& GetRotation() const
 	{
 		return m_rotation;
-	}
-
-	/// <summary>
-	/// キャラクターコントローラーへの参照を取得します。
-	/// </summary>
-	/// <returns>キャラクターコントローラー（CharacterController）への定数参照。</returns>
-	const CharacterController& GetCharacterController() const
-	{
-		return m_characterController;
 	}
 
 	/// <summary>
@@ -41,7 +49,7 @@ public:
 	/// キャラクターを指定された速度で移動させます。
 	/// </summary>
 	/// <param name="speed">移動速度。</param>
-	void Move(float speed);
+	void Move(const float speed);
 
 	/// <summary>
 	/// moveSpeedに基づいてY軸回転を更新します。
@@ -49,16 +57,19 @@ public:
 	void Rotation();
 
 protected:
-	ModelRender m_modelRender;							// モデルレンダー。
-	Vector3 m_position = Vector3::Zero;					// ポジション。
-	Quaternion m_rotation;								// 回転。
-	Vector3 m_moveSpeed = Vector3::Zero;				// 移動速度。
-	AnimationClip* m_animationClips;					// アニメーションクリップ。
-	CharacterController m_characterController;			// キャラクターコントローラー。
-	float m_jumpSpeed = 0.0f;							// ジャンプの速さ。
-	Vector3 m_planetCenter = Vector3::Zero;				// 重力を働かせる惑星の中心座標。
-	Vector3 m_directionToPlanetCenter = Vector3::Zero;	// 自分から惑星の中心への方向ベクトル。
-	Vector3 m_directionFromPlanetCenter = Vector3::Zero;// 惑星の中心から自分への方向ベクトル。
+	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
+
+	ModelRender	m_modelRender;										// モデルレンダー。
+	Vector3		m_position = Vector3::Zero;							// ポジション。
+	Quaternion  m_rotation;											// 回転。
+	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。
+	Vector3		m_beforeMoveSpeed = Vector3::Zero;					// 前フレームの移動速度。
+	Vector3     m_planetCenter = Vector3::Zero;						// 重力を働かせる惑星の中心座標。
+	Vector3     m_directionFromPlanetCenter = Vector3::Zero;		// 惑星の中心から自分への方向ベクトル。
+	Vector3     m_beforeDirectionFromPlanetCenter = Vector3::Zero;	// 前フレームの惑星の中心から自分への方向ベクトル。
+	float		m_rotationAngle;									// Y軸回転角度。
+	Quaternion	m_xzAdditionalRot;									// 毎フレームのXZ軸回転角度。
+
 
 	// 静的メンバとして宣言
 	// 継承先の.cppで定義すること。
@@ -94,11 +105,6 @@ protected:
 	/// 重力を適用します。
 	/// </summary>
 	void AddGravity();
-
-	/// <summary>
-	/// 「キャラ→惑星の中心」のベクトルを計算し、正規化します。
-	/// </summary>
-	void CalcDirectionToPlanetCenter();
 
 	/// <summary>
 	/// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
