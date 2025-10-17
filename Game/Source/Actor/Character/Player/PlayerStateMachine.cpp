@@ -4,10 +4,10 @@
 
 namespace
 {
-	constexpr float JUMP_POWER = 300.0f;		// ジャンプパワー。
+	constexpr float JUMP_POWER = 9.8f * 50;		// ジャンプパワー。
 	constexpr float STICK_DEAD_ZONE = 0.01f;	// スティックのデッドゾーン。
-	const float DASH_SPEED = 300.0f;			// ダッシュスピード。
-	const float WALK_SPEED = 150.0f;			// 歩くスピード。
+	const float DASH_SPEED = 10.0f;			// ダッシュスピード。
+	const float WALK_SPEED = 5.0f;			// 歩くスピード。
 
 	/// <summary>
 	/// 左スティックの現在の位置を取得します。
@@ -62,6 +62,7 @@ namespace app
 
 		void IdleState::Exit()
 		{
+			GetOwner<Player>()->SetSpeedBeforeJump(WALK_SPEED);
 		}
 
 
@@ -77,10 +78,10 @@ namespace app
 				return true;
 			}
 
-			//if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-			//	requestStateId = enPlayerState_Jump;
-			//	return true;
-			//}
+			if (!GetOwner<Player>()->IsOnGround()) {
+				requestStateId = enPlayerState_Jump;
+				return true;
+			}
 
 			return false;
 		}
@@ -99,13 +100,14 @@ namespace app
 
 		void app::player::WalkState::Update()
 		{
-			GetOwner<Player>()->Move(WALK_SPEED);
+			GetOwner<Player>()->MoveOnGround(WALK_SPEED);
 			GetOwner<Player>()->Rotation();
 		}
 
 
 		void app::player::WalkState::Exit()
 		{
+			GetOwner<Player>()->SetSpeedBeforeJump(WALK_SPEED);
 		}
 
 
@@ -126,10 +128,10 @@ namespace app
 				return true;
 			}
 
-			//if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-			//	requestStateId = enPlayerState_Jump;
-			//	return true;
-			//}
+			if (!GetOwner<Player>()->IsOnGround()) {
+				requestStateId = enPlayerState_Jump;
+				return true;
+			}
 
 			return false;
 		}
@@ -148,13 +150,14 @@ namespace app
 
 		void app::player::RunState::Update()
 		{
-			GetOwner<Player>()->Move(DASH_SPEED);
+			GetOwner<Player>()->MoveOnGround(DASH_SPEED);
 			GetOwner<Player>()->Rotation();
 		}
 
 
 		void app::player::RunState::Exit()
 		{
+			GetOwner<Player>()->SetSpeedBeforeJump(DASH_SPEED);
 		}
 
 
@@ -175,10 +178,10 @@ namespace app
 				return true;
 			}
 
-			//if (!GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-			//	requestStateId = enPlayerState_Jump;
-			//	return true;
-			//}
+			if (!GetOwner<Player>()->IsOnGround()) {
+				requestStateId = enPlayerState_Jump;
+				return true;
+			}
 
 			return false;
 		}
@@ -193,30 +196,44 @@ namespace app
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Jump);
 
-			//if (GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-			//	GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
-			//}
+			if (GetOwner<Player>()->IsOnGround()) {
+				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
+			}
 		}
 
 
 		void app::player::JumpState::Update()
 		{
-			GetOwner<Player>()->Move(WALK_SPEED);
+			GetOwner<Player>()->MoveOnGround(GetOwner<Player>()->GetSpeedBeforeJump());
+			GetOwner<Player>()->MoveOffGround();
 			GetOwner<Player>()->Rotation();
 		}
 
 
 		void app::player::JumpState::Exit()
 		{
+			GetOwner<Player>()->ResetFallTimer();
 		}
 
 
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
-			//if (GetOwner<Player>()->GetCharacterController().IsOnGround()) {
-			//	requestStateId = enPlayerState_Idle;
-			//	return true;
-			//}
+			if (GetOwner<Player>()->IsOnGround()) {
+				if (IsLeftStick()) {
+					if (g_pad[0]->IsPress(enButtonB)) {
+						requestStateId = enPlayerState_Run;
+						return true;
+					}
+					else {
+						requestStateId = enPlayerState_Walk;
+						return true;
+					}
+				}
+				else {
+					requestStateId = enPlayerState_Idle;
+					return true;
+				}
+			}
 			return false;
 		}
 	}

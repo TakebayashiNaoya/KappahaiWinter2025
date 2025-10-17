@@ -5,9 +5,9 @@
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
 const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
-   {"idle", true},
+   {"idle",	true},
    {"walk", true},
-   {"run", true},
+   {"run",	true},
    {"jump", false}
 };
 
@@ -40,7 +40,6 @@ bool Player::Start()
 void Player::Update()
 {
 	m_beforeDirectionFromPlanetCenter = m_directionFromPlanetCenter;
-	m_beforeMoveSpeed = m_moveSpeed;
 	m_moveSpeed = Vector3::Zero;
 	m_xzAdditionalRot = Quaternion::Identity;
 

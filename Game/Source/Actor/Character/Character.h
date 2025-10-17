@@ -9,7 +9,7 @@ public:
 	/// <summary>
 	/// 「惑星の中心→キャラ」の向きを取得します。
 	/// </summary>
-	/// <returns>「惑星の中心→キャラ」の向き Vector3 型の参照。</returns>
+	/// <returns>「惑星の中心→キャラ」の向き。</returns>
 	const Vector3& GetDirectionFromPlanetCenter() const
 	{
 		return m_directionFromPlanetCenter;
@@ -18,19 +18,53 @@ public:
 	/// <summary>
 	/// 毎フレームのXZ軸回転角度を取得します。
 	/// </summary>
+	/// <returns>XZ軸回転角度。</returns>
 	const Quaternion& GetAdditionalRot() const
 	{
 		return m_xzAdditionalRot;
 	}
 
+	/// <summary>
+	/// キャラクターの座標を取得します。
+	/// </summary>
+	/// <returns>キャラクターの座標。</returns>
 	const Vector3& GetPosition() const
 	{
 		return m_position;
 	}
 
+	/// <summary>
+	/// キャラクターの回転を取得します。
+	/// </summary>
+	/// <returns>キャラクターの回転。</returns>
 	const Quaternion& GetRotation() const
 	{
 		return m_rotation;
+	}
+
+	/// <summary>
+	/// 接地しているかを取得します。
+	/// 地面に向かってレイを飛ばし、当たった座標と自分の座標の距離が一定未満なら接地していると判定します。
+	/// </summary>
+	/// <returns>接地していれば true、そうでなければ false を示す。</returns>
+	const bool& IsOnGround();
+
+	const float& GetSpeedBeforeJump() const
+	{
+		return m_speedBeforeJump;
+	}
+
+	/// <summary>
+	/// ジャンプ前の移動速度を設定します。
+	/// </summary>
+	void SetSpeedBeforeJump(const float speed)
+	{
+		m_speedBeforeJump = speed;
+	}
+
+	void ResetFallTimer()
+	{
+		m_fallTimer = 0.0f;
 	}
 
 	/// <summary>
@@ -40,7 +74,7 @@ public:
 	void PlayAnimation(const int animNo);
 
 	/// <summary>
-	///　ジャンプパワーをジャンプスピードとムーブスピードに即座に適用します。
+	/// ジャンプパワーをジャンプスピードとムーブスピードに即座に適用します。
 	/// </summary>
 	/// <param name="jumpPower">ジャンプパワー。</param>
 	void ApplyJumpImpulse(const float jumpPower);
@@ -49,7 +83,13 @@ public:
 	/// キャラクターを指定された速度で移動させます。
 	/// </summary>
 	/// <param name="speed">移動速度。</param>
-	void Move(const float speed);
+	void MoveOnGround(const float speed);
+
+	/// <summary>
+	/// 重力処理と移動処理の両方を行います。
+	/// 空中での移動速度はジャンプ前の移動速度を維持します。
+	/// </summary>
+	void MoveOffGround();
 
 	/// <summary>
 	/// moveSpeedに基づいてY軸回転を更新します。
@@ -63,7 +103,11 @@ protected:
 	Vector3		m_position = Vector3::Zero;							// ポジション。
 	Quaternion  m_rotation;											// 回転。
 	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。
-	Vector3		m_beforeMoveSpeed = Vector3::Zero;					// 前フレームの移動速度。
+	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
+	float		m_jumpUpSpeed = 0.0f;								// ジャンプ速度。
+	float		m_jumpSpeed = 0.0f;									// ジャンプ速度。
+	float		m_fallTimer = 0.0f;									// 落下時間。
+	Vector3		m_lastHitPosition = Vector3::Zero;					// 最後に地面に接地した位置。
 	Vector3     m_planetCenter = Vector3::Zero;						// 重力を働かせる惑星の中心座標。
 	Vector3     m_directionFromPlanetCenter = Vector3::Zero;		// 惑星の中心から自分への方向ベクトル。
 	Vector3     m_beforeDirectionFromPlanetCenter = Vector3::Zero;	// 前フレームの惑星の中心から自分への方向ベクトル。
@@ -100,11 +144,6 @@ protected:
 	/// <param name="count">アニメーションクリップの数。</param>
 	/// <param name="option">各アニメーションクリップの設定情報が格納されたAnimationOption型の配列。</param>
 	void InitModel(const size_t count, const AnimationOption* option);
-
-	/// <summary>
-	/// 重力を適用します。
-	/// </summary>
-	void AddGravity();
 
 	/// <summary>
 	/// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
