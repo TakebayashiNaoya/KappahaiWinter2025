@@ -25,6 +25,12 @@
     <Filter Include="Source\Actor\Character\Enemy">
       <UniqueIdentifier>{31048017-482d-4a2f-ac1a-b98aef76532b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actor\Character\Enemy\BasicEnemy">
+      <UniqueIdentifier>{e2beb5b2-14b2-4636-9a43-2d074f8fa8ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Character\Enemy\TransformEnemy">
+      <UniqueIdentifier>{4901d8ae-2e0f-4a18-878d-07faa1a1ec1f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -60,6 +66,18 @@
     <ClCompile Include="Source\Actor\Character\Character.cpp">
       <Filter>Source\Actor\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.cpp">
+      <Filter>Source\Actor\Character\Enemy\BasicEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.cpp">
+      <Filter>Source\Actor\Character\Enemy\BasicEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.cpp">
+      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.cpp">
+      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -93,6 +111,18 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Character.h">
       <Filter>Source\Actor\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.h">
+      <Filter>Source\Actor\Character\Enemy\BasicEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.h">
+      <Filter>Source\Actor\Character\Enemy\BasicEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.h">
+      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.h">
+      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

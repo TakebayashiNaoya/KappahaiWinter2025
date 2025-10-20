@@ -2,6 +2,7 @@
 /// エネミーを管理するクラス。
 /// </summary>
 #pragma once
-class Enemy : public IGameObject
+#include "Source/Actor/Character/Character.h"
+class Enemy : public Character
 {
 };
