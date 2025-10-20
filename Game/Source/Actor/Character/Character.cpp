@@ -8,9 +8,11 @@ const std::string Character::ANIMATION_EXTENSION = ".tka";
 namespace
 {
 	constexpr float GRAVITY_POWER = 9.8f * 100;		// 重力。
-	constexpr float MAX_FALL_SPEED = 9.8f * 10;		// 最大落下速度。
 	constexpr float DEADZONE = 0.01f;				// スティック入力検知の基準値。
 	constexpr float STICK_ACCEL = 2.0f;				// スティック入力による微小押し付けの強さ。
+
+	const std::string MODEL_FILE_PATH = "Assets/modelData/Character/";
+	const std::string MODEL_EXTENSION = ".tkm";
 }
 
 /// <summary>
@@ -61,7 +63,7 @@ void Character::PlayAnimation(const int animNo)
 /// <param name="jumpPower">適用するジャンプの強さ（速度）。この値を内部の m_jumpSpeed に設定します。</param>
 void Character::ApplyJumpImpulse(const float jumpPower)
 {
-	m_jumpUpSpeed = jumpPower;
+	m_initialJumpSpeed = jumpPower;
 }
 
 /// <summary>
@@ -125,18 +127,17 @@ void Character::MoveOffGround()
 	Vector3 currentDirectionFromPlanetCenter = m_position - m_planetCenter;
 	currentDirectionFromPlanetCenter.Normalize();
 
-	float y = (m_jumpUpSpeed * m_fallTimer) - (GRAVITY_POWER * m_fallTimer * m_fallTimer / 2);
+	float y = (m_initialJumpSpeed * m_fallTimer) - (GRAVITY_POWER * m_fallTimer * m_fallTimer / 2);
 
 	Vector3 airPos = currentDirectionFromPlanetCenter * y;
 
 	m_position += airPos;
-
 }
 
 /// <summary>
 /// moveSpeedに基づいてY軸回転を更新します。
 /// </summary>
-void Character::Rotation()
+void Character::ModelRotation()
 {
 	if (fabsf(m_moveSpeed.x) <= DEADZONE && fabsf(m_moveSpeed.y) <= DEADZONE && fabsf(m_moveSpeed.z) <= DEADZONE) {
 		return;
@@ -245,12 +246,25 @@ void Character::Rotation()
 	m_modelRender.SetRotation(m_rotation);
 }
 
+void Character::GhostObjectUpdate(const float offset)
+{
+	// ゴーストオブジェクト用の座標を計算する。
+	Vector3 ghostPos = m_position + m_directionFromPlanetCenter * offset;
+
+	// ゴーストオブジェクトの座標をモデルの座標に合わせる。
+	m_ghostObject->SetPosition(ghostPos);
+
+	// ゴーストオブジェクトの回転をモデルの回転に合わせる。
+	m_ghostObject->SetRotation(m_rotation);
+}
+
 /// <summary>
 /// キャラクターのモデルとアニメーションクリップを初期化します。
 /// </summary>
 /// <param name="count">アニメーションクリップの数。</param>
 /// <param name="option">各アニメーションクリップの設定情報が格納されたAnimationOption型の配列。</param>
-void Character::InitModel(const size_t count, const AnimationOption* option)
+/// <param name="path">モデルファイルのパス。</param>
+void Character::InitModel(const size_t count, const AnimationOption* option, const std::string path)
 {
 	// ポインタに配列でnewすると、連続で確保される。
 	m_animationClips = new AnimationClip[count];
@@ -262,7 +276,8 @@ void Character::InitModel(const size_t count, const AnimationOption* option)
 	}
 
 	// モデルの初期化。
-	m_modelRender.Init("Assets/modelData/Character/unityChan.tkm", m_animationClips, count, enModelUpAxisY);
+	std::string fullModelPath = MODEL_FILE_PATH + path + MODEL_EXTENSION;
+	m_modelRender.Init(fullModelPath.c_str(), m_animationClips, count, enModelUpAxisY);
 }
 
 /// <summary>
