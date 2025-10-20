@@ -43,7 +43,7 @@ private:
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
 
-	/// プレイヤーのステートマシン。。
+	/// プレイヤーのステートマシン。
 	std::unique_ptr<app::player::PlayerStateMachine> m_stateMachine;
 
 	// クラススコープで宣言し、cppで定義。
