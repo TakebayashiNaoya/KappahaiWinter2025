@@ -101,7 +101,7 @@ namespace app
 		void app::player::WalkState::Update()
 		{
 			GetOwner<Player>()->MoveOnGround(WALK_SPEED);
-			GetOwner<Player>()->Rotation();
+			GetOwner<Player>()->ModelRotation();
 		}
 
 
@@ -151,7 +151,7 @@ namespace app
 		void app::player::RunState::Update()
 		{
 			GetOwner<Player>()->MoveOnGround(DASH_SPEED);
-			GetOwner<Player>()->Rotation();
+			GetOwner<Player>()->ModelRotation();
 		}
 
 
@@ -206,7 +206,7 @@ namespace app
 		{
 			GetOwner<Player>()->MoveOnGround(GetOwner<Player>()->GetSpeedBeforeJump());
 			GetOwner<Player>()->MoveOffGround();
-			GetOwner<Player>()->Rotation();
+			GetOwner<Player>()->ModelRotation();
 		}
 
 

@@ -13,9 +13,14 @@ const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
 
 namespace
 {
-	constexpr float CHARACTER_CONTROLLER_SCALE_RADIUS = 25.0f;		// キャラクターコントローラーの半径。
-	constexpr float CHARACTER_CONTROLLER_SCALE_HEIGHT = 75.0f;		// キャラクターコントローラーの高さ。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.0f, 0.0f);	// スポーン座標。
+	constexpr float GHOST_OBJECT_RADIUS = 25.0f;					// ゴーストオブジェクトの半径。
+	constexpr float GHOST_OBJECT_HEIGHT = 75.0f;					// ゴーストオブジェクトの高さ。
+	constexpr float GHOST_OBJECT_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
+
+	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
+	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.1f, 0.0f);	// スポーン座標。
+
+	constexpr int LIFE = 3;											// 初期ライフ数。
 }
 
 Player::Player()
@@ -26,13 +31,24 @@ Player::Player()
 bool Player::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS);
+	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "unityChan");
+
+	InitLife(LIFE);
 
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
 
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
+
+	// ゴーストオブジェクトを作成。
+	m_ghostObject = new PhysicsGhostObject();
+	m_ghostObject->CreateCapsule(
+		m_position,
+		m_rotation,
+		GHOST_OBJECT_RADIUS,
+		GHOST_OBJECT_HEIGHT
+	);
 
 	return true;
 }
@@ -48,8 +64,9 @@ void Player::Update()
 
 	m_stateMachine->Update();
 
-	m_modelRender.SetPosition(m_position);
+	GhostObjectUpdate(GHOST_OBJECT_OFFSET);
 
+	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
 }
 

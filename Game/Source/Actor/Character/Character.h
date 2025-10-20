@@ -94,20 +94,27 @@ public:
 	/// <summary>
 	/// moveSpeedに基づいてY軸回転を更新します。
 	/// </summary>
-	void Rotation();
+	void ModelRotation();
+
+	void GhostObjectUpdate(const float offset);
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
+	PhysicsGhostObject* m_ghostObject = nullptr;					// キャラクター同士の当たり判定用ゴーストオブジェクト。
 
 	ModelRender	m_modelRender;										// モデルレンダー。
 	Vector3		m_position = Vector3::Zero;							// ポジション。
-	Quaternion  m_rotation;											// 回転。
-	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。
+	Quaternion  m_rotation = Quaternion::Identity;					// 回転。
+	int			m_life = 0;											// ライフ。
+
+	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
-	float		m_jumpUpSpeed = 0.0f;								// ジャンプ速度。
-	float		m_jumpSpeed = 0.0f;									// ジャンプ速度。
+	float		m_initialJumpSpeed = 0.0f;							// ジャンプ速度。
 	float		m_fallTimer = 0.0f;									// 落下時間。
 	Vector3		m_lastHitPosition = Vector3::Zero;					// 最後に地面に接地した位置。
+
+	//---移動・回転関連---//
+	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。
 	Vector3     m_planetCenter = Vector3::Zero;						// 重力を働かせる惑星の中心座標。
 	Vector3     m_directionFromPlanetCenter = Vector3::Zero;		// 惑星の中心から自分への方向ベクトル。
 	Vector3     m_beforeDirectionFromPlanetCenter = Vector3::Zero;	// 前フレームの惑星の中心から自分への方向ベクトル。
@@ -119,6 +126,8 @@ protected:
 	// 継承先の.cppで定義すること。
 	static const std::string ANIMATION_FILE_PATH;
 	static const std::string ANIMATION_EXTENSION;
+
+
 
 	/// <summary>
 	/// アニメーションファイルのオプションを管理する構造体。
@@ -143,7 +152,17 @@ protected:
 	/// </summary>
 	/// <param name="count">アニメーションクリップの数。</param>
 	/// <param name="option">各アニメーションクリップの設定情報が格納されたAnimationOption型の配列。</param>
-	void InitModel(const size_t count, const AnimationOption* option);
+	/// <param name="path">モデルファイルのパス。</param>
+	void InitModel(const size_t count, const AnimationOption* option, const std::string path);
+
+	/// <summary>
+	/// ライフを設定する。
+	/// </summary>
+	/// <param name="life">設定するライフの値（整数）。</param>
+	void InitLife(const int life)
+	{
+		m_life = life;
+	}
 
 	/// <summary>
 	/// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
