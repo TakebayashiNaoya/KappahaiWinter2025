@@ -33,7 +33,7 @@ const bool& Character::IsOnGround()
 		// キャラクター座標と当たった座標の距離を計算。
 		Vector3 DistanceToGround = m_position - hitPosition;
 		// 距離が一定未満なら接地していると判定。
-		if (DistanceToGround.Length() < 0.1f) {
+		if (DistanceToGround.Length() < 1.0f) {
 			return true;
 		}
 
@@ -41,8 +41,8 @@ const bool& Character::IsOnGround()
 	}
 	// レイが当たっていない場合は地面下にいると判定し、最後にレイが当たった座標に戻す。
 	else {
-		m_position = m_lastHitPosition;
-		return true;
+		//m_position = m_lastHitPosition;
+		//return true;
 	}
 
 	return false;
@@ -67,181 +67,81 @@ void Character::ApplyJumpImpulse(const float jumpPower)
 }
 
 /// <summary>
-/// キャラクターを指定された速度で移動させます。
-/// </summary>
-/// <param name="speed">移動速度。</param>
-void Character::MoveOnGround(const float speed)
-{
-	m_moveSpeed.x = 0.0f;
-	m_moveSpeed.z = 0.0f;
-
-	// スティックの入力を取得。
-	Vector3 stickL = Vector3::Zero;
-	stickL.x = g_pad[0]->GetLStickXF();
-	stickL.y = g_pad[0]->GetLStickYF();
-
-	// カメラの向きから正面を取得。
-	Vector3 forward = Vector3::Zero;
-	forward = g_camera3D->GetForward();
-	forward = ProjectOnPlane(forward, m_directionFromPlanetCenter);
-	forward.Normalize();
-
-	// カメラの向きから右を取得。
-	Vector3 right = Vector3::Zero;
-	right = g_camera3D->GetRight();
-	right = ProjectOnPlane(right, m_directionFromPlanetCenter);
-	right.Normalize();
-
-	// 方向設定
-	Vector3 direction = Vector3::Front;
-	direction = forward * stickL.y + right * stickL.x;
-	direction.Normalize();
-
-	// 入力方向（接線）を合成
-	Vector3 wish = direction * speed;
-
-	// 速度に加算
-	m_moveSpeed += wish;
-
-	// 次の移動地点を先に計算
-	Vector3 rayStartPos = Vector3::Zero;
-	rayStartPos = m_position + m_moveSpeed;
-	// レイのスタート地点を少しだけ上にずらす。
-	rayStartPos += m_directionFromPlanetCenter * 5.0f;
-
-	// 次の移動地点をレイのスタート地点にして、惑星の中心に向かってレイを飛ばす。
-	// そして、レイが当たった位置を次の移動地点とする。
-	Vector3 hitPosition = Vector3::Zero;
-	const bool isHit = PhysicsWorld::GetInstance()->RayTest(rayStartPos, m_planetCenter, hitPosition);
-	if (isHit) {
-		m_position = hitPosition;
-	}
-}
-
-void Character::MoveOffGround()
-{
-	// 落下時間を加算
-	m_fallTimer += g_gameTime->GetFrameDeltaTime();
-
-	// 現在の「惑星の中心→キャラ」の向きを取得
-	Vector3 currentDirectionFromPlanetCenter = m_position - m_planetCenter;
-	currentDirectionFromPlanetCenter.Normalize();
-
-	float y = (m_initialJumpSpeed * m_fallTimer) - (GRAVITY_POWER * m_fallTimer * m_fallTimer / 2);
-
-	Vector3 airPos = currentDirectionFromPlanetCenter * y;
-
-	m_position += airPos;
-}
-
-/// <summary>
-/// moveSpeedに基づいてY軸回転を更新します。
+/// moveSpeedに基づいてモデルを回転させます。
 /// </summary>
 void Character::ModelRotation()
 {
-	if (fabsf(m_moveSpeed.x) <= DEADZONE && fabsf(m_moveSpeed.y) <= DEADZONE && fabsf(m_moveSpeed.z) <= DEADZONE) {
+	if (m_moveSpeed.Length() <= DEADZONE) {
 		return;
 	}
 
-	// カメラが追従するための回転角度を計算する。
-	{
-		// 前方向
-		Vector3 forwardDirection = m_moveSpeed;
-		forwardDirection.Normalize();
-		// 上方向(重力の逆)
-		Vector3 upDirection = m_directionFromPlanetCenter;
+	// キャラクターの新しい前方ベクトルを計算 (目標の移動方向)
+	Vector3 targetForward = m_moveSpeed;
 
-		Vector3 xzDirection;
-		xzDirection.Cross(upDirection, forwardDirection);
-		xzDirection.Normalize();
+	// 惑星の中心からキャラクターへの上方向ベクトルを計算
+	Vector3 upDirection = m_directionFromPlanetCenter;
+	upDirection.Normalize();
 
-		// 回転の角度を求める
-		float dotResult = m_directionFromPlanetCenter.Dot(m_beforeDirectionFromPlanetCenter);
+	// m_moveSpeedを惑星の接平面に投影し、ジャンプによる垂直成分を除去する。
+	// Player.cppで使用されている ProjectOnPlane() 関数を流用します。
+	targetForward = ProjectOnPlane(targetForward, upDirection);
 
-		// acosの引数の範囲は-1.0f～1.0fなので、範囲外の値が入ってしまったら補正する
-		if (dotResult < -1.0f) {
-			dotResult = -1.0f;
-		}
-		else if (dotResult > 1.0f) {
-			dotResult = 1.0f;
-		}
-
-		m_rotationAngle = acosf(dotResult);
-
-		// 回転の向き（符号）を外積で判定する
-		Vector3 m_rotationDirection = Vector3::Zero;
-		m_rotationDirection.Cross(m_beforeDirectionFromPlanetCenter, m_directionFromPlanetCenter);
-
-		// もし回転軸と外積の向きが逆なら、角度にマイナスをつける
-		if (m_rotationDirection.Dot(xzDirection) < 0.0f) {
-			m_rotationAngle *= -1.0f;
-		}
-
-		// 回転の角度を加算
-		m_xzAdditionalRot.SetRotation(xzDirection, m_rotationAngle);
+	// 投影後のベクトルの長さがデッドゾーン以下なら回転しない
+	if (targetForward.LengthSq() <= DEADZONE) {
+		return;
 	}
 
+	targetForward.Normalize();
 
-	// 自身の回転処理
-	{
-		// キャラクターの新しい前方ベクトルを計算 (目標の移動方向)
-		Vector3 targetForward = m_moveSpeed;
-		targetForward.Normalize();
+	// モデルのデフォルトの上方向(0, 1, 0)を、惑星の上方向(upDirection)に回転させるクォータニオンを計算
+	Quaternion planetAlignmentRotation;
+	planetAlignmentRotation.SetRotation(Vector3::Up, upDirection);
 
-		// 惑星の中心からキャラクターへの上方向ベクトルを計算
-		Vector3 upDirection = m_directionFromPlanetCenter;
-		upDirection.Normalize();
+	// 回転前のモデルの前方向(0, 0, 1)を、ターゲットの移動方向(targetForward)に回転させるクォータニオンを計算
+	Quaternion movementRotation;
+	// 惑星にアライメントされた状態で、モデルの前方向（Vector3::Front）がどこに向いているかを求める
+	// これは、planetAlignmentRotationをVector3::Frontに適用することで得られる
+	Vector3 currentForward = Vector3::Front;
+	planetAlignmentRotation.Apply(currentForward); // これが惑星に沿った状態での「前」
 
-		// モデルのデフォルトの上方向(0, 1, 0)を、惑星の上方向(upDirection)に回転させるクォータニオンを計算
-		Quaternion planetAlignmentRotation;
-		planetAlignmentRotation.SetRotation(Vector3::Up, upDirection);
+	// currentForward（回転後の前）をtargetForwardに回転させるためのクォータニオンを求める
+	// ただし、回転軸はupDirection（キャラクターの真上）に限定する必要がある
 
-		// 回転前のモデルの前方向(0, 0, 1)を、ターゲットの移動方向(targetForward)に回転させるクォータニオンを計算
-		Quaternion movementRotation;
-		// 惑星にアライメントされた状態で、モデルの前方向（Vector3::Front）がどこに向いているかを求める
-		// これは、planetAlignmentRotationをVector3::Frontに適用することで得られる
-		Vector3 currentForward = Vector3::Front;
-		planetAlignmentRotation.Apply(currentForward); // これが惑星に沿った状態での「前」
+	// 回転軸を計算: 上方向
+	Vector3 rotationAxis = upDirection;
 
-		// currentForward（回転後の前）をtargetForwardに回転させるためのクォータニオンを求める
-		// ただし、回転軸はupDirection（キャラクターの真上）に限定する必要がある
+	// 回転角度を計算: currentForwardとtargetForwardの間の角度
+	Vector3 projectedCurrentForward = currentForward;
+	projectedCurrentForward.Normalize();
+	Vector3 projectedTargetForward = targetForward;
+	projectedTargetForward.Normalize();
 
-		// 回転軸を計算: 上方向
-		Vector3 rotationAxis = upDirection;
-
-		// 回転角度を計算: currentForwardとtargetForwardの間の角度
-		Vector3 projectedCurrentForward = currentForward;
-		projectedCurrentForward.Normalize();
-		Vector3 projectedTargetForward = targetForward;
-		projectedTargetForward.Normalize();
-
-		float dotResult = projectedCurrentForward.Dot(projectedTargetForward);
-		// acosの引数をクランプ
-		if (dotResult < -1.0f) {
-			dotResult = -1.0f;
-		}
-		else if (dotResult > 1.0f) {
-			dotResult = 1.0f;
-		}
-		float rotationAngle = acosf(dotResult);
-
-		// 回転の向き（符号）を外積で判定。
-		Vector3 crossProduct = Vector3::Zero;
-		crossProduct.Cross(projectedCurrentForward, projectedTargetForward);
-
-		if (crossProduct.Dot(rotationAxis) < 0.0f) {
-			rotationAngle *= -1.0f;
-		}
-
-		// Y軸周りの回転クォータニオンを作成。
-		Quaternion yRotation;
-		yRotation.SetRotation(rotationAxis, rotationAngle);
-
-		// 「惑星アライメント」と「Y軸回転」を乗算。
-		Quaternion targetRotation = yRotation * planetAlignmentRotation;
-
-		m_rotation = targetRotation;
+	float dotResult = projectedCurrentForward.Dot(projectedTargetForward);
+	// acosの引数をクランプ
+	if (dotResult < -1.0f) {
+		dotResult = -1.0f;
 	}
+	else if (dotResult > 1.0f) {
+		dotResult = 1.0f;
+	}
+	float rotationAngle = acosf(dotResult);
+
+	// 回転の向き（符号）を外積で判定。
+	Vector3 crossProduct = Vector3::Zero;
+	crossProduct.Cross(projectedCurrentForward, projectedTargetForward);
+
+	if (crossProduct.Dot(rotationAxis) < 0.0f) {
+		rotationAngle *= -1.0f;
+	}
+
+	// Y軸周りの回転クォータニオンを作成。
+	Quaternion yRotation;
+	yRotation.SetRotation(rotationAxis, rotationAngle);
+
+	// 「惑星アライメント」と「Y軸回転」を乗算。
+	Quaternion targetRotation = yRotation * planetAlignmentRotation;
+
+	m_rotation = targetRotation;
 
 	m_modelRender.SetRotation(m_rotation);
 }

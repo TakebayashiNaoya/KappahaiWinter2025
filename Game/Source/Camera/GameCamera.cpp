@@ -53,7 +53,6 @@ void GameCamera::Update()
 	//if (playerAdditionalRotation.a)
 	{
 		// キャラクターの1フレーム間の回転をカメラに適用
-
 		playerAdditionalRotation.Apply(m_toCameraPos);
 	}
 
