@@ -4,7 +4,7 @@
 
 namespace
 {
-	constexpr float JUMP_POWER = 9.8f * 50;		// ジャンプパワー。
+	constexpr float JUMP_POWER = 10.0f;		// ジャンプパワー。
 	constexpr float STICK_DEAD_ZONE = 0.01f;	// スティックのデッドゾーン。
 	const float DASH_SPEED = 10.0f;			// ダッシュスピード。
 	const float WALK_SPEED = 5.0f;			// 歩くスピード。
@@ -74,6 +74,7 @@ namespace app
 			}
 
 			if (g_pad[0]->IsTrigger(enButtonA)) {
+				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -100,7 +101,8 @@ namespace app
 
 		void app::player::WalkState::Update()
 		{
-			GetOwner<Player>()->MoveOnGround(WALK_SPEED);
+			GetOwner<Player>()->MoveUpdate(WALK_SPEED);
+			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
 		}
 
@@ -124,6 +126,7 @@ namespace app
 			}
 
 			if (g_pad[0]->IsTrigger(enButtonA)) {
+				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -150,7 +153,8 @@ namespace app
 
 		void app::player::RunState::Update()
 		{
-			GetOwner<Player>()->MoveOnGround(DASH_SPEED);
+			GetOwner<Player>()->MoveUpdate(DASH_SPEED);
+			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
 		}
 
@@ -174,6 +178,7 @@ namespace app
 			}
 
 			if (g_pad[0]->IsTrigger(enButtonA)) {
+				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -195,24 +200,19 @@ namespace app
 		void app::player::JumpState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Jump);
-
-			if (GetOwner<Player>()->IsOnGround()) {
-				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
-			}
 		}
 
 
 		void app::player::JumpState::Update()
 		{
-			GetOwner<Player>()->MoveOnGround(GetOwner<Player>()->GetSpeedBeforeJump());
-			GetOwner<Player>()->MoveOffGround();
+			GetOwner<Player>()->MoveUpdate(GetOwner<Player>()->GetSpeedBeforeJump());
+			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
 		}
 
 
 		void app::player::JumpState::Exit()
 		{
-			GetOwner<Player>()->ResetFallTimer();
 		}
 
 

@@ -16,15 +16,6 @@ public:
 	}
 
 	/// <summary>
-	/// 毎フレームのXZ軸回転角度を取得します。
-	/// </summary>
-	/// <returns>XZ軸回転角度。</returns>
-	const Quaternion& GetAdditionalRot() const
-	{
-		return m_xzAdditionalRot;
-	}
-
-	/// <summary>
 	/// キャラクターの座標を取得します。
 	/// </summary>
 	/// <returns>キャラクターの座標。</returns>
@@ -49,6 +40,10 @@ public:
 	/// <returns>接地していれば true、そうでなければ false を示す。</returns>
 	const bool& IsOnGround();
 
+	/// <summary>
+	/// ジャンプ前の速度を取得します。
+	/// </summary>
+	/// <returns>ジャンプ前の速度を表す float 型の定数参照。</returns>
 	const float& GetSpeedBeforeJump() const
 	{
 		return m_speedBeforeJump;
@@ -62,6 +57,9 @@ public:
 		m_speedBeforeJump = speed;
 	}
 
+	/// <summary>
+	/// 落下タイマーをリセットします。
+	/// </summary>
 	void ResetFallTimer()
 	{
 		m_fallTimer = 0.0f;
@@ -92,10 +90,14 @@ public:
 	void MoveOffGround();
 
 	/// <summary>
-	/// moveSpeedに基づいてY軸回転を更新します。
+	/// moveSpeedに基づいてモデルを回転させます。
 	/// </summary>
 	void ModelRotation();
 
+	/// <summary>
+	/// ゴーストオブジェクトを更新します。
+	/// </summary>
+	/// <param name="offset">位置補正の値。</param>
 	void GhostObjectUpdate(const float offset);
 
 protected:
@@ -118,8 +120,6 @@ protected:
 	Vector3     m_planetCenter = Vector3::Zero;						// 重力を働かせる惑星の中心座標。
 	Vector3     m_directionFromPlanetCenter = Vector3::Zero;		// 惑星の中心から自分への方向ベクトル。
 	Vector3     m_beforeDirectionFromPlanetCenter = Vector3::Zero;	// 前フレームの惑星の中心から自分への方向ベクトル。
-	float		m_rotationAngle;									// Y軸回転角度。
-	Quaternion	m_xzAdditionalRot;									// 毎フレームのXZ軸回転角度。
 
 
 	// 静的メンバとして宣言
