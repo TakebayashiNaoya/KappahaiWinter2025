@@ -1,5 +1,5 @@
 /// <summary>
-/// エネミーのステートマシン。
+/// 基本エネミーのステートマシン。
 /// </summary>
 #pragma once
 #include "Source/Actor/Character/Types.h"
@@ -11,14 +11,6 @@ namespace app
 {
 	namespace basicEnemy
 	{
-		app::IState* m_currentState = nullptr;	// 現在の状態を格納する変数。
-		//app::IState* m_nextState = nullptr;		// 次の状態を格納する変数。
-
-		/// <summary>
-		/// プレイヤーの状態を管理するインターフェース。
-		/// </summary>
-		//app::IState* m_states[enPlayerState_Num];
-
 		class IdleState : public IState
 		{
 		public:
