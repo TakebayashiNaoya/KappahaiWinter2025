@@ -85,11 +85,10 @@ bool BasicEnemy::Start()
 
 void BasicEnemy::Update()
 {
-	m_beforeDirectionFromPlanetCenter = m_upDirection;
 	m_moveSpeed = Vector3::Zero;
 
 	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
-	CalcDirectionFromPlanetCenter();
+	UpdateUpDirection();
 
 	m_stateMachine->Update();
 

@@ -42,7 +42,7 @@ namespace app
 			TransformEnemyStateMachine(TransformEnemy* owner) : m_owner(owner)
 			{
 				AddState<IdleState, TransformEnemy>(enEnemyState_Idle, owner);
-				AddState<WalkState, TransformEnemy>(enEnemyState_Walk, owner);
+				AddState<WalkState, TransformEnemy>(enEnemyState_Chase, owner);
 			}
 
 			void Update() override final;

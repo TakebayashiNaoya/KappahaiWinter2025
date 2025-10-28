@@ -280,12 +280,11 @@ bool Player::Start()
 
 void Player::Update()
 {
-	m_beforeDirectionFromPlanetCenter = m_upDirection;
 	m_moveSpeed = Vector3::Zero;
 	m_xzAdditionalRot = Quaternion::Identity;
 
-	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
-	CalcDirectionFromPlanetCenter();
+	//「惑星の中心→キャラ」のベクトルを更新します。
+	UpdateUpDirection();
 
 	m_stateMachine->Update();
 

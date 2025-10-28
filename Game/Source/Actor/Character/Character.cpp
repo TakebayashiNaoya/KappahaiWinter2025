@@ -196,7 +196,7 @@ void Character::InitModel(const size_t count, const AnimationOption* option, con
 /// <summary>
 /// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
 /// </summary>
-void Character::CalcDirectionFromPlanetCenter()
+void Character::UpdateUpDirection()
 {
 	m_beforeDirectionFromPlanetCenter = m_upDirection;
 	m_upDirection = m_position - m_planetCenter;

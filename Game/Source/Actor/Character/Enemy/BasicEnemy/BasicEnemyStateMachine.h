@@ -21,10 +21,10 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
-		class WalkState : public IState
+		class ChaseState : public IState
 		{
 		public:
-			WalkState(BasicEnemy* owner) : IState(owner) {}
+			ChaseState(BasicEnemy* owner) : IState(owner) {}
 			void Enter() override final;
 			void Update() override final;
 			void Exit() override final;
@@ -60,7 +60,7 @@ namespace app
 			BasicEnemyStateMachine(BasicEnemy* owner) : m_owner(owner)
 			{
 				AddState<IdleState, BasicEnemy>(enEnemyState_Idle, owner);
-				AddState<WalkState, BasicEnemy>(enEnemyState_Walk, owner);
+				AddState<ChaseState, BasicEnemy>(enEnemyState_Chase, owner);
 				AddState<CoolDownState, BasicEnemy>(enEnemyState_CoolDown, owner);
 				AddState<DieState, BasicEnemy>(enEnemyState_Die, owner);
 			}

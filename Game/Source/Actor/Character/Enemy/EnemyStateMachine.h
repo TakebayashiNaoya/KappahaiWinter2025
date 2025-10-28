@@ -60,7 +60,7 @@ namespace app
 			EnemyStateMachine(Enemy* owner) : m_owner(owner)
 			{
 				AddState<IdleState, Enemy>(enEnemyState_Idle, owner);
-				AddState<WalkState, Enemy>(enEnemyState_Walk, owner);
+				AddState<WalkState, Enemy>(enEnemyState_Chase, owner);
 				AddState<DownState, Enemy>(enEnemyState_Die, owner);
 			}
 

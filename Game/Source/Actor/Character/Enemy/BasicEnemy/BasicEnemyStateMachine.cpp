@@ -41,7 +41,7 @@ namespace app
 				return true;
 			}
 			if (GetOwner<BasicEnemy>()->GetIsFoundPlayer()) {
-				requestStateId = enEnemyState_Walk;
+				requestStateId = enEnemyState_Chase;
 				return true;
 			}
 			if (GetOwner<BasicEnemy>()->GetIsCoolDown()) {
@@ -58,24 +58,24 @@ namespace app
 		/*************************************/
 
 
-		void WalkState::Enter()
+		void ChaseState::Enter()
 		{
 		}
 
 
-		void app::basicEnemy::WalkState::Update()
+		void app::basicEnemy::ChaseState::Update()
 		{
 			GetOwner<BasicEnemy>()->RunToPlayer();
 			GetOwner<BasicEnemy>()->ModelRotation();
 		}
 
 
-		void app::basicEnemy::WalkState::Exit()
+		void app::basicEnemy::ChaseState::Exit()
 		{
 		}
 
 
-		bool app::basicEnemy::WalkState::RequestState(int& requestStateId)
+		bool app::basicEnemy::ChaseState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<BasicEnemy>()->GetIsDead()) {
 				requestStateId = enEnemyState_Die;

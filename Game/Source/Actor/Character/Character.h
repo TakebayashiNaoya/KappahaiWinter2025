@@ -182,7 +182,7 @@ protected:
 	/// <summary>
 	/// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
 	/// </summary>
-	void CalcDirectionFromPlanetCenter();
+	void UpdateUpDirection();
 
 	// ベクトル v を法線 n の接平面へ投影（接線成分を取り出す）
 	// Dot(v, n) は v と n の内積 → v の中で n 方向にどれだけ成分があるか。
