@@ -41,6 +41,16 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
+		class DownState : public IState
+		{
+		public:
+			DownState(Enemy* owner) : IState(owner) {}
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
 		class EnemyStateMachine : public StateMachineBase
 		{
 		private:
@@ -51,6 +61,7 @@ namespace app
 			{
 				AddState<IdleState, Enemy>(enEnemyState_Idle, owner);
 				AddState<WalkState, Enemy>(enEnemyState_Walk, owner);
+				AddState<DownState, Enemy>(enEnemyState_Die, owner);
 			}
 
 			void Update() override final;
