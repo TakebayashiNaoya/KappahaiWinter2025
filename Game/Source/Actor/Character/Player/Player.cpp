@@ -172,7 +172,11 @@ void Player::ComputeAttackedDirection(const Vector3& enemyPos)
 	directionToEnemy.Normalize();
 
 	// 攻撃された方向を計算します。
-	m_attackedDirection = ProjectOnPlane(directionToEnemy, m_upDirection);
+	Vector3 attackedDirection = ProjectOnPlane(directionToEnemy, m_upDirection);
+
+	// ノックバック方向を設定します。（攻撃された方向の逆向き）
+	m_knockBackDirection = attackedDirection * -1.0f;
+	m_knockBackDirection.Normalize();
 }
 
 /// <summary>
@@ -180,10 +184,10 @@ void Player::ComputeAttackedDirection(const Vector3& enemyPos)
 /// </summary>
 void Player::KnockedBack()
 {
-	m_knockedbackTimer += g_gameTime->GetFrameDeltaTime();
+	m_knockBackTimer += g_gameTime->GetFrameDeltaTime();
 
 	// ノックバック速度を計算。
-	float knockedBackSpeed = INITIAL_KNOCK_BACK_SPEED - (KNOCK_BACK_DAMPING * m_knockedbackTimer);
+	float knockedBackSpeed = INITIAL_KNOCK_BACK_SPEED - (KNOCK_BACK_DAMPING * m_knockBackTimer);
 
 	// ノックバック速度が0以下になったら処理を終了。
 	if (knockedBackSpeed < 0.0f)
@@ -192,10 +196,8 @@ void Player::KnockedBack()
 		return;
 	}
 
-	Vector3 knockBackDirection = m_attackedDirection * -1.0f;
-
 	// ノックバック速度を移動速度に加算。
-	m_moveSpeed += knockBackDirection * knockedBackSpeed;
+	m_moveSpeed += m_knockBackDirection * knockedBackSpeed;
 
 	///--- ジャンプ・重力処理 ---///
 	// 空中の移動速度の計算。

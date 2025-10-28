@@ -107,7 +107,7 @@ public:
 	/// </summary>
 	void ResetKnockBackTimer()
 	{
-		m_knockedbackTimer = 0.0f;
+		m_knockBackTimer = 0.0f;
 	}
 
 	/// <summary>
@@ -166,11 +166,12 @@ private:
 
 	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
 
-	bool m_isAttacked = false;						// ダメージを受けたかどうか。
-	Vector3 m_attackedDirection = Vector3::Zero;	// ダメージを受けた方向。
-	float	m_knockedbackTimer = 0.0f;				// ノックバックタイマー。
-	bool m_isBlinking = false;						// 点滅中かどうか。
-	bool m_isInvincible = false;					// 無敵状態かどうか。
+	/// ダメージ関連。
+	bool	m_isAttacked = false;					// ダメージを受けたかどうか。
+	Vector3 m_knockBackDirection = Vector3::Zero;	// ノックバック方向。
+	float	m_knockBackTimer = 0.0f;				// ノックバックタイマー。
+	bool	m_isBlinking = false;					// 点滅中かどうか。
+	bool	m_isInvincible = false;					// 無敵状態かどうか。
 	float   m_invincibleTimer = 0.0f;				// 無敵タイマー。
 
 	/// プレイヤーのステートマシン。
