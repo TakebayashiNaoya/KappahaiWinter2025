@@ -9,9 +9,32 @@
 namespace
 {
 	constexpr float PLAYER_SEARCH_RADIUS = 500.0f;	// プレイヤー検出半径
+
+	/// <summary>
+	/// プレイヤーがエネミーに近づいたら、エネミーにプレイヤーの座標を伝え、発見フラグを立てる。
+	/// </summary>
+	/// <typeparam name="T"> 敵オブジェクトの型（vector）。</typeparam>
+	/// <param name="player"> プレイヤーのポインタ。</param>
+	/// <param name="enemys"> エネミーのvector型の変数。</param>
+	/// <param name="searchRadius">敵を検出するための半径。</param>
+	template <class T>
+	void CheckEnemyDetection(Player* player, std::vector<T*>& enemys, float searchRadius)
+	{
+		for (auto* enemy : enemys) {
+			Vector3 distance = enemy->GetPosition() - player->GetPosition();
+			if (distance.Length() < searchRadius) {
+				enemy->SetIsFoundPlayer(true, player->GetPosition());
+			}
+			else {
+				enemy->SetIsFoundPlayer(false, Vector3::Zero);
+			}
+		}
+	}
 }
 
 BattleManager* BattleManager::m_instance = nullptr;
+
+
 
 
 void BattleManager::Update()
@@ -22,27 +45,14 @@ void BattleManager::Update()
 	std::vector<TransformEnemy*> transformEnemys = FindGOs<TransformEnemy>("TransformEnemy");
 
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	for (auto* enemy : basicEnemys) {
-		Vector3 distance = enemy->GetPosition() - player->GetPosition();
-		if (distance.Length() < PLAYER_SEARCH_RADIUS) {
-			enemy->SetIsFoundPlayer(true, player->GetPosition());
-		}
-		else {
-			enemy->SetIsFoundPlayer(false, Vector3::Zero);
-		}
-	}
+	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, PLAYER_SEARCH_RADIUS);
 
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	for (auto* enemy : transformEnemys) {
-		Vector3 distance = enemy->GetPosition() - player->GetPosition();
-		if (distance.Length() < PLAYER_SEARCH_RADIUS) {
-			enemy->SetIsFoundPlayer(true, player->GetPosition());
-		}
-		else {
-			enemy->SetIsFoundPlayer(false, Vector3::Zero);
-		}
-	}
+	CheckEnemyDetection<TransformEnemy>(player, transformEnemys, PLAYER_SEARCH_RADIUS);
 }
+
+
+
 
 
 
