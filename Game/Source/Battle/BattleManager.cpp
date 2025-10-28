@@ -21,8 +21,19 @@ void BattleManager::Update()
 	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
 	std::vector<TransformEnemy*> transformEnemys = FindGOs<TransformEnemy>("TransformEnemy");
 
-	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーが攻撃する。
+	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
 	for (auto* enemy : basicEnemys) {
+		Vector3 distance = enemy->GetPosition() - player->GetPosition();
+		if (distance.Length() < PLAYER_SEARCH_RADIUS) {
+			enemy->SetIsFoundPlayer(true, player->GetPosition());
+		}
+		else {
+			enemy->SetIsFoundPlayer(false, Vector3::Zero);
+		}
+	}
+
+	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
+	for (auto* enemy : transformEnemys) {
 		Vector3 distance = enemy->GetPosition() - player->GetPosition();
 		if (distance.Length() < PLAYER_SEARCH_RADIUS) {
 			enemy->SetIsFoundPlayer(true, player->GetPosition());
