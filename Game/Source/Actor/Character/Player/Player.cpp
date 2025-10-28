@@ -162,10 +162,10 @@ void Player::DeleteStompCollider()
 }
 
 /// <summary>
-/// 攻撃してきた敵の方向を計算します。
+/// ノックバック方向を計算します。
 /// </summary>
-/// <param name="enemyPos"> 敵の座標。</param>
-void Player::ComputeAttackedDirection(const Vector3& enemyPos)
+/// <param name="enemyPos"> 攻撃してきた敵の座標。</param>
+void Player::ComputeKnockBackDirection(const Vector3& enemyPos)
 {
 	// 敵の位置から「惑星の中心→敵」のベクトルを計算し、正規化します。
 	Vector3 directionToEnemy = enemyPos - m_position;

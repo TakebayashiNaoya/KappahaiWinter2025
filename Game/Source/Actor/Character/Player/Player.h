@@ -137,10 +137,10 @@ public:
 	void DeleteStompCollider();
 
 	/// <summary>
-	/// 攻撃してきた敵の方向を計算します。
+	/// ノックバック方向を計算します。
 	/// </summary>
-	/// <param name="enemyPos"> 敵の座標。</param>
-	void ComputeAttackedDirection(const Vector3& enemyPos);
+	/// <param name="enemyPos"> 攻撃してきた敵の座標。</param>
+	void ComputeKnockBackDirection(const Vector3& enemyPos);
 
 	/// <summary>
 	/// ノックバックされる処理を実行する関数。

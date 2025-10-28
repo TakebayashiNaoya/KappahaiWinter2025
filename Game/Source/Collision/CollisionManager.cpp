@@ -47,17 +47,16 @@ void CollisionHitManager::Update()
 		// エネミーの攻撃。
 		if (enemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
 			player->SetIsAttacked(true);
-			player->ComputeAttackedDirection(enemy->GetPosition());
+			player->ComputeKnockBackDirection(enemy->GetPosition());
 			enemy->SetIsCoolDown(true);
 		}
 	}
 
-	// プレイヤーとボスエネミー
-	{
-
+	// プレイヤーと変形エネミー。
+	for (auto* enemy : transformEnemys) {
 	}
-}
 
+}
 
 
 /********************************/
