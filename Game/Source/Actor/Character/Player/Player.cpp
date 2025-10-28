@@ -8,7 +8,8 @@ const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
    {"idle",	true},
    {"walk", true},
    {"run",	true},
-   {"jump", false}
+   {"jump", false},
+   {"kneelDown", false}
 };
 
 namespace
@@ -237,6 +238,14 @@ void Player::StompJump()
 	m_initialJumpSpeed = STOMP_JUMP_POWER;
 	// 落下タイマーをリセット。
 	m_fallTimer = 0.0f;
+}
+
+/// <summary>
+/// ライフを1減らします。
+/// </summary>
+void Player::TakeDamage()
+{
+	m_life--;
 }
 
 

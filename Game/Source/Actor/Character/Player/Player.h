@@ -22,10 +22,11 @@ public:
 	/// </summary>
 	enum EnAnimationClip
 	{
-		enAnimationClip_Idle,	// 待機アニメーション。
-		enAnimationClip_Walk,	// 歩きアニメーション。
-		enAnimationClip_Run,	// 走りアニメーション。
-		enAnimationClip_Jump,	// ジャンプアニメーション。
+		enAnimationClip_Idle,		// 待機アニメーション。
+		enAnimationClip_Walk,		// 歩きアニメーション。
+		enAnimationClip_Run,		// 走りアニメーション。
+		enAnimationClip_Jump,		// ジャンプアニメーション。
+		enAnimationClip_KneelDown,	// 倒れるアニメーション。
 		enAnimationClip_Num,
 	};
 
@@ -72,6 +73,15 @@ public:
 	const bool GetIsInvincible() const
 	{
 		return m_isInvincible;
+	}
+
+	/// <summary>
+	/// ライフを取得します。
+	/// </summary>
+	/// <returns> ライフ。</returns>
+	const int GetLife() const
+	{
+		return m_life;
 	}
 
 	/// <summary>
@@ -141,6 +151,11 @@ public:
 	/// エネミーを踏みつけたときのジャンプ処理。
 	/// </summary>
 	void StompJump();
+
+	/// <summary>
+	/// ライフを1減らします。
+	/// </summary>
+	void TakeDamage();
 
 private:
 	bool Start()override final;

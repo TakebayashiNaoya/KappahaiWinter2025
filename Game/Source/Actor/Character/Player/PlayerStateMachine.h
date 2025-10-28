@@ -67,11 +67,21 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
+		class DieState : public app::IState
+		{
+		public:
+			DieState(Player* owner) : app::IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
 		class PlayerStateMachine : public StateMachineBase
 		{
 		private:
 			Player* m_owner = nullptr;
-
 
 		public:
 			PlayerStateMachine(Player* owner) : m_owner(owner)
@@ -81,6 +91,7 @@ namespace app
 				AddState<RunState, Player>(enPlayerState_Run, owner);
 				AddState<JumpState, Player>(enPlayerState_Jump, owner);
 				AddState<KnockBackState, Player>(enPlayerState_KnockBack, owner);
+				AddState<DieState, Player>(enPlayerState_KneelDown, owner);
 			}
 
 			void Update() override final;
