@@ -22,8 +22,6 @@ namespace
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
-
-	constexpr int LIFE = 3;											// 初期ライフ数。
 }
 
 BasicEnemy::BasicEnemy()
@@ -62,8 +60,6 @@ bool BasicEnemy::Start()
 {
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, "unityChan");
-
-	InitLife(LIFE);
 
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;

@@ -59,10 +59,10 @@ namespace app
 		public:
 			BasicEnemyStateMachine(BasicEnemy* owner) : m_owner(owner)
 			{
-				AddState<IdleState, BasicEnemy>(enEnemyState_Idle, owner);
-				AddState<ChaseState, BasicEnemy>(enEnemyState_Chase, owner);
-				AddState<CoolDownState, BasicEnemy>(enEnemyState_CoolDown, owner);
-				AddState<DieState, BasicEnemy>(enEnemyState_Die, owner);
+				AddState<IdleState, BasicEnemy>(enBasicEnemyState_Idle, owner);
+				AddState<ChaseState, BasicEnemy>(enBasicEnemyState_Chase, owner);
+				AddState<CoolDownState, BasicEnemy>(enBasicEnemyState_CoolDown, owner);
+				AddState<DieState, BasicEnemy>(enBasicEnemyState_Die, owner);
 			}
 
 			void Update() override final;

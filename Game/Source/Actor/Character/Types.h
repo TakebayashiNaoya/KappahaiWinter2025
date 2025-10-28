@@ -14,18 +14,18 @@ enum enPlayerState {
 };
 
 enum enBasicEnemyState {
-	enEnemyState_Idle,		// 待機。
-	enEnemyState_Chase,		// 追跡。
-	enEnemyState_CoolDown,	// クールダウン。
-	enEnemyState_Die,		// 死亡。
-	enEnemyState_Num,
+	enBasicEnemyState_Idle,			// 待機。
+	enBasicEnemyState_Chase,		// 追跡。
+	enBasicEnemyState_CoolDown,		// クールダウン。
+	enBasicEnemyState_Die,			// 死亡。
+	enBasicEnemyState_Num,
 };
 
 enum enTransformEnemyState {
-	enEnemyState_Idle,		// 待機。
-	enEnemyState_Escape,	// 逃走。
-	enEnemyState_Transform,	// 変形。
-	enEnemyState_Slide,		// 滑走。
-	enEnemyState_Die,		// 死亡。
-	enEnemyState_Num,
+	enTransformEnemyState_Idle,			// 待機。
+	enTransformEnemyState_Escape,		// 逃走。
+	enTransformEnemyState_Transform,	// 変形。
+	enTransformEnemyState_Slide,		// 滑走。
+	enTransformEnemyState_Die,			// 死亡。
+	enTransformEnemyState_Num,
 };
