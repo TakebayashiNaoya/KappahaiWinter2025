@@ -18,7 +18,7 @@ Enemy::Enemy()
 void Enemy::RunToPlayer()
 {
 	// プレイヤーへの方向ベクトルを計算。
-	Vector3 directionToPlayer = m_playerLastPos - m_position;
+	Vector3 directionToPlayer = m_playerFoundPos - m_position;
 	directionToPlayer.Normalize();
 
 	// プレイヤーへの方向ベクトルから、接線方向を取得。
@@ -64,7 +64,7 @@ void Enemy::RunToPlayer()
 void Enemy::RunAwayFromPlayer()
 {
 	// プレイヤーからの方向ベクトルを計算。
-	Vector3 directionFromPlayer = m_position - m_playerLastPos;
+	Vector3 directionFromPlayer = m_position - m_playerFoundPos;
 	directionFromPlayer.Normalize();
 
 	// プレイヤーからの方向ベクトルから、接線方向を取得。
