@@ -19,7 +19,7 @@ namespace
 	constexpr float BODY_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
 	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
 
-	constexpr float STOMP_COLLIDER_RADIUS = 25.0f;					// 踏みつけ用コライダーの半径。
+	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;					// 踏みつけ用コライダーの半径。
 	constexpr float STOMP_JUMP_POWER = 30.0f;						// 踏みつけジャンプの初速。
 
 	constexpr float GRAVITY_POWER = 9.8f * 10;						// 重力。
