@@ -38,6 +38,24 @@ public:
 		return m_position;
 	}
 
+	/// <summary>
+	/// 変形しているかどうかを取得します。
+	/// </summary>
+	/// <returns> 変形しているならtrueを返す。</returns>
+	const bool GetIsTransform() const
+	{
+		return m_isTransform;
+	}
+
+	/// <summary>
+	/// 変形しているかどうかを設定します。
+	/// </summary>
+	/// <param name="isTransform"> 変形しているならtrueを入れる。</param>
+	void SetIsTransform(const bool isTransform)
+	{
+		m_isTransform = isTransform;
+	}
+
 private:
 	bool Start()override final;
 	void Update()override final;
@@ -48,4 +66,6 @@ private:
 
 	// クラススコープで宣言し、cppで定義。
 	static const Character::AnimationOption TRANSFORM_ENEMY_ANIMATION_OPTIONS[];
+
+	bool m_isTransform = false; // 変形しているかどうか。
 };
