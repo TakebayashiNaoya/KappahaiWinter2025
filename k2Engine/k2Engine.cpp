@@ -24,8 +24,8 @@ namespace nsK2Engine {
 		raytracintInitData.m_outputColorBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 #endif // #ifdef COPY_RAYTRACING_FRAMEBUFFER
 		m_k2EngineLow.Init(
-			initData.hwnd, 
-			initData.frameBufferWidth, 
+			initData.hwnd,
+			initData.frameBufferWidth,
 			initData.frameBufferHeight,
 			raytracintInitData
 		);
@@ -34,7 +34,7 @@ namespace nsK2Engine {
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
 #ifdef K2_DEBUG
 		// デバッグベクトルレンダラーを作成する。
-		m_vectorRenderer = NewGO<nsDbg::VectorRenderer>(0);
+		m_vectorRenderer = NewGO<nsDbg::VectorRenderer>(254);
 #endif // #ifdef K2_DEBUG
 	}
 	K2Engine::~K2Engine()
@@ -56,11 +56,11 @@ namespace nsK2Engine {
 		g_engine->ExecuteUpdate();
 		// レンダリングエンジンの更新。
 		m_renderingEngine.Update();
-		
+
 		g_engine->ExecuteRender();
 		//レンダリングエンジンを実行。		
 		m_renderingEngine.Execute(renderContext);
-		
+
 		//当たり判定描画。
 		g_engine->DebubDrawWorld();
 

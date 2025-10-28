@@ -84,6 +84,13 @@ namespace nsK2Engine {
 		/// <summary>
 		/// インスタンシングデータの更新。
 		/// </summary>
+		/// <param name="pos">座標</param>
+		/// <param name="rot">回転</param>
+		/// <param name="scale">拡大率</param>
+		void UpdateInstancingData(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+		/// <summary>
+		/// インスタンシングデータの更新。
+		/// </summary>
 		/// <param name="instanceNo">インスタンス番号</param>
 		/// <param name="pos">座標</param>
 		/// <param name="rot">回転</param>
@@ -434,7 +441,7 @@ namespace nsK2Engine {
 		EnModelUpAxis				m_enFbxUpAxis = enModelUpAxisZ;		// FBXの上方向。
 		Animation					m_animation;						// アニメーション。
 		ComputeAnimationVertexBuffer m_computeAnimationVertexBuffer;	// アニメーション済み頂点バッファの計算処理。
-		Model*						m_addRaytracingWorldModel = nullptr;// レイトレワールドに登録したモデル。				
+		Model* m_addRaytracingWorldModel = nullptr;// レイトレワールドに登録したモデル。				
 		Model						m_zprepassModel;					// ZPrepassで描画されるモデル
 		Model						m_forwardRenderModel;				// フォワードレンダリングの描画パスで描画されるモデル
 		Model						m_translucentModel;					// 半透明モデル。

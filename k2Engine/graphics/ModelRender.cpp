@@ -29,12 +29,12 @@ namespace nsK2Engine {
 	{
 		if (enEvent == RenderingEngine::enEventReInitIBLTexture
 			&& m_translucentModel.IsInited()
-		) {
+			) {
 			// IBLテクスチャが更新されたので、PBRシェーダーを利用している
 			// フォワードレンダリングの場合は、ディスクリプタヒープを再初期化する。
 			// (IBLテクスチャを使っているので。)
 			MaterialReInitData matReInitData;
-			if(m_isEnableInstancingDraw) {
+			if (m_isEnableInstancingDraw) {
 				// インスタンシング描画を行う場合は、拡張SRVにインスタンシング描画用のデータを設定する。
 				matReInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 			}
@@ -46,7 +46,7 @@ namespace nsK2Engine {
 	{
 		modelInitData.m_vsSkinEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
 		modelInitData.m_vsEntryPointFunc = "VSMainUsePreComputedVertexBuffer";
-		
+
 		if (m_animationClips != nullptr) {
 			// アニメーションあり。
 			modelInitData.m_vsSkinEntryPointFunc = "VSMainSkinUsePreComputedVertexBuffer";
@@ -82,7 +82,7 @@ namespace nsK2Engine {
 			g_renderingEngine->AddModelToRaytracingWorld(m_translucentModel);
 			m_addRaytracingWorldModel = &m_translucentModel;
 		}
-		
+
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
 
@@ -139,7 +139,7 @@ namespace nsK2Engine {
 		InitGeometryDatas(maxInstance);
 		// 各種ワールド行列を更新する。
 		UpdateWorldMatrixInModes();
-		
+
 		if (m_isRaytracingWorld) {
 			// レイトレワールドに追加。
 			g_renderingEngine->AddModelToRaytracingWorld(m_renderToGBufferModel);
@@ -217,7 +217,8 @@ namespace nsK2Engine {
 		modelInitData.m_computedAnimationVertexBuffer = &m_computeAnimationVertexBuffer;
 		if (m_animationClips != nullptr) {
 			//スケルトンを指定する。
-			modelInitData.m_skeleton = &m_skeleton;		}
+			modelInitData.m_skeleton = &m_skeleton;
+		}
 
 		if (isShadowReciever) {
 			modelInitData.m_psEntryPointFunc = "PSMainShadowReciever";
@@ -245,9 +246,9 @@ namespace nsK2Engine {
 		if (m_isEnableInstancingDraw) {
 			worldMatrxiArraySB = &m_worldMatrixArraySB;
 		}
-		
+
 		m_computeAnimationVertexBuffer.Init(
-			tkmFilePath, 
+			tkmFilePath,
 			m_skeleton.GetNumBones(),
 			m_skeleton.GetBoneMatricesTopAddress(),
 			enModelUpAxis,
@@ -300,7 +301,7 @@ namespace nsK2Engine {
 		g_renderingEngine->QueryShadowMapTexture([&](Texture& shadowMap) {
 			modelInitData.m_expandShaderResoruceView[expandSRVNo] = &shadowMap;
 			expandSRVNo++;
-		});
+			});
 		m_translucentModel.Init(modelInitData);
 	}
 
@@ -381,6 +382,28 @@ namespace nsK2Engine {
 
 		m_zprepassModel.Init(modelInitData);
 	}
+	void ModelRender::UpdateInstancingData(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
+	{
+		K2_ASSERT(m_numInstance < m_maxInstance, "インスタンスの数が多すぎです。");
+		if (!m_isEnableInstancingDraw) {
+			return;
+		}
+		auto wlorldMatrix = m_zprepassModel.CalcWorldMatrix(pos, rot, scale);
+
+		// インスタンシング描画を行う。
+		m_worldMatrixArray[m_numInstance] = wlorldMatrix;
+		if (m_numInstance == 0) {
+			//インスタンス数が0の場合のみアニメーション関係の更新を行う。
+			// スケルトンを更新。
+			// 各インスタンスのワールド空間への変換は、
+			// インスタンスごとに行う必要があるので、頂点シェーダーで行う。
+			// なので、単位行列を渡して、モデル空間でボーン行列を構築する。
+			m_skeleton.Update(g_matIdentity);
+			//アニメーションを進める。
+			m_animation.Progress(g_gameTime->GetFrameDeltaTime() * m_animationSpeed);
+		}
+		m_numInstance++;
+	}
 	void ModelRender::UpdateInstancingData(int instanceNo, const Vector3& pos, const Quaternion& rot, const Vector3& scale)
 	{
 		K2_ASSERT(instanceNo < m_maxInstance, "インスタンス番号が不正です。");
@@ -394,7 +417,7 @@ namespace nsK2Engine {
 		}
 		else {
 			worldMatrix = m_zprepassModel.CalcWorldMatrix(pos, rot, scale);
-		} 
+		}
 		// インスタンス番号から行列のインデックスを取得する。
 		int matrixArrayIndex = m_instanceNoToWorldMatrixArrayIndexTable[instanceNo];
 		// インスタンシング描画を行う。
@@ -463,12 +486,12 @@ namespace nsK2Engine {
 			}
 		}
 	}
-	
+
 	void ModelRender::RemoveInstance(int instanceNo)
-	{		
+	{
 		int matrixIndex = m_instanceNoToWorldMatrixArrayIndexTable[instanceNo];
-		
-		m_worldMatrixArray[matrixIndex] = g_matZero;		
+
+		m_worldMatrixArray[matrixIndex] = g_matZero;
 	}
 	void ModelRender::OnComputeVertex(RenderContext& rc)
 	{
@@ -489,7 +512,7 @@ namespace nsK2Engine {
 
 		if (m_isShadowCaster
 			&& m_shadowModels[ligNo][shadowMapNo].IsInited()
-		) {
+			) {
 			Vector4 cameraParam;
 			cameraParam.x = g_camera3D->GetNear();
 			cameraParam.y = g_camera3D->GetFar();
