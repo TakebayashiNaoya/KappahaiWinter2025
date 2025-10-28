@@ -3,7 +3,10 @@
 
 class BackGround;
 class Player;
+class BasicEnemy;
 class GameCamera;
+class CollisionManagerObject;
+class BattleManagerObject;
 
 class Game : public IGameObject
 {
@@ -17,7 +20,10 @@ public:
 private:
 	BackGround* m_backGround = nullptr;
 	Player* m_player = nullptr;
+	BasicEnemy* m_basicEnemy = nullptr;
 	GameCamera* m_gameCamera = nullptr;
+	CollisionManagerObject* m_collisionManager = nullptr;
+	BattleManagerObject* m_battleManager = nullptr;
 
 	FontRender currentPos;
 

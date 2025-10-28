@@ -2,14 +2,21 @@
 #include "Game.h"
 #include "Source/Actor/Stage/BackGround.h"
 #include "Source/Actor/Character/Player/Player.h"
+#include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
 #include "Source/Camera/GameCamera.h"
+#include "Source/Collision/CollisionManager.h"
+#include "Source/Battle/BattleManager.h"
 
 bool Game::Start()
 {
 	InitSky();
 	m_backGround = NewGO<FirstPlanet>(0, "BackGround");
 	m_player = NewGO<Player>(0, "Player");
+	m_basicEnemy = NewGO<BasicEnemy>(0, "BasicEnemy");
 	m_gameCamera = NewGO<GameCamera>(0, "GameCamera");
+	m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
+	m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
+
 	return true;
 }
 
