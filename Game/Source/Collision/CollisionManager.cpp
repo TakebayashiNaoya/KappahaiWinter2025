@@ -20,31 +20,30 @@ void CollisionHitManager::Update()
 
 
 	// プレイヤーとベーシックエネミー。
-	{
-		for (auto* enemy : basicEnemys) {
+	for (auto* enemy : basicEnemys) {
 
-			// コライダーを消してから一定時間後にモデルを消しているため、コライダーがnullptrの場合はスキップする。
-			if (enemy->GetBodyCollider() == nullptr) {
-				continue;
-			}
+		// エネミー死亡時、コライダーを消してから一定時間後にモデルを消しているため、
+		// コライダーがnullptrの場合はスキップする。
+		if (enemy->GetBodyCollider() == nullptr) {
+			continue;
+		}
 
-			// プレイヤーの攻撃。
-			if (player->GetStompCollider()->IsHit(enemy->GetBodyCollider())) {
-				player->StompJump();
-				enemy->SetIsDead(true);
-			}
+		// プレイヤーの攻撃。
+		if (player->GetStompCollider()->IsHit(enemy->GetBodyCollider())) {
+			player->StompJump();
+			enemy->SetIsDead(true);
+		}
 
-			// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-			if (player->GetIsInvincible()) {
-				return;
-			}
+		// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
+		if (player->GetIsInvincible()) {
+			continue;
+		}
 
-			// エネミーの攻撃。
-			if (enemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
-				player->SetIsAttacked(true);
-				player->ComputeAttackedDirection(enemy->GetPosition());
-				enemy->SetIsCoolDown(true);
-			}
+		// エネミーの攻撃。
+		if (enemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+			player->SetIsAttacked(true);
+			player->ComputeAttackedDirection(enemy->GetPosition());
+			enemy->SetIsCoolDown(true);
 		}
 	}
 
