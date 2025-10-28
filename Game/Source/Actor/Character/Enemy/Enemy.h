@@ -26,7 +26,7 @@ public:
 	void SetIsFoundPlayer(const bool isFound, const Vector3& playerPos)
 	{
 		m_isFoundPlayer = isFound;
-		m_playerLastPos = playerPos;
+		m_playerFoundPos = playerPos;
 	}
 
 	/// <summary>
@@ -46,5 +46,5 @@ public:
 	bool IsStomped();
 
 	bool m_isFoundPlayer = false;
-	Vector3 m_playerLastPos = Vector3::Zero;
+	Vector3 m_playerFoundPos = Vector3::Zero;
 };

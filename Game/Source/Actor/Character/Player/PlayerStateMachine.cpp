@@ -69,7 +69,7 @@ namespace app
 		bool IdleState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -121,7 +121,7 @@ namespace app
 		bool app::player::WalkState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -178,7 +178,7 @@ namespace app
 		bool app::player::RunState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -237,7 +237,7 @@ namespace app
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -266,14 +266,15 @@ namespace app
 		/*************************************/
 
 
-		void app::player::AttackedState::Enter()
+		void app::player::KnockBackState::Enter()
 		{
+			GetOwner<Player>()->TakeDamage();
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Idle);
 			GetOwner<Player>()->SetIsInvincible(true);
 		}
 
 
-		void app::player::AttackedState::Update()
+		void app::player::KnockBackState::Update()
 		{
 			GetOwner<Player>()->KnockedBack();
 			GetOwner<Player>()->CalcCameraRotation();
@@ -281,36 +282,68 @@ namespace app
 		}
 
 
-		void app::player::AttackedState::Exit()
+		void app::player::KnockBackState::Exit()
 		{
 			GetOwner<Player>()->ResetKnockBackTimer();
 		}
 
 
-		bool app::player::AttackedState::RequestState(int& requestStateId)
+		bool app::player::KnockBackState::RequestState(int& requestStateId)
 		{
-			if (!GetOwner<Player>()->GetIsAttacked()) {
-				if (GetOwner<Player>()->IsOnGround()) {
-					if (IsLeftStick()) {
-						if (g_pad[0]->IsPress(enButtonB)) {
-							requestStateId = enPlayerState_Run;
-							return true;
-						}
-						else {
-							requestStateId = enPlayerState_Walk;
-							return true;
-						}
+			if (GetOwner<Player>()->GetIsAttacked()) {
+				return false;
+			}
+
+			if (GetOwner<Player>()->GetLife() == 0) {
+				requestStateId = enPlayerState_KneelDown;
+				return true;
+			}
+
+			if (GetOwner<Player>()->IsOnGround()) {
+				if (IsLeftStick()) {
+					if (g_pad[0]->IsPress(enButtonB)) {
+						requestStateId = enPlayerState_Run;
+						return true;
 					}
 					else {
-						requestStateId = enPlayerState_Idle;
+						requestStateId = enPlayerState_Walk;
 						return true;
 					}
 				}
 				else {
-					requestStateId = enPlayerState_Jump;
+					requestStateId = enPlayerState_Idle;
 					return true;
 				}
 			}
+			else {
+				requestStateId = enPlayerState_Jump;
+				return true;
+			}
+			return false;
+		}
+
+
+		/*************************************/
+
+
+		void app::player::DieState::Enter()
+		{
+			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_KneelDown);
+		}
+
+
+		void app::player::DieState::Update()
+		{
+		}
+
+
+		void app::player::DieState::Exit()
+		{
+		}
+
+
+		bool app::player::DieState::RequestState(int& requestStateId)
+		{
 			return false;
 		}
 	}
