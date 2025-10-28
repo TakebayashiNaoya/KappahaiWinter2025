@@ -29,13 +29,18 @@ void CollisionHitManager::Update()
 		}
 
 		// プレイヤーの攻撃。
+		bool successStomp = false;
 		if (player->GetStompCollider()->IsHit(enemy->GetBodyCollider())) {
 			player->StompJump();
 			enemy->SetIsDead(true);
+			successStomp = true;
 		}
 
-		// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
+		// プレイヤーが無敵中の場合、またはプレイヤーの攻撃が先に当たっている場合、エネミーの攻撃は無効にする。
 		if (player->GetIsInvincible()) {
+			continue;
+		}
+		else if (successStomp) {
 			continue;
 		}
 
