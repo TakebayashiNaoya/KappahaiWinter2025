@@ -23,7 +23,7 @@ namespace
 const bool& Character::IsOnGround()
 {
 	// 移動処理でhitPositionをm_positionに代入しており、レイの判定が不安定になるため、rayStartをm_positionから少し離す。
-	Vector3 rayStart = m_position + m_directionFromPlanetCenter * 0.1f;
+	Vector3 rayStart = m_position + m_upDirection * 0.1f;
 	Vector3 hitPosition = Vector3::Zero;
 
 	if (PhysicsWorld::GetInstance()->RayTest(rayStart, m_planetCenter, hitPosition)) {
@@ -79,7 +79,7 @@ void Character::ModelRotation()
 	Vector3 targetForward = m_moveSpeed;
 
 	// 惑星の中心からキャラクターへの上方向ベクトルを計算
-	Vector3 upDirection = m_directionFromPlanetCenter;
+	Vector3 upDirection = m_upDirection;
 	upDirection.Normalize();
 
 	// m_moveSpeedを惑星の接平面に投影し、ジャンプによる垂直成分を除去する。
@@ -146,16 +146,29 @@ void Character::ModelRotation()
 	m_modelRender.SetRotation(m_rotation);
 }
 
-void Character::GhostObjectUpdate(const float offset)
+void Character::UpdateBodyCollider(const float offset)
 {
+	if (m_bodyCollider == nullptr) {
+		return;
+	}
+
 	// ゴーストオブジェクト用の座標を計算する。
-	Vector3 ghostPos = m_position + m_directionFromPlanetCenter * offset;
+	Vector3 ghostPos = m_position + m_upDirection * offset;
 
 	// ゴーストオブジェクトの座標をモデルの座標に合わせる。
-	m_ghostObject->SetPosition(ghostPos);
+	m_bodyCollider->SetPosition(ghostPos);
 
 	// ゴーストオブジェクトの回転をモデルの回転に合わせる。
-	m_ghostObject->SetRotation(m_rotation);
+	m_bodyCollider->SetRotation(m_rotation);
+}
+
+/// <summary>
+/// ボディコライダーをdelete、nullptrします。
+/// </summary>
+void Character::DeleteBodyCollider()
+{
+	delete m_bodyCollider;
+	m_bodyCollider = nullptr;
 }
 
 /// <summary>
@@ -185,7 +198,7 @@ void Character::InitModel(const size_t count, const AnimationOption* option, con
 /// </summary>
 void Character::CalcDirectionFromPlanetCenter()
 {
-	m_beforeDirectionFromPlanetCenter = m_directionFromPlanetCenter;
-	m_directionFromPlanetCenter = m_position - m_planetCenter;
-	m_directionFromPlanetCenter.Normalize();
+	m_beforeDirectionFromPlanetCenter = m_upDirection;
+	m_upDirection = m_position - m_planetCenter;
+	m_upDirection.Normalize();
 }

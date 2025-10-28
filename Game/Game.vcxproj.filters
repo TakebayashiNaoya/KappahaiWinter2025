@@ -31,6 +31,12 @@
     <Filter Include="Source\Actor\Character\Enemy\TransformEnemy">
       <UniqueIdentifier>{4901d8ae-2e0f-4a18-878d-07faa1a1ec1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Collision">
+      <UniqueIdentifier>{3393a522-fc3e-46a3-8adf-6b7d10eac9e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Battle">
+      <UniqueIdentifier>{9f1685a2-0289-4f9d-8eef-fa4c527d20ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -78,6 +84,12 @@
     <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.cpp">
       <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Collision\CollisionManager.cpp">
+      <Filter>Source\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Battle\BattleManager.cpp">
+      <Filter>Source\Battle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -123,6 +135,12 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.h">
       <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collision\CollisionManager.h">
+      <Filter>Source\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Battle\BattleManager.h">
+      <Filter>Source\Battle</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -33,10 +33,56 @@ public:
 	/// 基本エネミーの座標を取得します。
 	/// </summary>
 	/// <returns>プレイヤーの現在の座標値（float型）。</returns>
-	const Vector3 GetPosition()const
+	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
+
+	/// <summary>
+	/// クールダウン状態かどうかを取得します。
+	/// </summary>
+	/// <returns> クールダウン状態であれば true。</returns>
+	const bool GetIsCoolDown() const
+	{
+		return m_isCoolDown;
+	}
+
+	/// <summary>
+	/// 死亡状態を取得します。
+	/// </summary>
+	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
+	const bool GetIsDead() const
+	{
+		return m_isDead;
+	}
+
+	/// <summary>
+	/// クールダウン状態を設定します。
+	/// </summary>
+	/// <param name="isCoolDown"> クールダウン状態の場合はtrueを設定。</param>
+	void SetIsCoolDown(const bool isCoolDown)
+	{
+		m_isCoolDown = isCoolDown;
+	}
+
+	/// <summary>
+	/// 死亡状態を設定します。
+	/// </summary>
+	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
+	void SetIsDead(const bool isDead)
+	{
+		m_isDead = isDead;
+	}
+
+	/// <summary>
+	/// クールダウンをカウントダウンします。
+	/// </summary>
+	void CoolDownCount();
+
+	/// <summary>
+	/// エネミーを消滅させます。
+	/// </summary>
+	void DeleteEnemy();
 
 private:
 	bool Start()override final;
@@ -48,4 +94,10 @@ private:
 
 	// クラススコープで宣言し、cppで定義。
 	static const Character::AnimationOption BASIC_ENEMY_ANIMATION_OPTIONS[];
+
+	float m_coolDownTimer = 0.0f;	// クールダウンタイマー。
+	bool m_isCoolDown = false;		// クールダウン中かどうか。
+
+	bool m_isDead = false;          // 死亡状態かどうか。
+	float m_deleteTimer = 0.0f;		// 死亡タイマー。
 };

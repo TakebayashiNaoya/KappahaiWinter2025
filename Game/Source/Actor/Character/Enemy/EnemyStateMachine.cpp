@@ -81,5 +81,31 @@ namespace app
 		{
 			return false;
 		}
+
+
+
+
+		/*************************************/
+
+
+		void DownState::Enter()
+		{
+		}
+
+
+		void app::enemy::DownState::Update()
+		{
+		}
+
+
+		void app::enemy::DownState::Exit()
+		{
+		}
+
+
+		bool app::enemy::DownState::RequestState(int& requestStateId)
+		{
+			return false;
+		}
 	}
 }

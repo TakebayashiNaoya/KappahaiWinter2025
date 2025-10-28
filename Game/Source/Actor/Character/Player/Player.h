@@ -30,6 +30,15 @@ public:
 	};
 
 	/// <summary>
+	/// 踏みつけ用のコライダーのポインタを取得します。
+	/// </summary>
+	/// <returns> 踏みつけ用のコライダーのポインタ。</returns>
+	CollisionObject* GetStompCollider()
+	{
+		return m_stompCollider;
+	}
+
+	/// <summary>
 	/// プレイヤーの座標を取得します。
 	/// </summary>
 	/// <returns>プレイヤーの現在の座標値（float型）。</returns>
@@ -48,6 +57,50 @@ public:
 	}
 
 	/// <summary>
+	/// 攻撃されているかどうかを取得します。
+	/// </summary>
+	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
+	const bool GetIsAttacked() const
+	{
+		return m_isAttacked;
+	}
+
+	/// <summary>
+	/// 無敵中かどうかを取得します。
+	/// </summary>
+	/// <returns> 無敵中ならtrue、そうでなければfalseを返す。</returns>
+	const bool GetIsInvincible() const
+	{
+		return m_isInvincible;
+	}
+
+	/// <summary>
+	/// 攻撃されているどうかのフラグを設定します。
+	/// </summary>
+	/// <param name="isAttacked"> 攻撃されている場合はtrue、されていない場合はfalseを入れる。</param>
+	void SetIsAttacked(const bool isAttacked)
+	{
+		m_isAttacked = isAttacked;
+	}
+
+	/// <summary>
+	/// 無敵中かどうかを設定します。
+	/// </summary>
+	/// <param name="isInvincible"> 無敵中ならtrue、そうでなければfalse。</param>
+	void SetIsInvincible(const bool isInvincible)
+	{
+		m_isInvincible = isInvincible;
+	}
+
+	/// <summary>
+	/// ノックバックタイマーをリセットします。
+	/// </summary>
+	void ResetKnockBackTimer()
+	{
+		m_knockedbackTimer = 0.0f;
+	}
+
+	/// <summary>
 	/// カメラの回転角度を計算します。
 	/// </summary>
 	void CalcCameraRotation();
@@ -58,10 +111,58 @@ public:
 	/// <param name="speed">移動速度を表す値。</param>
 	void MoveUpdate(const float speed);
 
+	/// <summary>
+	/// 踏みつけ判定用コライダーを作成します。
+	/// </summary>
+	void CreateStompCollider();
+
+	/// <summary>
+	/// 踏みつけ判定用コライダーの座標と回転を更新します。
+	/// </summary>
+	void UpdateStompCollider();
+
+	/// <summary>
+	/// 踏みつけ判定用コライダーをdelete、nullptrします。
+	/// </summary>
+	void DeleteStompCollider();
+
+	/// <summary>
+	/// 攻撃してきた敵の方向を計算します。
+	/// </summary>
+	/// <param name="enemyPos"> 敵の座標。</param>
+	void ComputeAttackedDirection(const Vector3& enemyPos);
+
+	/// <summary>
+	/// ノックバックされる処理を実行する関数。
+	/// </summary>
+	void KnockedBack();
+
+	/// <summary>
+	/// エネミーを踏みつけたときのジャンプ処理。
+	/// </summary>
+	void StompJump();
+
 private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
+
+	CollisionObject* m_stompCollider = nullptr;		// 踏みつけ用のゴーストオブジェクト。
+
+	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
+
+	bool m_isAttacked = false;						// ダメージを受けたかどうか。
+	Vector3 m_attackedDirection = Vector3::Zero;	// ダメージを受けた方向。
+	float	m_knockedbackTimer = 0.0f;				// ノックバックタイマー。
+	bool m_isBlinking = false;						// 点滅中かどうか。
+	bool m_isInvincible = false;					// 無敵状態かどうか。
+	float   m_invincibleTimer = 0.0f;				// 無敵タイマー。
+
+	/// プレイヤーのステートマシン。
+	std::unique_ptr<app::player::PlayerStateMachine> m_stateMachine;
+
+	// クラススコープで宣言し、cppで定義。
+	static const Character::AnimationOption PLAYER_ANIMATION_OPTIONS[];
 
 	/// <summary>
 	/// 移動方向を返します。
@@ -74,13 +175,10 @@ private:
 	/// </summary>
 	/// <param name="speed"> 移動速度。</param>
 	/// <returns> 移動先の相対座標。</returns>
-	const Vector3 ComputeAddMoveSpeed(const float speed)const;
+	const Vector3 CalcVelocity(const float speed)const;
 
-	Quaternion	m_xzAdditionalRot;		// 毎フレームのXZ軸回転角度。
-
-	/// プレイヤーのステートマシン。
-	std::unique_ptr<app::player::PlayerStateMachine> m_stateMachine;
-
-	// クラススコープで宣言し、cppで定義。
-	static const Character::AnimationOption PLAYER_ANIMATION_OPTIONS[];
+	/// <summary>
+	/// 一定時間が経過したら無敵状態を解除します。
+	/// </summary>
+	void InvincibleTimer();
 };

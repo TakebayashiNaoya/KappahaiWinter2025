@@ -28,7 +28,7 @@ bool GameCamera::Start()
 void GameCamera::Update()
 {
 	Vector3 playerPos = m_player->GetPosition();
-	Vector3 up = m_player->GetDirectionFromPlanetCenter();
+	Vector3 up = m_player->GetUpDirection();
 
 	// スティックによるカメラ回転
 	float x = g_pad[0]->GetRStickXF();

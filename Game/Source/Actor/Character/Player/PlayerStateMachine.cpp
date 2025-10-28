@@ -4,7 +4,7 @@
 
 namespace
 {
-	constexpr float JUMP_POWER = 10.0f;		// ジャンプパワー。
+	constexpr float JUMP_POWER = 40.0f;		// ジャンプパワー。
 	constexpr float STICK_DEAD_ZONE = 0.01f;	// スティックのデッドゾーン。
 	const float DASH_SPEED = 10.0f;			// ダッシュスピード。
 	const float WALK_SPEED = 5.0f;			// 歩くスピード。
@@ -68,6 +68,11 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
+			if (GetOwner<Player>()->GetIsAttacked()) {
+				requestStateId = enPlayerState_Attacked;
+				return true;
+			}
+
 			if (IsLeftStick()) {
 				requestStateId = enPlayerState_Walk;
 				return true;
@@ -115,6 +120,11 @@ namespace app
 
 		bool app::player::WalkState::RequestState(int& requestStateId)
 		{
+			if (GetOwner<Player>()->GetIsAttacked()) {
+				requestStateId = enPlayerState_Attacked;
+				return true;
+			}
+
 			if (!IsLeftStick()) {
 				requestStateId = enPlayerState_Idle;
 				return true;
@@ -167,6 +177,11 @@ namespace app
 
 		bool app::player::RunState::RequestState(int& requestStateId)
 		{
+			if (GetOwner<Player>()->GetIsAttacked()) {
+				requestStateId = enPlayerState_Attacked;
+				return true;
+			}
+
 			if (!IsLeftStick()) {
 				requestStateId = enPlayerState_Idle;
 				return true;
@@ -200,6 +215,7 @@ namespace app
 		void app::player::JumpState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Jump);
+			GetOwner<Player>()->CreateStompCollider();
 		}
 
 
@@ -208,16 +224,23 @@ namespace app
 			GetOwner<Player>()->MoveUpdate(GetOwner<Player>()->GetSpeedBeforeJump());
 			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
+			GetOwner<Player>()->UpdateStompCollider();
 		}
 
 
 		void app::player::JumpState::Exit()
 		{
+			GetOwner<Player>()->DeleteStompCollider();
 		}
 
 
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
+			if (GetOwner<Player>()->GetIsAttacked()) {
+				requestStateId = enPlayerState_Attacked;
+				return true;
+			}
+
 			if (GetOwner<Player>()->IsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
@@ -231,6 +254,60 @@ namespace app
 				}
 				else {
 					requestStateId = enPlayerState_Idle;
+					return true;
+				}
+			}
+			return false;
+		}
+
+
+
+
+		/*************************************/
+
+
+		void app::player::AttackedState::Enter()
+		{
+			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Idle);
+			GetOwner<Player>()->SetIsInvincible(true);
+		}
+
+
+		void app::player::AttackedState::Update()
+		{
+			GetOwner<Player>()->KnockedBack();
+			GetOwner<Player>()->CalcCameraRotation();
+			GetOwner<Player>()->ModelRotation();
+		}
+
+
+		void app::player::AttackedState::Exit()
+		{
+			GetOwner<Player>()->ResetKnockBackTimer();
+		}
+
+
+		bool app::player::AttackedState::RequestState(int& requestStateId)
+		{
+			if (!GetOwner<Player>()->GetIsAttacked()) {
+				if (GetOwner<Player>()->IsOnGround()) {
+					if (IsLeftStick()) {
+						if (g_pad[0]->IsPress(enButtonB)) {
+							requestStateId = enPlayerState_Run;
+							return true;
+						}
+						else {
+							requestStateId = enPlayerState_Walk;
+							return true;
+						}
+					}
+					else {
+						requestStateId = enPlayerState_Idle;
+						return true;
+					}
+				}
+				else {
+					requestStateId = enPlayerState_Jump;
 					return true;
 				}
 			}

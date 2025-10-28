@@ -20,6 +20,7 @@ namespace app
 
 		void IdleState::Enter()
 		{
+			GetOwner<BasicEnemy>()->PlayAnimation(BasicEnemy::enAnimationClip_Idle);
 		}
 
 
@@ -35,8 +36,21 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
+			if (GetOwner<BasicEnemy>()->GetIsDead()) {
+				requestStateId = enEnemyState_Die;
+				return true;
+			}
+			if (GetOwner<BasicEnemy>()->GetIsFoundPlayer()) {
+				requestStateId = enEnemyState_Walk;
+				return true;
+			}
+			if (GetOwner<BasicEnemy>()->GetIsCoolDown()) {
+				requestStateId = enEnemyState_CoolDown;
+				return true;
+			}
 			return false;
 		}
+
 
 
 
@@ -51,6 +65,8 @@ namespace app
 
 		void app::basicEnemy::WalkState::Update()
 		{
+			GetOwner<BasicEnemy>()->RunToPlayer();
+			GetOwner<BasicEnemy>()->ModelRotation();
 		}
 
 
@@ -60,6 +76,85 @@ namespace app
 
 
 		bool app::basicEnemy::WalkState::RequestState(int& requestStateId)
+		{
+			if (GetOwner<BasicEnemy>()->GetIsDead()) {
+				requestStateId = enEnemyState_Die;
+				return true;
+			}
+			// プレイヤーが一定距離外に出たら待機状態へ移行
+			if (!GetOwner<BasicEnemy>()->GetIsFoundPlayer()) {
+				requestStateId = enEnemyState_Idle;
+				return true;
+			}
+			if (GetOwner<BasicEnemy>()->GetIsCoolDown()) {
+				requestStateId = enEnemyState_CoolDown;
+				return true;
+			}
+			return false;
+		}
+
+
+
+
+		/*************************************/
+
+
+		void CoolDownState::Enter()
+		{
+			GetOwner<BasicEnemy>()->PlayAnimation(BasicEnemy::enAnimationClip_Idle);
+		}
+
+
+		void app::basicEnemy::CoolDownState::Update()
+		{
+			GetOwner<BasicEnemy>()->CoolDownCount();
+		}
+
+
+		void CoolDownState::Exit()
+		{
+		}
+
+
+		bool CoolDownState::RequestState(int& requestStateId)
+		{
+			if (GetOwner<BasicEnemy>()->GetIsDead()) {
+				requestStateId = enEnemyState_Die;
+				return true;
+			}
+			// クールダウンが終わったら歩き状態へ移行
+			if (!GetOwner<BasicEnemy>()->GetIsCoolDown()) {
+				requestStateId = enEnemyState_Idle;
+				return true;
+			}
+			return false;
+		}
+
+
+
+
+
+		/*************************************/
+
+
+		void DieState::Enter()
+		{
+		}
+
+
+		void DieState::Update()
+		{
+			// 消滅処理
+			GetOwner<BasicEnemy>()->DeleteEnemy();
+		}
+
+
+		void DieState::Exit()
+		{
+		}
+
+
+		bool DieState::RequestState(int& requestStateId)
 		{
 			return false;
 		}

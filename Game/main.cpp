@@ -33,6 +33,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここから初期化を行うコードを記述する。
 	//////////////////////////////////////
 
+	// @todo for test
+	//g_renderingEngine->DisableTonemap();
+
 	//Gameクラスのオブジェクトを作成。
 	NewGO<Game>(0, "game");
 
