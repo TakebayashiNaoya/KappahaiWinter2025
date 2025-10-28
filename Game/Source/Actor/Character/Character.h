@@ -7,12 +7,21 @@ class Character :public IGameObject
 {
 public:
 	/// <summary>
+	/// ボディのコライダーを取得します。
+	/// </summary>
+	/// <returns> ボディのコライダーのポインタ。</returns>
+	CollisionObject* GetBodyCollider()
+	{
+		return m_bodyCollider;
+	}
+
+	/// <summary>
 	/// 「惑星の中心→キャラ」の向きを取得します。
 	/// </summary>
 	/// <returns>「惑星の中心→キャラ」の向き。</returns>
-	const Vector3& GetDirectionFromPlanetCenter() const
+	const Vector3& GetUpDirection() const
 	{
-		return m_directionFromPlanetCenter;
+		return m_upDirection;
 	}
 
 	/// <summary>
@@ -98,11 +107,17 @@ public:
 	/// ゴーストオブジェクトを更新します。
 	/// </summary>
 	/// <param name="offset">位置補正の値。</param>
-	void GhostObjectUpdate(const float offset);
+	void UpdateBodyCollider(const float offset);
+
+	/// <summary>
+	/// ボディコライダーをdelete、nullptrします。
+	/// </summary>
+	void DeleteBodyCollider();
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
-	PhysicsGhostObject* m_ghostObject = nullptr;					// キャラクター同士の当たり判定用ゴーストオブジェクト。
+	CollisionObject* m_bodyCollider = nullptr;						// キャラクター同士の当たり判定用ゴーストオブジェクト。
+
 
 	ModelRender	m_modelRender;										// モデルレンダー。
 	Vector3		m_position = Vector3::Zero;							// ポジション。
@@ -118,7 +133,7 @@ protected:
 	//---移動・回転関連---//
 	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。
 	Vector3     m_planetCenter = Vector3::Zero;						// 重力を働かせる惑星の中心座標。
-	Vector3     m_directionFromPlanetCenter = Vector3::Zero;		// 惑星の中心から自分への方向ベクトル。
+	Vector3     m_upDirection = Vector3::Zero;						// 惑星の中心から自分への方向ベクトル。
 	Vector3     m_beforeDirectionFromPlanetCenter = Vector3::Zero;	// 前フレームの惑星の中心から自分への方向ベクトル。
 
 
