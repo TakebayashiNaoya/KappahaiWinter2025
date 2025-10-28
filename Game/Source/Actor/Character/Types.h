@@ -8,7 +8,7 @@ enum enPlayerState {
 	enPlayerState_Walk,		// 歩き状態。
 	enPlayerState_Run,		// 走り状態。
 	enPlayerState_Jump,		// ジャンプ状態。
-	enPlayerState_Attacked,	// 被ダメージ状態。
+	enPlayerState_KnockBack,	// 被ダメージ状態。
 	enPlayerState_Num,
 };
 

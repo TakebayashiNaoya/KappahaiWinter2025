@@ -69,7 +69,7 @@ namespace app
 		bool IdleState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -121,7 +121,7 @@ namespace app
 		bool app::player::WalkState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -178,7 +178,7 @@ namespace app
 		bool app::player::RunState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -237,7 +237,7 @@ namespace app
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<Player>()->GetIsAttacked()) {
-				requestStateId = enPlayerState_Attacked;
+				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
@@ -266,14 +266,14 @@ namespace app
 		/*************************************/
 
 
-		void app::player::AttackedState::Enter()
+		void app::player::KnockBackState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Idle);
 			GetOwner<Player>()->SetIsInvincible(true);
 		}
 
 
-		void app::player::AttackedState::Update()
+		void app::player::KnockBackState::Update()
 		{
 			GetOwner<Player>()->KnockedBack();
 			GetOwner<Player>()->CalcCameraRotation();
@@ -281,13 +281,13 @@ namespace app
 		}
 
 
-		void app::player::AttackedState::Exit()
+		void app::player::KnockBackState::Exit()
 		{
 			GetOwner<Player>()->ResetKnockBackTimer();
 		}
 
 
-		bool app::player::AttackedState::RequestState(int& requestStateId)
+		bool app::player::KnockBackState::RequestState(int& requestStateId)
 		{
 			if (!GetOwner<Player>()->GetIsAttacked()) {
 				if (GetOwner<Player>()->IsOnGround()) {
