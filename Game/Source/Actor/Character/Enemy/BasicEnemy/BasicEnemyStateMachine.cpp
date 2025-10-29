@@ -65,7 +65,7 @@ namespace app
 
 		void app::basicEnemy::ChaseState::Update()
 		{
-			GetOwner<BasicEnemy>()->RunToPlayer();
+			GetOwner<BasicEnemy>()->ChasePlayer();
 			GetOwner<BasicEnemy>()->ModelRotation();
 		}
 

@@ -2,20 +2,114 @@
 #include "TransformEnemy.h"
 #include "TransformEnemyStateMachine.h"
 
+// ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
+// ただ、staticの方がメモリ効率は良いので今回はこの形。
+const Character::AnimationOption TransformEnemy::TRANSFORM_ENEMY_ANIMATION_OPTIONS[] = {
+   {"idle",	true},
+   {"walk", true},
+   {"run",	true},
+   {"jump", false}
+};
+
+namespace
+{
+	constexpr float BODY_COLLIDER_RADIUS = 25.0f;					// ゴーストオブジェクトの半径。
+	constexpr float BODY_COLLIDER_HEIGHT = 75.0f;					// ゴーストオブジェクトの高さ。
+	constexpr float BODY_COLLIDER_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
+
+	constexpr float RUN_SPEED = 3.0f;								// 走る速度
+
+	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
+	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
+}
+
 TransformEnemy::TransformEnemy()
 {
 	m_stateMachine = std::make_unique<app::transformEnemy::TransformEnemyStateMachine>(this);
 }
 
+/// <summary>
+/// プレイヤーが一定範囲内にいる場合、プレイヤーから逃げる。
+/// </summary>
+void TransformEnemy::EscapePlayer()
+{
+	// 水平方向に速度加算。
+	m_moveSpeed += CalcHorizontalVelocity(RUN_SPEED);
+
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
+
+	// 移動速度から座標更新。
+	ComputePosition();
+}
+
+void TransformEnemy::ComputeSlideDirection(const Vector3& playerPos)
+{
+	// プレイヤーから見た変形エネミーの方向ベクトルを計算。
+	Vector3 directionToEnemy = m_position - playerPos;
+	directionToEnemy.Normalize();
+
+	// 滑走方向を計算。
+	m_slideDirection = ProjectOnPlane(directionToEnemy, m_upDirection);
+	m_slideDirection.Normalize();
+}
+
 bool TransformEnemy::Start()
 {
-	return false;
+	// モデルとアニメーションを初期化。
+	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, "unityChan");
+
+	// 星に埋もれないように初期位置を調整。
+	m_position = SPAWN_POSITION;
+
+	// 初期ステートを設定
+	m_stateMachine->InitializeState(enPlayerState_Idle);
+
+	// ゴーストオブジェクトを作成。
+	m_bodyCollider = new CollisionObject();
+	m_bodyCollider->CreateCapsule(
+		m_position,
+		m_rotation,
+		BODY_COLLIDER_RADIUS,
+		BODY_COLLIDER_HEIGHT
+	);
+
+	return true;
 }
 
 void TransformEnemy::Update()
 {
+	m_moveSpeed = Vector3::Zero;
+
+	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
+	UpdateUpDirection();
+
+	m_stateMachine->Update();
+
+	UpdateBodyCollider(BODY_COLLIDER_OFFSET);
+
+	m_modelRender.SetPosition(m_position);
+	m_modelRender.Update();
 }
 
 void TransformEnemy::Render(RenderContext& rc)
 {
+	m_modelRender.Draw(rc);
+}
+
+/// <summary>
+/// プレイヤーから逃げる方向を計算して返します。
+/// </summary>
+/// <returns> 逃走方向。</returns>
+const Vector3 TransformEnemy::ComputeMoveDirection() const
+{
+	// プレイヤーからの方向ベクトルを計算。
+	Vector3 directionFromPlayer = m_position - m_playerFoundPos;
+	directionFromPlayer.Normalize();
+
+	// プレイヤーからの方向ベクトルから、接線方向を取得。
+	Vector3 moveDirection = ProjectOnPlane(directionFromPlayer, m_upDirection);
+	moveDirection.Normalize();
+
+	return moveDirection;
 }

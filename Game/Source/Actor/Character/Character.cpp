@@ -7,7 +7,7 @@ const std::string Character::ANIMATION_EXTENSION = ".tka";
 
 namespace
 {
-	constexpr float GRAVITY_POWER = 9.8f * 100;		// 重力。
+	constexpr float GRAVITY_POWER = 9.8f * 10;		// 重力。
 	constexpr float DEADZONE = 0.01f;				// スティック入力検知の基準値。
 	constexpr float STICK_ACCEL = 2.0f;				// スティック入力による微小押し付けの強さ。
 
@@ -198,7 +198,48 @@ void Character::InitModel(const size_t count, const AnimationOption* option, con
 /// </summary>
 void Character::UpdateUpDirection()
 {
-	m_beforeDirectionFromPlanetCenter = m_upDirection;
+	m_beforeUpDirection = m_upDirection;
 	m_upDirection = m_position - m_planetCenter;
 	m_upDirection.Normalize();
+}
+
+/// <summary>
+/// ジャンプや重力から、垂直方向の速度ベクトルを計算して返します。
+/// </summary>
+/// <returns> 垂直方向の速度。/returns>
+const Vector3 Character::CalcVerticalVelocity()
+{
+	// 落下時間を加算
+	m_fallTimer += g_gameTime->GetFrameDeltaTime();
+
+	// 鉛直投げ上げ運動の公式を使って鉛直方向の速度を計算。
+	//速度 = 初速度 - 重力 * 時間。
+	float jumpPower = m_initialJumpSpeed - (GRAVITY_POWER * m_fallTimer);
+
+	// 垂直方向に加算。
+	Vector3 velocity = m_upDirection * jumpPower;
+
+	return velocity;
+}
+
+/// <summary>
+/// 移動速度から移動後の座標を計算します。
+/// </summary>
+void Character::ComputePosition()
+{
+	Vector3 rayStartPos = m_position + m_upDirection * 10.0f;	// 少し上からレイを飛ばす。
+	Vector3 rayEndPos = m_position + m_moveSpeed;				// 移動先までレイを飛ばす。
+
+	// レイが地面に当たったら、その位置に移動させる。
+	Vector3 hitPos = Vector3::Zero;
+	if (PhysicsWorld::GetInstance()->RayTest(rayStartPos, rayEndPos, hitPos)) {
+		// 地面にぶつかった
+		m_position = hitPos;
+		// ジャンプ終了
+		m_initialJumpSpeed = 0.0f;
+		m_fallTimer = 0.0f;
+		return;
+	}
+	// 地面にぶつからなかったら、そのまま移動させる。
+	m_position = rayEndPos;
 }

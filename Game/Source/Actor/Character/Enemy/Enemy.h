@@ -30,16 +30,6 @@ public:
 	}
 
 	/// <summary>
-	/// プレイヤーが一定範囲内にいる場合、プレイヤーに向かって走る。
-	/// </summary>
-	void RunToPlayer();
-
-	/// <summary>
-	/// プレイヤーが一定範囲内にいる場合、プレイヤーから逃げる。
-	/// </summary>
-	void RunAwayFromPlayer();
-
-	/// <summary>
 	/// プレイヤーに踏まれているかを判定します。
 	/// </summary>
 	/// <returns> 踏まれていればtrue、踏まれていなければfalseを返します。</returns>

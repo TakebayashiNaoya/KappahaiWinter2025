@@ -75,6 +75,11 @@ public:
 	}
 
 	/// <summary>
+	/// プレイヤーに向かって走ります。
+	/// </summary>
+	void ChasePlayer();
+
+	/// <summary>
 	/// クールダウンをカウントダウンします。
 	/// </summary>
 	void CoolDownCount();
@@ -88,6 +93,12 @@ private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
+
+	/// <summary>
+	/// プレイヤーを追いかける方向を計算して返します。
+	/// </summary>
+	/// <returns> 追跡方向。</returns>
+	const Vector3 ComputeMoveDirection()const override final;
 
 	// 基本エネミーのステートマシン。
 	std::unique_ptr<app::basicEnemy::BasicEnemyStateMachine> m_stateMachine;

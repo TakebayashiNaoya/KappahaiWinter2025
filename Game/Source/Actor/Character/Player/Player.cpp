@@ -63,7 +63,7 @@ void Player::CalcCameraRotation()
 
 	// 回転の角度を求める。
 	// この時点ではcosの範囲（-1.0～1.0）で算出されるため、後でacosを使って角度に変換する。
-	float dotResult = m_upDirection.Dot(m_beforeDirectionFromPlanetCenter);
+	float dotResult = m_upDirection.Dot(m_beforeUpDirection);
 
 	// acosの引数の範囲は-1.0f～1.0fだが、floatの誤差で範囲外の値が入ってしまうことがあるためクランプする。
 	if (dotResult < -1.0f) {
@@ -78,7 +78,7 @@ void Player::CalcCameraRotation()
 
 	// 回転の向き（符号）を外積で判定する
 	Vector3 m_rotationDirection = Vector3::Zero;
-	m_rotationDirection.Cross(m_beforeDirectionFromPlanetCenter, m_upDirection);
+	m_rotationDirection.Cross(m_beforeUpDirection, m_upDirection);
 
 	// もし回転軸と外積の向きが逆なら、角度にマイナスをつける
 	if (m_rotationDirection.Dot(xzDirection) < 0.0f) {
@@ -95,39 +95,14 @@ void Player::CalcCameraRotation()
 /// <param name="speed">移動速度を表す値。</param>
 void Player::MoveUpdate(const float speed)
 {
-	///--- 平面移動処理 ---///
-	Vector3 move = CalcVelocity(speed);
-	m_moveSpeed += move;				// 移動速度に加算。
+	// 移動方向に速度加算。
+	m_moveSpeed += CalcHorizontalVelocity(speed);
 
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
 
-	///--- ジャンプ・重力処理 ---///
-	// 空中の移動速度の計算。
-	// 落下時間を加算
-	m_fallTimer += g_gameTime->GetFrameDeltaTime();
-
-	// 鉛直投げ上げ運動の公式を使って鉛直方向の速度を計算。
-	//速度 = 初速度 - 重力 * 時間。
-	float jumpPower = m_initialJumpSpeed - (GRAVITY_POWER * m_fallTimer);
-
-	m_moveSpeed += m_upDirection * jumpPower;	// 垂直方向に加算。
-
-
-	///--- 移動処理 ---///
-	Vector3 rayStartPos = m_position + m_upDirection * 10.0f;	// 少し上からレイを飛ばす。
-	Vector3 rayEndPos = m_position + m_moveSpeed;							// 移動先までレイを飛ばす。
-
-	// レイが地面に当たったら、その位置に移動させる。
-	Vector3 hitPos = Vector3::Zero;
-	if (PhysicsWorld::GetInstance()->RayTest(rayStartPos, rayEndPos, hitPos)) {
-		// 地面にぶつかった
-		m_position = hitPos;
-		// ジャンプ終了
-		m_initialJumpSpeed = 0.0f;
-		m_fallTimer = 0.0f;
-		return;
-	}
-	// 地面にぶつからなかったら、そのまま移動させる。
-	m_position = rayEndPos;
+	// 移動速度から座標更新。
+	ComputePosition();
 }
 
 /// <summary>
@@ -199,34 +174,11 @@ void Player::KnockedBack()
 	// ノックバック速度を移動速度に加算。
 	m_moveSpeed += m_knockBackDirection * knockedBackSpeed;
 
-	///--- ジャンプ・重力処理 ---///
-	// 空中の移動速度の計算。
-	// 落下時間を加算
-	m_fallTimer += g_gameTime->GetFrameDeltaTime();
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
 
-	// 鉛直投げ上げ運動の公式を使って鉛直方向の速度を計算。
-	//速度 = 初速度 - 重力 * 時間。
-	float jumpPower = m_initialJumpSpeed - (GRAVITY_POWER * m_fallTimer);
-
-	m_moveSpeed += m_upDirection * jumpPower;	// 垂直方向に加算。
-
-
-	///--- 移動処理 ---///
-	Vector3 rayStartPos = m_position + m_upDirection * 10.0f;	// 少し上からレイを飛ばす。
-	Vector3 rayEndPos = m_position + m_moveSpeed;							// 移動先までレイを飛ばす。
-
-	// レイが地面に当たったら、その位置に移動させる。
-	Vector3 hitPos = Vector3::Zero;
-	if (PhysicsWorld::GetInstance()->RayTest(rayStartPos, rayEndPos, hitPos)) {
-		// 地面にぶつかった
-		m_position = hitPos;
-		// ジャンプ終了
-		m_initialJumpSpeed = 0.0f;
-		m_fallTimer = 0.0f;
-		return;
-	}
-	// 地面にぶつからなかったら、そのまま移動させる。
-	m_position = rayEndPos;
+	// 移動速度から座標更新。
+	ComputePosition();
 }
 
 /// <summary>
@@ -339,17 +291,6 @@ const Vector3 Player::ComputeMoveDirection() const
 	direction.Normalize();
 
 	return direction;
-}
-
-/// <summary>
-/// 移動方向に速度を乗算して返します。
-/// </summary>
-/// <param name="speed"> 移動速度。</param>
-/// <returns> 移動先の相対座標。</returns>
-const Vector3 Player::CalcVelocity(const float speed) const
-{
-	Vector3 computeSpeed = ComputeMoveDirection() * speed;
-	return computeSpeed;
 }
 
 /// <summary>

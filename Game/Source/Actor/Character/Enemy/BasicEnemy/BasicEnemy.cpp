@@ -17,8 +17,7 @@ namespace
 	constexpr float BODY_COLLIDER_HEIGHT = 75.0f;					// ゴーストオブジェクトの高さ。
 	constexpr float BODY_COLLIDER_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
 
-	constexpr float GRAVITY_POWER = 9.8f;							// 重力。
-	constexpr float DEADZONE = 0.01f;								// スティック入力検知の基準値。
+	constexpr float RUN_SPEED = 3.0f;								// 走る速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
@@ -27,6 +26,21 @@ namespace
 BasicEnemy::BasicEnemy()
 {
 	m_stateMachine = std::make_unique<app::basicEnemy::BasicEnemyStateMachine>(this);
+}
+
+/// <summary>
+/// プレイヤーに向かって走ります。
+/// </summary>
+void BasicEnemy::ChasePlayer()
+{
+	// 水平方向に速度加算。
+	m_moveSpeed += CalcHorizontalVelocity(RUN_SPEED);
+
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
+
+	// 移動速度から座標更新。
+	ComputePosition();
 }
 
 /// <summary>
@@ -97,4 +111,21 @@ void BasicEnemy::Update()
 void BasicEnemy::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
+}
+
+/// <summary>
+/// プレイヤーを追いかける方向を計算して返します。
+/// </summary>
+/// <returns> 追跡方向。</returns>
+const Vector3 BasicEnemy::ComputeMoveDirection() const
+{
+	// プレイヤーへの方向ベクトルを計算。
+	Vector3 directionToPlayer = m_playerFoundPos - m_position;
+	directionToPlayer.Normalize();
+
+	// プレイヤーへの方向ベクトルから、接線方向を取得。
+	Vector3 moveDirection = ProjectOnPlane(directionToPlayer, m_upDirection);
+	moveDirection.Normalize();
+
+	return moveDirection;
 }

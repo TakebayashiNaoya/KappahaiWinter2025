@@ -43,7 +43,7 @@ public:
 	/// プレイヤーの座標を取得します。
 	/// </summary>
 	/// <returns>プレイヤーの現在の座標値（float型）。</returns>
-	const Vector3 GetPosition()const
+	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
@@ -183,15 +183,8 @@ private:
 	/// <summary>
 	/// 移動方向を返します。
 	/// </summary>
-	/// <returns>移動方向。</returns>
-	const Vector3 ComputeMoveDirection()const;
-
-	/// <summary>
-	/// 移動方向に速度を乗算して返します。
-	/// </summary>
-	/// <param name="speed"> 移動速度。</param>
-	/// <returns> 移動先の相対座標。</returns>
-	const Vector3 CalcVelocity(const float speed)const;
+	/// <returns> 移動方向。</returns>
+	const Vector3 ComputeMoveDirection()const override final;
 
 	/// <summary>
 	/// 一定時間が経過したら無敵状態を解除します。
