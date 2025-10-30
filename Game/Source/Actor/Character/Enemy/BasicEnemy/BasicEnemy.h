@@ -48,30 +48,12 @@ public:
 	}
 
 	/// <summary>
-	/// 死亡状態を取得します。
-	/// </summary>
-	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
-	const bool GetIsDead() const
-	{
-		return m_isDead;
-	}
-
-	/// <summary>
 	/// クールダウン状態を設定します。
 	/// </summary>
 	/// <param name="isCoolDown"> クールダウン状態の場合はtrueを設定。</param>
 	void SetIsCoolDown(const bool isCoolDown)
 	{
 		m_isCoolDown = isCoolDown;
-	}
-
-	/// <summary>
-	/// 死亡状態を設定します。
-	/// </summary>
-	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
-	void SetIsDead(const bool isDead)
-	{
-		m_isDead = isDead;
 	}
 
 	/// <summary>

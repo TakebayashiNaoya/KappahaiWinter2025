@@ -17,6 +17,15 @@ public:
 	}
 
 	/// <summary>
+	/// 死亡状態を取得します。
+	/// </summary>
+	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
+	const bool GetIsDead() const
+	{
+		return m_isDead;
+	}
+
+	/// <summary>
 	/// プレイヤーが見つかったかどうかと、その座標を設定します。
 	/// </summary>
 	/// <param name="isFound"> プレイヤーが見つかったらtrueを入れる。</param>
@@ -27,6 +36,16 @@ public:
 		m_playerFoundPos = playerPos;
 	}
 
+	/// <summary>
+	/// 死亡状態を設定します。
+	/// </summary>
+	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
+	void SetIsDead(const bool isDead)
+	{
+		m_isDead = isDead;
+	}
+
 	bool m_isFoundPlayer = false;
 	Vector3 m_playerFoundPos = Vector3::Zero;
+	bool m_isDead = false;						// 死亡状態かどうか。
 };
