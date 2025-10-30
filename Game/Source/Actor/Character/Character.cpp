@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Character.h"
+#include "Source/Collision/CollisionManager.h"
 
 // 静的メンバの定義
 const std::string Character::ANIMATION_FILE_PATH = "Assets/animData/";
@@ -33,7 +34,7 @@ const bool& Character::IsOnGround()
 		// キャラクター座標と当たった座標の距離を計算。
 		Vector3 DistanceToGround = m_position - hitPosition;
 		// 距離が一定未満なら接地していると判定。
-		if (DistanceToGround.Length() < 1.0f) {
+		if (DistanceToGround.Length() < 2.0f) {
 			return true;
 		}
 
@@ -167,6 +168,8 @@ void Character::UpdateBodyCollider(const float offset)
 /// </summary>
 void Character::DeleteBodyCollider()
 {
+	// コリジョンヒットマネージャーから登録解除。
+	CollisionHitManager::GetInstance()->Unregister(m_bodyCollider);
 	delete m_bodyCollider;
 	m_bodyCollider = nullptr;
 }
