@@ -48,15 +48,6 @@ public:
 	}
 
 	/// <summary>
-	/// 死亡状態を取得します。
-	/// </summary>
-	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
-	const bool GetIsDead() const
-	{
-		return m_isDead;
-	}
-
-	/// <summary>
 	/// クールダウン状態を設定します。
 	/// </summary>
 	/// <param name="isCoolDown"> クールダウン状態の場合はtrueを設定。</param>
@@ -66,28 +57,33 @@ public:
 	}
 
 	/// <summary>
-	/// 死亡状態を設定します。
+	/// プレイヤーに向かって走ります。
 	/// </summary>
-	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
-	void SetIsDead(const bool isDead)
-	{
-		m_isDead = isDead;
-	}
+	void ChasePlayer();
 
 	/// <summary>
-	/// クールダウンをカウントダウンします。
+	/// クールダウンをカウントダウンし、一定時間が経過したらm_isCoolDownをfalseにします。
 	/// </summary>
 	void CoolDownCount();
 
 	/// <summary>
 	/// エネミーを消滅させます。
+	/// 1.コライダーを削除。
+	/// 2.モデルのYスケールを半分にして、潰されているように表現する。
+	/// 3.一定時間経過後、DeleteGO(this)。
 	/// </summary>
-	void DeleteEnemy();
+	void DeleteEnemy()override final;
 
 private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
+
+	/// <summary>
+	/// プレイヤーを追いかける方向を計算して返します。
+	/// </summary>
+	/// <returns> 追跡方向。</returns>
+	const Vector3 ComputeMoveDirection()const override final;
 
 	// 基本エネミーのステートマシン。
 	std::unique_ptr<app::basicEnemy::BasicEnemyStateMachine> m_stateMachine;
@@ -98,6 +94,5 @@ private:
 	float m_coolDownTimer = 0.0f;	// クールダウンタイマー。
 	bool m_isCoolDown = false;		// クールダウン中かどうか。
 
-	bool m_isDead = false;          // 死亡状態かどうか。
 	float m_deleteTimer = 0.0f;		// 死亡タイマー。
 };

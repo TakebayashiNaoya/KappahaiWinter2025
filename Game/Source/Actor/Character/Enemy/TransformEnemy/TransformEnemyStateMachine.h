@@ -22,10 +22,43 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
-		class WalkState : public IState
+		class EscapeState : public IState
 		{
 		public:
-			WalkState(TransformEnemy* owner) : IState(owner) {}
+			EscapeState(TransformEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
+		class TransformState : public IState
+		{
+		public:
+			TransformState(TransformEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
+		class SlideState : public IState
+		{
+		public:
+			SlideState(TransformEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
+		class DieState : public IState
+		{
+		public:
+			DieState(TransformEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -41,8 +74,11 @@ namespace app
 		public:
 			TransformEnemyStateMachine(TransformEnemy* owner) : m_owner(owner)
 			{
-				AddState<IdleState, TransformEnemy>(enEnemyState_Idle, owner);
-				AddState<WalkState, TransformEnemy>(enEnemyState_Walk, owner);
+				AddState<IdleState, TransformEnemy>(enTransformEnemyState_Idle, owner);
+				AddState<EscapeState, TransformEnemy>(enTransformEnemyState_Escape, owner);
+				AddState<TransformState, TransformEnemy>(enTransformEnemyState_Transform, owner);
+				AddState<SlideState, TransformEnemy>(enTransformEnemyState_Slide, owner);
+				AddState<DieState, TransformEnemy>(enTransformEnemyState_Die, owner);
 			}
 
 			void Update() override final;

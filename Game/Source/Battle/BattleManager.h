@@ -1,6 +1,5 @@
 #pragma once
 
-
 // “–‚½‚è”»’è‚ğŠÇ—‚·‚éƒNƒ‰ƒX
 // “–‚½‚Á‚½‚Æ‚¢‚¤ˆ—‚ğ‚Ü‚Æ‚ß‚½‚¢
 class BattleManager
@@ -8,7 +7,6 @@ class BattleManager
 private:
 	BattleManager() {};
 	~BattleManager() {};
-
 
 public:
 	void Update();

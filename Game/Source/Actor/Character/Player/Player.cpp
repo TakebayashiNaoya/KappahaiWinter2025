@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "PlayerStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -19,7 +20,7 @@ namespace
 	constexpr float BODY_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
 	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
 
-	constexpr float STOMP_COLLIDER_RADIUS = 25.0f;					// 踏みつけ用コライダーの半径。
+	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;					// 踏みつけ用コライダーの半径。
 	constexpr float STOMP_JUMP_POWER = 30.0f;						// 踏みつけジャンプの初速。
 
 	constexpr float GRAVITY_POWER = 9.8f * 10;						// 重力。
@@ -63,7 +64,7 @@ void Player::CalcCameraRotation()
 
 	// 回転の角度を求める。
 	// この時点ではcosの範囲（-1.0～1.0）で算出されるため、後でacosを使って角度に変換する。
-	float dotResult = m_upDirection.Dot(m_beforeDirectionFromPlanetCenter);
+	float dotResult = m_upDirection.Dot(m_beforeUpDirection);
 
 	// acosの引数の範囲は-1.0f～1.0fだが、floatの誤差で範囲外の値が入ってしまうことがあるためクランプする。
 	if (dotResult < -1.0f) {
@@ -78,7 +79,7 @@ void Player::CalcCameraRotation()
 
 	// 回転の向き（符号）を外積で判定する
 	Vector3 m_rotationDirection = Vector3::Zero;
-	m_rotationDirection.Cross(m_beforeDirectionFromPlanetCenter, m_upDirection);
+	m_rotationDirection.Cross(m_beforeUpDirection, m_upDirection);
 
 	// もし回転軸と外積の向きが逆なら、角度にマイナスをつける
 	if (m_rotationDirection.Dot(xzDirection) < 0.0f) {
@@ -95,39 +96,14 @@ void Player::CalcCameraRotation()
 /// <param name="speed">移動速度を表す値。</param>
 void Player::MoveUpdate(const float speed)
 {
-	///--- 平面移動処理 ---///
-	Vector3 move = CalcVelocity(speed);
-	m_moveSpeed += move;				// 移動速度に加算。
+	// 移動方向に速度加算。
+	m_moveSpeed += CalcHorizontalVelocity(speed);
 
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
 
-	///--- ジャンプ・重力処理 ---///
-	// 空中の移動速度の計算。
-	// 落下時間を加算
-	m_fallTimer += g_gameTime->GetFrameDeltaTime();
-
-	// 鉛直投げ上げ運動の公式を使って鉛直方向の速度を計算。
-	//速度 = 初速度 - 重力 * 時間。
-	float jumpPower = m_initialJumpSpeed - (GRAVITY_POWER * m_fallTimer);
-
-	m_moveSpeed += m_upDirection * jumpPower;	// 垂直方向に加算。
-
-
-	///--- 移動処理 ---///
-	Vector3 rayStartPos = m_position + m_upDirection * 10.0f;	// 少し上からレイを飛ばす。
-	Vector3 rayEndPos = m_position + m_moveSpeed;							// 移動先までレイを飛ばす。
-
-	// レイが地面に当たったら、その位置に移動させる。
-	Vector3 hitPos = Vector3::Zero;
-	if (PhysicsWorld::GetInstance()->RayTest(rayStartPos, rayEndPos, hitPos)) {
-		// 地面にぶつかった
-		m_position = hitPos;
-		// ジャンプ終了
-		m_initialJumpSpeed = 0.0f;
-		m_fallTimer = 0.0f;
-		return;
-	}
-	// 地面にぶつからなかったら、そのまま移動させる。
-	m_position = rayEndPos;
+	// 移動速度から座標更新。
+	ComputePosition();
 }
 
 /// <summary>
@@ -141,6 +117,9 @@ void Player::CreateStompCollider()
 		m_rotation,
 		STOMP_COLLIDER_RADIUS
 	);
+
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_stompCollider, this);
 }
 
 /// <summary>
@@ -157,22 +136,28 @@ void Player::UpdateStompCollider()
 /// </summary>
 void Player::DeleteStompCollider()
 {
+	// コリジョンヒットマネージャーから登録解除。
+	CollisionHitManager::GetInstance()->Unregister(m_stompCollider);
 	delete m_stompCollider;
 	m_stompCollider = nullptr;
 }
 
 /// <summary>
-/// 攻撃してきた敵の方向を計算します。
+/// ノックバック方向を計算します。
 /// </summary>
-/// <param name="enemyPos"> 敵の座標。</param>
-void Player::ComputeAttackedDirection(const Vector3& enemyPos)
+/// <param name="enemyPos"> 攻撃してきた敵の座標。</param>
+void Player::ComputeKnockBackDirection(const Vector3& enemyPos)
 {
 	// 敵の位置から「惑星の中心→敵」のベクトルを計算し、正規化します。
 	Vector3 directionToEnemy = enemyPos - m_position;
 	directionToEnemy.Normalize();
 
 	// 攻撃された方向を計算します。
-	m_attackedDirection = ProjectOnPlane(directionToEnemy, m_upDirection);
+	Vector3 attackedDirection = ProjectOnPlane(directionToEnemy, m_upDirection);
+
+	// ノックバック方向を設定します。（攻撃された方向の逆向き）
+	m_knockBackDirection = attackedDirection * -1.0f;
+	m_knockBackDirection.Normalize();
 }
 
 /// <summary>
@@ -180,10 +165,10 @@ void Player::ComputeAttackedDirection(const Vector3& enemyPos)
 /// </summary>
 void Player::KnockedBack()
 {
-	m_knockedbackTimer += g_gameTime->GetFrameDeltaTime();
+	m_knockBackTimer += g_gameTime->GetFrameDeltaTime();
 
 	// ノックバック速度を計算。
-	float knockedBackSpeed = INITIAL_KNOCK_BACK_SPEED - (KNOCK_BACK_DAMPING * m_knockedbackTimer);
+	float knockedBackSpeed = INITIAL_KNOCK_BACK_SPEED - (KNOCK_BACK_DAMPING * m_knockBackTimer);
 
 	// ノックバック速度が0以下になったら処理を終了。
 	if (knockedBackSpeed < 0.0f)
@@ -192,39 +177,14 @@ void Player::KnockedBack()
 		return;
 	}
 
-	Vector3 knockBackDirection = m_attackedDirection * -1.0f;
-
 	// ノックバック速度を移動速度に加算。
-	m_moveSpeed += knockBackDirection * knockedBackSpeed;
+	m_moveSpeed += m_knockBackDirection * knockedBackSpeed;
 
-	///--- ジャンプ・重力処理 ---///
-	// 空中の移動速度の計算。
-	// 落下時間を加算
-	m_fallTimer += g_gameTime->GetFrameDeltaTime();
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
 
-	// 鉛直投げ上げ運動の公式を使って鉛直方向の速度を計算。
-	//速度 = 初速度 - 重力 * 時間。
-	float jumpPower = m_initialJumpSpeed - (GRAVITY_POWER * m_fallTimer);
-
-	m_moveSpeed += m_upDirection * jumpPower;	// 垂直方向に加算。
-
-
-	///--- 移動処理 ---///
-	Vector3 rayStartPos = m_position + m_upDirection * 10.0f;	// 少し上からレイを飛ばす。
-	Vector3 rayEndPos = m_position + m_moveSpeed;							// 移動先までレイを飛ばす。
-
-	// レイが地面に当たったら、その位置に移動させる。
-	Vector3 hitPos = Vector3::Zero;
-	if (PhysicsWorld::GetInstance()->RayTest(rayStartPos, rayEndPos, hitPos)) {
-		// 地面にぶつかった
-		m_position = hitPos;
-		// ジャンプ終了
-		m_initialJumpSpeed = 0.0f;
-		m_fallTimer = 0.0f;
-		return;
-	}
-	// 地面にぶつからなかったら、そのまま移動させる。
-	m_position = rayEndPos;
+	// 移動速度から座標更新。
+	ComputePosition();
 }
 
 /// <summary>
@@ -273,17 +233,18 @@ bool Player::Start()
 		BODY_COLLIDER_RADIUS,
 		BODY_COLLIDER_HEIGHT
 	);
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_bodyCollider, this);
 	return true;
 }
 
 void Player::Update()
 {
-	m_beforeDirectionFromPlanetCenter = m_upDirection;
 	m_moveSpeed = Vector3::Zero;
 	m_xzAdditionalRot = Quaternion::Identity;
 
-	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
-	CalcDirectionFromPlanetCenter();
+	//「惑星の中心→キャラ」のベクトルを更新します。
+	UpdateUpDirection();
 
 	m_stateMachine->Update();
 
@@ -338,17 +299,6 @@ const Vector3 Player::ComputeMoveDirection() const
 	direction.Normalize();
 
 	return direction;
-}
-
-/// <summary>
-/// 移動方向に速度を乗算して返します。
-/// </summary>
-/// <param name="speed"> 移動速度。</param>
-/// <returns> 移動先の相対座標。</returns>
-const Vector3 Player::CalcVelocity(const float speed) const
-{
-	Vector3 computeSpeed = ComputeMoveDirection() * speed;
-	return computeSpeed;
 }
 
 /// <summary>

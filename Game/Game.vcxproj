@@ -229,7 +229,6 @@
     <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\Enemy.cpp" />
-    <ClCompile Include="Source\Actor\Character\Enemy\EnemyStateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\Player\Player.cpp" />
@@ -253,7 +252,6 @@
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\Enemy.h" />
-    <ClInclude Include="Source\Actor\Character\Enemy\EnemyStateMachine.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.h" />
     <ClInclude Include="Source\Actor\Character\Player\Player.h" />

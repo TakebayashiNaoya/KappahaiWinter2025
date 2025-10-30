@@ -43,7 +43,7 @@ public:
 	/// プレイヤーの座標を取得します。
 	/// </summary>
 	/// <returns>プレイヤーの現在の座標値（float型）。</returns>
-	const Vector3 GetPosition()const
+	const Vector3& GetPosition()const
 	{
 		return m_position;
 	}
@@ -107,7 +107,7 @@ public:
 	/// </summary>
 	void ResetKnockBackTimer()
 	{
-		m_knockedbackTimer = 0.0f;
+		m_knockBackTimer = 0.0f;
 	}
 
 	/// <summary>
@@ -137,10 +137,10 @@ public:
 	void DeleteStompCollider();
 
 	/// <summary>
-	/// 攻撃してきた敵の方向を計算します。
+	/// ノックバック方向を計算します。
 	/// </summary>
-	/// <param name="enemyPos"> 敵の座標。</param>
-	void ComputeAttackedDirection(const Vector3& enemyPos);
+	/// <param name="enemyPos"> 攻撃してきた敵の座標。</param>
+	void ComputeKnockBackDirection(const Vector3& enemyPos);
 
 	/// <summary>
 	/// ノックバックされる処理を実行する関数。
@@ -166,11 +166,12 @@ private:
 
 	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
 
-	bool m_isAttacked = false;						// ダメージを受けたかどうか。
-	Vector3 m_attackedDirection = Vector3::Zero;	// ダメージを受けた方向。
-	float	m_knockedbackTimer = 0.0f;				// ノックバックタイマー。
-	bool m_isBlinking = false;						// 点滅中かどうか。
-	bool m_isInvincible = false;					// 無敵状態かどうか。
+	/// ダメージ関連。
+	bool	m_isAttacked = false;					// ダメージを受けたかどうか。
+	Vector3 m_knockBackDirection = Vector3::Zero;	// ノックバック方向。
+	float	m_knockBackTimer = 0.0f;				// ノックバックタイマー。
+	bool	m_isBlinking = false;					// 点滅中かどうか。
+	bool	m_isInvincible = false;					// 無敵状態かどうか。
 	float   m_invincibleTimer = 0.0f;				// 無敵タイマー。
 
 	/// プレイヤーのステートマシン。
@@ -182,15 +183,8 @@ private:
 	/// <summary>
 	/// 移動方向を返します。
 	/// </summary>
-	/// <returns>移動方向。</returns>
-	const Vector3 ComputeMoveDirection()const;
-
-	/// <summary>
-	/// 移動方向に速度を乗算して返します。
-	/// </summary>
-	/// <param name="speed"> 移動速度。</param>
-	/// <returns> 移動先の相対座標。</returns>
-	const Vector3 CalcVelocity(const float speed)const;
+	/// <returns> 移動方向。</returns>
+	const Vector3 ComputeMoveDirection()const override final;
 
 	/// <summary>
 	/// 一定時間が経過したら無敵状態を解除します。

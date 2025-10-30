@@ -134,7 +134,7 @@ protected:
 	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。
 	Vector3     m_planetCenter = Vector3::Zero;						// 重力を働かせる惑星の中心座標。
 	Vector3     m_upDirection = Vector3::Zero;						// 惑星の中心から自分への方向ベクトル。
-	Vector3     m_beforeDirectionFromPlanetCenter = Vector3::Zero;	// 前フレームの惑星の中心から自分への方向ベクトル。
+	Vector3     m_beforeUpDirection = Vector3::Zero;				// 前フレームの惑星の中心から自分への方向ベクトル。
 
 
 	// 静的メンバとして宣言
@@ -182,15 +182,53 @@ protected:
 	/// <summary>
 	/// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
 	/// </summary>
-	void CalcDirectionFromPlanetCenter();
+	void UpdateUpDirection();
 
-	// ベクトル v を法線 n の接平面へ投影（接線成分を取り出す）
-	// Dot(v, n) は v と n の内積 → v の中で n 方向にどれだけ成分があるか。
-	// n * Dot(v, n) はその成分を n 方向に戻したベクトル。
-	// v - (その成分) → n方向の成分を引いて、残りを返す → 結果は n に直交する平面上のベクトル（接線）
+	/// <summary>
+	/// ベクトル v を法線 n の接平面へ投影（接線成分を取り出す）
+	/// Dot(v, n) は v と n の内積 → v の中で n 方向にどれだけ成分があるか。
+	/// n * Dot(v, n) はその成分を n 方向に戻したベクトル。
+	/// v - (その成分) → n方向の成分を引いて、残りを返す → 結果は n に直交する平面上のベクトル（接線）
+	/// </summary>
+	/// <param name="v"> 投影するベクトル。</param>
+	/// <param name="n"> 法線ベクトル。</param>
+	/// <returns> 接平面への投影ベクトル。</returns>
 	static Vector3 ProjectOnPlane(const Vector3& v, const Vector3& n)
 	{
 		return v - n * Dot(v, n);
 	}
-};
 
+	/// <summary>
+	/// 移動方向を計算して返します。
+	/// キャラによって移動方向の決定方法が異なるため、継承先でオーバーライドしてください。
+	/// </summary>
+	/// <returns> 移動方向。</returns>
+	virtual const Vector3 ComputeMoveDirection() const
+	{
+		return Vector3::Zero;
+	};
+
+	/// <summary>
+	/// 移動方向に速度を乗算して返します。
+	/// ComputeMoveDirection()を使い、継承先で移動方向を決定してください。
+	/// </summary>
+	/// <param name="direction"> 移動方向。</param>
+	/// <param name="speed"> 速度。</param>
+	/// <returns> 水平方向の速度ベクトル。</returns>
+	const Vector3 CalcHorizontalVelocity(const float speed)const
+	{
+		Vector3 velocity = ComputeMoveDirection() * speed;
+		return velocity;
+	};
+
+	/// <summary>
+	/// ジャンプや重力から、垂直方向の速度ベクトルを計算して返します。
+	/// </summary>
+	/// <returns> 垂直方向の速度。/returns>
+	const Vector3 CalcVerticalVelocity();
+
+	/// <summary>
+	/// 移動速度から移動後の座標を計算します。
+	/// </summary>
+	void ComputePosition();
+};

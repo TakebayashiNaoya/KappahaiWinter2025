@@ -7,8 +7,6 @@
 class Enemy : public Character
 {
 public:
-	Enemy();
-
 	/// <summary>
 	/// プレイヤーが見つかったかどうかを取得します。
 	/// </summary>
@@ -16,6 +14,15 @@ public:
 	const bool& GetIsFoundPlayer() const
 	{
 		return m_isFoundPlayer;
+	}
+
+	/// <summary>
+	/// 死亡状態を取得します。
+	/// </summary>
+	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
+	const bool GetIsDead() const
+	{
+		return m_isDead;
 	}
 
 	/// <summary>
@@ -30,21 +37,21 @@ public:
 	}
 
 	/// <summary>
-	/// プレイヤーが一定範囲内にいる場合、プレイヤーに向かって走る。
+	/// 死亡状態を設定します。
 	/// </summary>
-	void RunToPlayer();
-
-	/// <summary>
-	/// プレイヤーが一定範囲内にいる場合、プレイヤーから逃げる。
-	/// </summary>
-	void RunAwayFromPlayer();
-
-	/// <summary>
-	/// プレイヤーに踏まれているかを判定します。
-	/// </summary>
-	/// <returns> 踏まれていればtrue、踏まれていなければfalseを返します。</returns>
-	bool IsStomped();
+	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
+	void SetIsDead(const bool isDead)
+	{
+		m_isDead = isDead;
+	}
 
 	bool m_isFoundPlayer = false;
 	Vector3 m_playerFoundPos = Vector3::Zero;
+	bool m_isDead = false;						// 死亡状態かどうか。
+
+protected:
+	/// <summary>
+	/// エネミー削除の処理を行います。
+	/// </summary>
+	virtual void DeleteEnemy() = 0;
 };

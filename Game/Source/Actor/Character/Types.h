@@ -4,19 +4,28 @@
 
 #pragma once
 enum enPlayerState {
-	enPlayerState_Idle,			// 待機状態。
-	enPlayerState_Walk,			// 歩き状態。
-	enPlayerState_Run,			// 走り状態。
-	enPlayerState_Jump,			// ジャンプ状態。
-	enPlayerState_KnockBack,	// 被ダメージ状態。
-	enPlayerState_KneelDown,	// 死亡状態。
+	enPlayerState_Idle,			// 待機。
+	enPlayerState_Walk,			// 歩き。
+	enPlayerState_Run,			// 走り。
+	enPlayerState_Jump,			// ジャンプ。
+	enPlayerState_KnockBack,	// ノックバック。
+	enPlayerState_KneelDown,	// 死亡。
 	enPlayerState_Num,
 };
 
-enum enEnemyState {
-	enEnemyState_Idle,		// 待機状態。
-	enEnemyState_Walk,		// 歩き状態。
-	enEnemyState_CoolDown,	// クールダウン状態。
-	enEnemyState_Die,		// ダウン状態。
-	enEnemyState_Num,
+enum enBasicEnemyState {
+	enBasicEnemyState_Idle,			// 待機。
+	enBasicEnemyState_Chase,		// 追跡。
+	enBasicEnemyState_CoolDown,		// クールダウン。
+	enBasicEnemyState_Die,			// 死亡。
+	enBasicEnemyState_Num,
+};
+
+enum enTransformEnemyState {
+	enTransformEnemyState_Idle,			// 待機。
+	enTransformEnemyState_Escape,		// 逃走。
+	enTransformEnemyState_Transform,	// 変形。
+	enTransformEnemyState_Slide,		// 滑走。
+	enTransformEnemyState_Die,			// 死亡。
+	enTransformEnemyState_Num,
 };

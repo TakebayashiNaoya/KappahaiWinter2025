@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BasicEnemy.h"
 #include "BasicEnemyStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -17,18 +18,30 @@ namespace
 	constexpr float BODY_COLLIDER_HEIGHT = 75.0f;					// ゴーストオブジェクトの高さ。
 	constexpr float BODY_COLLIDER_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
 
-	constexpr float GRAVITY_POWER = 9.8f;							// 重力。
-	constexpr float DEADZONE = 0.01f;								// スティック入力検知の基準値。
+	constexpr float RUN_SPEED = 3.0f;								// 走る速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
-
-	constexpr int LIFE = 3;											// 初期ライフ数。
 }
 
 BasicEnemy::BasicEnemy()
 {
 	m_stateMachine = std::make_unique<app::basicEnemy::BasicEnemyStateMachine>(this);
+}
+
+/// <summary>
+/// プレイヤーに向かって走ります。
+/// </summary>
+void BasicEnemy::ChasePlayer()
+{
+	// 水平方向に速度加算。
+	m_moveSpeed += CalcHorizontalVelocity(RUN_SPEED);
+
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
+
+	// 移動速度から座標更新。
+	ComputePosition();
 }
 
 /// <summary>
@@ -63,8 +76,6 @@ bool BasicEnemy::Start()
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, "unityChan");
 
-	InitLife(LIFE);
-
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
 
@@ -80,16 +91,18 @@ bool BasicEnemy::Start()
 		BODY_COLLIDER_HEIGHT
 	);
 
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_BasicEnemy, m_bodyCollider, this);
+
 	return true;
 }
 
 void BasicEnemy::Update()
 {
-	m_beforeDirectionFromPlanetCenter = m_upDirection;
 	m_moveSpeed = Vector3::Zero;
 
 	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
-	CalcDirectionFromPlanetCenter();
+	UpdateUpDirection();
 
 	m_stateMachine->Update();
 
@@ -102,4 +115,21 @@ void BasicEnemy::Update()
 void BasicEnemy::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
+}
+
+/// <summary>
+/// プレイヤーを追いかける方向を計算して返します。
+/// </summary>
+/// <returns> 追跡方向。</returns>
+const Vector3 BasicEnemy::ComputeMoveDirection() const
+{
+	// プレイヤーへの方向ベクトルを計算。
+	Vector3 directionToPlayer = m_playerFoundPos - m_position;
+	directionToPlayer.Normalize();
+
+	// プレイヤーへの方向ベクトルから、接線方向を取得。
+	Vector3 moveDirection = ProjectOnPlane(directionToPlayer, m_upDirection);
+	moveDirection.Normalize();
+
+	return moveDirection;
 }
