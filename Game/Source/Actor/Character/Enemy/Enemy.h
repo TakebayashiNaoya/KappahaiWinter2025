@@ -48,4 +48,10 @@ public:
 	bool m_isFoundPlayer = false;
 	Vector3 m_playerFoundPos = Vector3::Zero;
 	bool m_isDead = false;						// 死亡状態かどうか。
+
+protected:
+	/// <summary>
+	/// エネミー削除の処理を行います。
+	/// </summary>
+	virtual void DeleteEnemy() = 0;
 };
