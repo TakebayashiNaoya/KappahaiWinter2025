@@ -72,7 +72,7 @@ public:
 	/// 2.モデルのYスケールを半分にして、潰されているように表現する。
 	/// 3.一定時間経過後、DeleteGO(this)。
 	/// </summary>
-	void DeleteEnemy();
+	void DeleteEnemy()override final;
 
 private:
 	bool Start()override final;
@@ -94,6 +94,5 @@ private:
 	float m_coolDownTimer = 0.0f;	// クールダウンタイマー。
 	bool m_isCoolDown = false;		// クールダウン中かどうか。
 
-	bool m_isDead = false;          // 死亡状態かどうか。
 	float m_deleteTimer = 0.0f;		// 死亡タイマー。
 };
