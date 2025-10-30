@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BasicEnemy.h"
 #include "BasicEnemyStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -89,6 +90,9 @@ bool BasicEnemy::Start()
 		BODY_COLLIDER_RADIUS,
 		BODY_COLLIDER_HEIGHT
 	);
+
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_BasicEnemy, m_bodyCollider, this);
 
 	return true;
 }

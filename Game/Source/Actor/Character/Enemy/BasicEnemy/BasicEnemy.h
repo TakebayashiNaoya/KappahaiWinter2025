@@ -80,12 +80,15 @@ public:
 	void ChasePlayer();
 
 	/// <summary>
-	/// クールダウンをカウントダウンします。
+	/// クールダウンをカウントダウンし、一定時間が経過したらm_isCoolDownをfalseにします。
 	/// </summary>
 	void CoolDownCount();
 
 	/// <summary>
 	/// エネミーを消滅させます。
+	/// 1.コライダーを削除。
+	/// 2.モデルのYスケールを半分にして、潰されているように表現する。
+	/// 3.一定時間経過後、DeleteGO(this)。
 	/// </summary>
 	void DeleteEnemy();
 
