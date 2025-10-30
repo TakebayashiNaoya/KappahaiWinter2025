@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "PlayerStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -116,6 +117,9 @@ void Player::CreateStompCollider()
 		m_rotation,
 		STOMP_COLLIDER_RADIUS
 	);
+
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_stompCollider, this);
 }
 
 /// <summary>
@@ -132,6 +136,8 @@ void Player::UpdateStompCollider()
 /// </summary>
 void Player::DeleteStompCollider()
 {
+	// コリジョンヒットマネージャーから登録解除。
+	CollisionHitManager::GetInstance()->Unregister(m_stompCollider);
 	delete m_stompCollider;
 	m_stompCollider = nullptr;
 }
@@ -227,6 +233,8 @@ bool Player::Start()
 		BODY_COLLIDER_RADIUS,
 		BODY_COLLIDER_HEIGHT
 	);
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_bodyCollider, this);
 	return true;
 }
 
