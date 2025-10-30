@@ -7,8 +7,6 @@
 class Enemy : public Character
 {
 public:
-	Enemy();
-
 	/// <summary>
 	/// プレイヤーが見つかったかどうかを取得します。
 	/// </summary>
@@ -28,12 +26,6 @@ public:
 		m_isFoundPlayer = isFound;
 		m_playerFoundPos = playerPos;
 	}
-
-	/// <summary>
-	/// プレイヤーに踏まれているかを判定します。
-	/// </summary>
-	/// <returns> 踏まれていればtrue、踏まれていなければfalseを返します。</returns>
-	bool IsStomped();
 
 	bool m_isFoundPlayer = false;
 	Vector3 m_playerFoundPos = Vector3::Zero;
