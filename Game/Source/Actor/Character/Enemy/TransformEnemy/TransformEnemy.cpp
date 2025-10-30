@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TransformEnemy.h"
 #include "TransformEnemyStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -18,9 +19,10 @@ namespace
 	constexpr float BODY_COLLIDER_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
 
 	constexpr float RUN_SPEED = 3.0f;								// 走る速度
+	constexpr float SLIDE_SPEED = 15.0f;								// 滑走速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
+	const Vector3 SPAWN_POSITION = Vector3(100.0f, 0.0f, 2001.0f);	// スポーン座標。
 }
 
 TransformEnemy::TransformEnemy()
@@ -43,15 +45,39 @@ void TransformEnemy::EscapePlayer()
 	ComputePosition();
 }
 
-void TransformEnemy::ComputeSlideDirection(const Vector3& playerPos)
+/// <summary>
+/// 滑走方向を更新します。
+/// </summary>
+void TransformEnemy::UpdateSlideDirection()
 {
-	// プレイヤーから見た変形エネミーの方向ベクトルを計算。
-	Vector3 directionToEnemy = m_position - playerPos;
-	directionToEnemy.Normalize();
-
-	// 滑走方向を計算。
-	m_slideDirection = ProjectOnPlane(directionToEnemy, m_upDirection);
+	m_slideDirection = ProjectOnPlane(m_slideDirection, m_upDirection);
 	m_slideDirection.Normalize();
+}
+
+/// <summary>
+/// 滑走します。
+/// </summary>
+void TransformEnemy::Sliding()
+{
+	// 滑走方向を再計算。
+	UpdateSlideDirection();
+
+	// 水平方向に速度加算。
+	m_moveSpeed += m_slideDirection * SLIDE_SPEED;
+
+	// 垂直方向に速度加算。
+	m_moveSpeed += CalcVerticalVelocity();
+
+	// 移動速度から座標更新。
+	ComputePosition();
+}
+
+void TransformEnemy::DeleteEnemy()
+{
+	// コライダーを削除。
+	DeleteBodyCollider();
+	// 自分自身を削除。
+	DeleteGO(this);
 }
 
 bool TransformEnemy::Start()
@@ -73,6 +99,9 @@ bool TransformEnemy::Start()
 		BODY_COLLIDER_RADIUS,
 		BODY_COLLIDER_HEIGHT
 	);
+
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(enCollisionType_TransformEnemy, m_bodyCollider, this);
 
 	return true;
 }

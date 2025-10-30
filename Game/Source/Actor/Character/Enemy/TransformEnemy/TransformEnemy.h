@@ -75,11 +75,32 @@ public:
 	}
 
 	/// <summary>
-	/// プレイヤーが一定範囲内にいる場合、プレイヤーから逃げる。
+	/// 衝撃を受けた位置から初期の滑走方向を計算します。
+	/// </summary>
+	/// <param name="impulsePos"> 衝撃を受けた座標。または衝撃を与えたものの座標。</param>
+	void CalcInitialSlideDirection(const Vector3& impulsePos)
+	{
+		Vector3 direction = m_position - impulsePos;
+		direction.Normalize();
+		m_slideDirection = direction;
+	}
+
+	/// <summary>
+	/// プレイヤーから逃げます。
 	/// </summary>
 	void EscapePlayer();
 
-	void ComputeSlideDirection(const Vector3& playerPos);
+	/// <summary>
+	/// 滑走します。
+	/// </summary>
+	void Sliding();
+
+	/// <summary>
+	/// エネミーを消滅させます。
+	/// 1.コライダーを削除。
+	/// 2.DeleteGO(this)。
+	/// </summary>
+	void DeleteEnemy()override final;
 
 private:
 	bool Start()override final;
@@ -92,6 +113,11 @@ private:
 	/// <returns> 逃走方向。</returns>
 	const Vector3 ComputeMoveDirection()const override final;
 
+	/// <summary>
+	/// 滑走する方向を更新します。
+	/// </summary>
+	void UpdateSlideDirection();
+
 	// 変形エネミーのステートマシン。
 	std::unique_ptr<app::transformEnemy::TransformEnemyStateMachine> m_stateMachine;
 
@@ -101,4 +127,5 @@ private:
 	bool m_isTransform = false;					// 変形しているかどうか。
 	bool m_isSliding = false;					// 滑っているかどうか。
 	Vector3 m_slideDirection = Vector3::Zero;	// 滑走方向。
+	Vector3 m_beforePosition = Vector3::Zero;	// 1フレーム前の座標。
 };
