@@ -218,6 +218,7 @@ bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
 		if (transformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
 			player->SetIsAttacked(true);
 			player->ComputeKnockBackDirection(transformEnemy->GetPosition());
+			transformEnemy->SetIsDead(true);
 			return true;
 		}
 		return true;
@@ -249,6 +250,7 @@ bool CollisionHitManager::UpdateHitBasicEnemyTransformEnemy(CollisionPair& pair)
 		// 変形エネミーの攻撃。
 		if (transformEnemy->GetBodyCollider()->IsHit(basicEnemy->GetBodyCollider())) {
 			basicEnemy->SetIsDead(true);
+			transformEnemy->SetIsDead(true);
 			return true;
 		}
 		return true;
