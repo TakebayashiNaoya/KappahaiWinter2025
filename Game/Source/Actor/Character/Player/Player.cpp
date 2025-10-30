@@ -41,6 +41,18 @@ Player::Player()
 	m_stateMachine = std::make_unique<app::player::PlayerStateMachine>(this);
 }
 
+Player::~Player()
+{
+	if (m_bodyCollider != nullptr)
+	{
+		DeleteBodyCollider();
+	}
+	if (m_stompCollider != nullptr)
+	{
+		DeleteStompCollider();
+	}
+}
+
 /// <summary>
 /// ƒJƒƒ‰‚Ì‰ñ“]Šp“x‚ğŒvZ‚µ‚Ü‚·B
 /// </summary>

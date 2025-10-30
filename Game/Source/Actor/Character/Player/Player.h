@@ -15,6 +15,7 @@ class Player :public Character
 {
 public:
 	Player();
+	~Player();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
