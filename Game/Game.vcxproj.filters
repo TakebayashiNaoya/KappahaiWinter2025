@@ -51,9 +51,6 @@
     <ClCompile Include="Source\Actor\Character\Player\PlayerStateMachine.cpp">
       <Filter>Source\Actor\Character\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Actor\Character\Enemy\EnemyStateMachine.cpp">
-      <Filter>Source\Actor\Character\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Actor\Character\StateMachine.cpp">
       <Filter>Source\Actor\Character</Filter>
     </ClCompile>
@@ -102,9 +99,6 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Player\PlayerStateMachine.h">
       <Filter>Source\Actor\Character\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Actor\Character\Enemy\EnemyStateMachine.h">
-      <Filter>Source\Actor\Character\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\StateMachine.h">
       <Filter>Source\Actor\Character</Filter>
