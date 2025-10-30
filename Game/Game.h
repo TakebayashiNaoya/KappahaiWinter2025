@@ -13,7 +13,7 @@ class Game : public IGameObject
 {
 public:
 	Game() {}
-	~Game() {}
+	~Game();
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;

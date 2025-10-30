@@ -7,6 +7,19 @@
 #include "Source/Camera/GameCamera.h"
 #include "Source/Collision/CollisionManager.h"
 #include "Source/Battle/BattleManager.h"
+#include "GameOver.h"
+
+Game::~Game()
+{
+	DeleteGO(m_skyCube);
+	DeleteGO(m_backGround);
+	DeleteGO(m_player);
+	DeleteGO(m_basicEnemy);
+	DeleteGO(m_transformEnemy);
+	DeleteGO(m_gameCamera);
+	DeleteGO(m_collisionManager);
+	DeleteGO(m_battleManager);
+}
 
 bool Game::Start()
 {
@@ -33,6 +46,12 @@ void Game::Update()
 	currentPos.SetPosition(Vector3(0.0f, 400.0f, 0.0f));
 	currentPos.SetScale(1.0f);
 	currentPos.SetColor(g_vec4White);
+
+	if (m_player->GetLife() == 0)
+	{
+		DeleteGO(this);
+		NewGO<GameOver>(0, "GameOver");
+	}
 }
 
 void Game::Render(RenderContext& rc)

@@ -7,6 +7,8 @@
 class Enemy : public Character
 {
 public:
+	~Enemy();
+
 	/// <summary>
 	/// プレイヤーが見つかったかどうかを取得します。
 	/// </summary>
