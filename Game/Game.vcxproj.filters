@@ -37,6 +37,9 @@
     <Filter Include="Source\Battle">
       <UniqueIdentifier>{9f1685a2-0289-4f9d-8eef-fa4c527d20ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Scene">
+      <UniqueIdentifier>{3bc159ef-d7c6-4cbf-8098-78e9444aad91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -90,6 +93,9 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="Source\Scene\Scene.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -142,5 +148,8 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="Source\Scene\Scene.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
