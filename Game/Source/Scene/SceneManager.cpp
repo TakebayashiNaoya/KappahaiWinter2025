@@ -5,6 +5,10 @@
 #include "GameClear.h"
 #include "GameOver.h"
 
+
+SceneManager* SceneManager::m_instance = nullptr;
+
+
 namespace
 {
 	IScene* CreateScene(SceneID id)
@@ -25,15 +29,16 @@ namespace
 	}
 }
 
+
 void SceneManager::Update()
 {
 	if (m_requestID != SceneID::None)
 	{
-		IScene* nextScene = CreateScene(m_requestID);
-		nextScene->Start();
-		// 古いシーンを削除して新しいシーンに切り替え。
 		delete m_currentScene;
-		m_currentScene = nextScene;
+		m_currentScene = nullptr;
+		// 古いシーンを削除して新しいシーンに切り替え。
+		m_currentScene = CreateScene(m_requestID);
+		m_currentScene->Start();
 		// シーンリクエストをクリア。
 		m_requestID = SceneID::None;
 	}
@@ -41,4 +46,33 @@ void SceneManager::Update()
 	{
 		m_currentScene->Update();
 	}
+}
+
+
+
+
+/********************************/
+
+
+SceneManagerObject::SceneManagerObject()
+{
+	SceneManager::CreateInstance();
+}
+
+
+SceneManagerObject::~SceneManagerObject()
+{
+	SceneManager::DeleteInstance();
+}
+
+
+bool SceneManagerObject::Start()
+{
+	return true;
+}
+
+
+void SceneManagerObject::Update()
+{
+	SceneManager::GetInstance()->Update();
 }

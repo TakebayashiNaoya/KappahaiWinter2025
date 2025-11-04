@@ -1,25 +1,33 @@
 #include "stdafx.h"
 #include "Title.h"
-#include "Game.h"
+#include "InGame.h"
+#include "Source/UI/TitleUI.h"
+
 
 Title::Title()
 {
-	m_spriteRender.Init("Assets/sprite/Title.dds", 1920.0f, 1080.0f);
+
 }
+
 
 Title::~Title()
 {
+	DeleteGO(m_titleUI);
 }
+
+
+bool Title::Start()
+{
+	m_titleUI = NewGO<TitleUI>(0, "TitleUI");
+	return true;
+}
+
 
 void Title::Update()
 {
+	// Aボタンが押されたらインゲームへ移行。
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		DeleteGO(this);
-		NewGO<Game>(0, "Game");
+		//m_titleUI->SetIsDraw(true);
+		SceneManager::GetInstance()->ChangeScene(SceneID::InGame);
 	}
-}
-
-void Title::Render(RenderContext& rc)
-{
-	m_spriteRender.Draw(rc);
 }

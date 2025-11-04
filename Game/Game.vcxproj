@@ -224,8 +224,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameClear.cpp" />
-    <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source\Actor\Character\Character.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.cpp" />
@@ -241,19 +239,24 @@
     <ClCompile Include="Source\Battle\BattleManager.cpp" />
     <ClCompile Include="Source\Camera\GameCamera.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
-    <ClCompile Include="Source\Scene\Scene.cpp" />
+    <ClCompile Include="Source\Scene\GameClear.cpp" />
+    <ClCompile Include="Source\Scene\GameOver.cpp" />
+    <ClCompile Include="Source\Scene\InGame.cpp" />
+    <ClCompile Include="Source\Scene\SceneManager.cpp" />
+    <ClCompile Include="Source\Scene\Title.cpp" />
+    <ClCompile Include="Source\UI\GameClearUI.cpp" />
+    <ClCompile Include="Source\UI\GameOverUI.cpp" />
+    <ClCompile Include="Source\UI\InGameUI.cpp" />
+    <ClCompile Include="Source\UI\TitleUI.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameClear.h" />
-    <ClInclude Include="GameOver.h" />
     <ClInclude Include="Source\Actor\Character\Character.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.h" />
@@ -268,10 +271,17 @@
     <ClInclude Include="Source\Battle\BattleManager.h" />
     <ClInclude Include="Source\Camera\GameCamera.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />
-    <ClInclude Include="Source\Scene\Scene.h" />
+    <ClInclude Include="Source\Scene\GameClear.h" />
+    <ClInclude Include="Source\Scene\GameOver.h" />
+    <ClInclude Include="Source\Scene\InGame.h" />
+    <ClInclude Include="Source\Scene\SceneManager.h" />
+    <ClInclude Include="Source\Scene\Title.h" />
+    <ClInclude Include="Source\UI\GameClearUI.h" />
+    <ClInclude Include="Source\UI\GameOverUI.h" />
+    <ClInclude Include="Source\UI\InGameUI.h" />
+    <ClInclude Include="Source\UI\TitleUI.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
-    <ClInclude Include="Title.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

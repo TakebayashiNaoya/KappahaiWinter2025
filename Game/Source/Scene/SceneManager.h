@@ -8,12 +8,12 @@ class IScene
 {
 public:
 	IScene() {};
-	~IScene() {};
+	// デストラクタにvirtualを付けることで、仮想関数テーブルに登録され、実体（派生先）のデストラクタが呼ばれるようになる。
+	virtual~IScene() {};
 
 	virtual bool Start() = 0;
 	virtual void Update() = 0;
 };
-
 
 
 enum class SceneID : uint8_t
@@ -24,7 +24,6 @@ enum class SceneID : uint8_t
 	GameOver,
 	None = 0xff	// 0xで16進数。ffは10進数で255。
 };
-
 
 
 /// <summary>
@@ -45,6 +44,17 @@ public:
 	{
 		m_requestID = nextID;
 	};
+
+
+public:
+	/// <summary>
+	/// シーン切り替えがリクエストされているかチェック。
+	/// </summary>
+	/// <returns> リクエストされていればtrue。</returns>
+	bool IsSceneChangeRequested() const
+	{
+		return m_requestID != SceneID::None;
+	}
 
 
 private:
@@ -72,4 +82,20 @@ public:
 			m_instance = nullptr;
 		}
 	};
+};
+
+
+/// <summary>
+/// シーンマネージャーを更新したりするためのゲームオブジェクト。
+/// </summary>
+class SceneManagerObject : public IGameObject
+{
+public:
+	SceneManagerObject();
+	~SceneManagerObject();
+
+
+private:
+	bool Start() override;
+	void Update() override;
 };

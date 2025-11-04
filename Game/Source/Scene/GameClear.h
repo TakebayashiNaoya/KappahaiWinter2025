@@ -1,5 +1,7 @@
 #pragma once
 #include "Source/Scene/SceneManager.h"
+
+
 class GameClear :public IScene
 {
 public:

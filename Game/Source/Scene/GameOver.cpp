@@ -1,25 +1,31 @@
 #include "stdafx.h"
 #include "GameOver.h"
-#include "Title.h"
+#include "Source/UI/GameOverUI.h"
+#include "Source/Scene/SceneManager.h"
+
 
 GameOver::GameOver()
 {
-	m_spriteRender.Init("Assets/sprite/GameOver.dds", 1920.0f, 1080.0f);
+
 }
+
 
 GameOver::~GameOver()
 {
+	DeleteGO(m_gameOverUI);
 }
+
+
+bool GameOver::Start()
+{
+	m_gameOverUI = NewGO<GameOverUI>(0, "GameOverUI");
+	return true;
+}
+
 
 void GameOver::Update()
 {
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		DeleteGO(this);
-		NewGO<Title>(0, "Title");
+		SceneManager::GetInstance()->ChangeScene(SceneID::Title);
 	}
-}
-
-void GameOver::Render(RenderContext& rc)
-{
-	m_spriteRender.Draw(rc);
 }

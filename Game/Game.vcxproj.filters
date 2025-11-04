@@ -40,6 +40,9 @@
     <Filter Include="Source\Scene">
       <UniqueIdentifier>{3bc159ef-d7c6-4cbf-8098-78e9444aad91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\UI">
+      <UniqueIdentifier>{fe0eed91-9dca-4dc8-b9ab-61780a859434}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -90,11 +93,32 @@
     <ClCompile Include="Source\Battle\BattleManager.cpp">
       <Filter>Source\Battle</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp" />
-    <ClCompile Include="GameOver.cpp" />
-    <ClCompile Include="GameClear.cpp" />
-    <ClCompile Include="Source\Scene\Scene.cpp">
+    <ClCompile Include="Source\Scene\SceneManager.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\GameClear.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\GameOver.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Title.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\InGame.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\TitleUI.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\InGameUI.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\GameOverUI.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\GameClearUI.cpp">
+      <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,11 +169,32 @@
     <ClInclude Include="Source\Battle\BattleManager.h">
       <Filter>Source\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="Title.h" />
-    <ClInclude Include="GameOver.h" />
-    <ClInclude Include="GameClear.h" />
-    <ClInclude Include="Source\Scene\Scene.h">
+    <ClInclude Include="Source\Scene\SceneManager.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\GameClear.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\GameOver.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Title.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\InGame.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\TitleUI.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\InGameUI.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\GameOverUI.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\GameClearUI.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

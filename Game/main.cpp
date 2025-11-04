@@ -5,8 +5,6 @@
 #include<dxgidebug.h>
 
 #include "Game.h"
-#include "Title.h"
-
 
 
 void ReportLiveObjects()
@@ -38,9 +36,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//g_renderingEngine->DisableTonemap();
 
 	//Gameクラスのオブジェクトを作成。
-	//NewGO<Game>(0, "game");
-
-	NewGO<Title>(0, "Title");
+	auto* game = NewGO<Game>(0, "Game");
 
 	//当たり判定を可視化する。
 
@@ -58,6 +54,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 		K2Engine::GetInstance()->Execute();
 	}
+
+	DeleteGO(game);
 
 	K2Engine::DeleteInstance();
 
