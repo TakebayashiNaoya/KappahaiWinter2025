@@ -15,6 +15,7 @@ public:
 		return m_bodyCollider;
 	}
 
+
 	/// <summary>
 	/// 「惑星の中心→キャラ」の向きを取得します。
 	/// </summary>
@@ -23,6 +24,7 @@ public:
 	{
 		return m_upDirection;
 	}
+
 
 	/// <summary>
 	/// キャラクターの座標を取得します。
@@ -33,6 +35,7 @@ public:
 		return m_position;
 	}
 
+
 	/// <summary>
 	/// キャラクターの回転を取得します。
 	/// </summary>
@@ -42,12 +45,14 @@ public:
 		return m_rotation;
 	}
 
+
 	/// <summary>
 	/// 接地しているかを取得します。
 	/// 地面に向かってレイを飛ばし、当たった座標と自分の座標の距離が一定未満なら接地していると判定します。
 	/// </summary>
 	/// <returns>接地していれば true、そうでなければ false を示す。</returns>
-	const bool& IsOnGround();
+	const bool& GetIsOnGround();
+
 
 	/// <summary>
 	/// ジャンプ前の速度を取得します。
@@ -57,7 +62,6 @@ public:
 	{
 		return m_speedBeforeJump;
 	}
-
 	/// <summary>
 	/// ジャンプ前の移動速度を設定します。
 	/// </summary>
@@ -65,6 +69,25 @@ public:
 	{
 		m_speedBeforeJump = speed;
 	}
+
+
+	/// <summary>
+	/// 死亡状態を取得します。
+	/// </summary>
+	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
+	const bool GetIsDead() const
+	{
+		return m_isDead;
+	}
+	/// <summary>
+	/// 死亡状態を設定します。
+	/// </summary>
+	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
+	void SetIsDead(const bool isDead)
+	{
+		m_isDead = isDead;
+	}
+
 
 	/// <summary>
 	/// 落下タイマーをリセットします。
@@ -74,11 +97,13 @@ public:
 		m_fallTimer = 0.0f;
 	}
 
+
 	/// <summary>
 	/// 指定されたアニメーション番号のアニメーションを再生します。
 	/// </summary>
 	/// <param name="animNo">再生するアニメーションの番号。</param>
 	void PlayAnimation(const int animNo);
+
 
 	/// <summary>
 	/// ジャンプパワーをジャンプスピードとムーブスピードに即座に適用します。
@@ -86,38 +111,28 @@ public:
 	/// <param name="jumpPower">ジャンプパワー。</param>
 	void ApplyJumpImpulse(const float jumpPower);
 
-	/// <summary>
-	/// キャラクターを指定された速度で移動させます。
-	/// </summary>
-	/// <param name="speed">移動速度。</param>
-	void MoveOnGround(const float speed);
-
-	/// <summary>
-	/// 重力処理と移動処理の両方を行います。
-	/// 空中での移動速度はジャンプ前の移動速度を維持します。
-	/// </summary>
-	void MoveOffGround();
 
 	/// <summary>
 	/// moveSpeedに基づいてモデルを回転させます。
 	/// </summary>
 	void ModelRotation();
 
-	/// <summary>
-	/// ゴーストオブジェクトを更新します。
-	/// </summary>
-	/// <param name="offset">位置補正の値。</param>
-	void UpdateBodyCollider(const float offset);
 
 	/// <summary>
-	/// ボディコライダーをdelete、nullptrします。
+	/// ボディコライダーの座標と回転を更新します。
+	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、y方向に位置補正を行う必要があります。
+	/// </summary>
+	/// <param name="offset"> y方向の位置補正の値。</param>
+	void UpdateBodyCollider(const float offset);
+	/// <summary>
+	/// コリジョンヒットマネージャーの登録解除を行い、ボディコライダーをdelete、nullptrします。
 	/// </summary>
 	void DeleteBodyCollider();
+
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
 	CollisionObject* m_bodyCollider = nullptr;						// キャラクター同士の当たり判定用ゴーストオブジェクト。
-
 
 	ModelRender	m_modelRender;										// モデルレンダー。
 	Vector3		m_position = Vector3::Zero;							// ポジション。
@@ -137,12 +152,11 @@ protected:
 	Vector3     m_beforeUpDirection = Vector3::Zero;				// 前フレームの惑星の中心から自分への方向ベクトル。
 
 
+protected:
 	// 静的メンバとして宣言
 	// 継承先の.cppで定義すること。
 	static const std::string ANIMATION_FILE_PATH;
 	static const std::string ANIMATION_EXTENSION;
-
-
 
 	/// <summary>
 	/// アニメーションファイルのオプションを管理する構造体。
@@ -170,6 +184,8 @@ protected:
 	/// <param name="path">モデルファイルのパス。</param>
 	void InitModel(const size_t count, const AnimationOption* option, const std::string path);
 
+
+protected:
 	/// <summary>
 	/// ライフを設定する。
 	/// </summary>
@@ -179,10 +195,12 @@ protected:
 		m_life = life;
 	}
 
+
 	/// <summary>
 	/// 「惑星の中心→キャラ」のベクトルを計算し、正規化します。
 	/// </summary>
 	void UpdateUpDirection();
+
 
 	/// <summary>
 	/// ベクトル v を法線 n の接平面へ投影（接線成分を取り出す）
@@ -198,6 +216,7 @@ protected:
 		return v - n * Dot(v, n);
 	}
 
+
 	/// <summary>
 	/// 移動方向を計算して返します。
 	/// キャラによって移動方向の決定方法が異なるため、継承先でオーバーライドしてください。
@@ -207,6 +226,7 @@ protected:
 	{
 		return Vector3::Zero;
 	};
+
 
 	/// <summary>
 	/// 移動方向に速度を乗算して返します。
@@ -221,11 +241,13 @@ protected:
 		return velocity;
 	};
 
+
 	/// <summary>
 	/// ジャンプや重力から、垂直方向の速度ベクトルを計算して返します。
 	/// </summary>
 	/// <returns> 垂直方向の速度。/returns>
 	const Vector3 CalcVerticalVelocity();
+
 
 	/// <summary>
 	/// 移動速度から移動後の座標を計算します。

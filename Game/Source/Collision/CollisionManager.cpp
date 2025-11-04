@@ -4,7 +4,7 @@
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
 #include "Source/Actor/Character/Enemy/TransformEnemy/TransformEnemy.h"
-
+#include "Source/Scene/SceneManager.h"
 
 
 CollisionHitManager* CollisionHitManager::m_instance = nullptr;
@@ -25,9 +25,27 @@ namespace
 }
 
 
+CollisionHitManager::CollisionHitManager()
+{
+	m_collisionInformationList.clear();
+}
+
+
+CollisionHitManager::~CollisionHitManager()
+{
+	m_collisionInformationList.clear();
+}
+
 
 void CollisionHitManager::Update()
 {
+	// シーン切り替えがリクエストされている場合は、現在のフレームの衝突判定処理をスキップする。
+	// これにより、削除が始まったオブジェクトへの不正アクセスを防ぐ。
+	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+		m_collisionPairList.clear(); // 念のためリストはクリア
+		return;
+	}
+
 	m_collisionPairList.clear();
 
 	// ヒットするオブジェクトのペアを作る
@@ -88,10 +106,17 @@ void CollisionHitManager::Register(const EnCollisionType type, CollisionObject* 
 
 void CollisionHitManager::Unregister(CollisionObject* collisionObject)
 {
+	if (m_collisionInformationList.size() == 0) {
+		return;
+	}
+
 	for (auto it = m_collisionInformationList.begin(); it != m_collisionInformationList.end(); ++it)
 	{
-		if (it->m_collision == collisionObject)
-		{
+		if (it->m_collision == nullptr) {
+			continue;
+		}
+
+		if (it->m_collision == collisionObject) {
 			m_collisionInformationList.erase(it);
 			break;
 		}
@@ -266,7 +291,7 @@ bool CollisionHitManager::UpdateHitBasicEnemyTransformEnemy(CollisionPair& pair)
 
 CollisionManagerObject::CollisionManagerObject()
 {
-	m_collisionHitManager = CollisionHitManager::Create();
+	m_collisionHitManager = CollisionHitManager::CreateInstance();
 }
 
 

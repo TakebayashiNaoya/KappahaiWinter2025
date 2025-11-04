@@ -48,8 +48,8 @@ private:
 
 
 private:
-	CollisionHitManager() {};
-	~CollisionHitManager() {};
+	CollisionHitManager();
+	~CollisionHitManager();
 
 
 public:
@@ -124,7 +124,7 @@ private:
 
 
 public:
-	static CollisionHitManager* Create()
+	static CollisionHitManager* CreateInstance()
 	{
 		if (m_instance == nullptr) {
 			m_instance = new CollisionHitManager();

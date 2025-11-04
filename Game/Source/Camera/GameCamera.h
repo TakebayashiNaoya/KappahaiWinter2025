@@ -7,6 +7,10 @@ class Player;
 
 class GameCamera :public IGameObject
 {
+public:
+public:
+	void SetPlayerTarget(Player* player) { m_player = player; } // V‹K’Ç‰Á
+
 private:
 	bool Start()override final;
 	void Update()override final;

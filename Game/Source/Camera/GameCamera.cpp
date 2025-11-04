@@ -27,6 +27,11 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
+	if (m_player == nullptr)
+	{
+		return;
+	}
+
 	Vector3 playerPos = m_player->GetPosition();
 	Vector3 up = m_player->GetUpDirection();
 

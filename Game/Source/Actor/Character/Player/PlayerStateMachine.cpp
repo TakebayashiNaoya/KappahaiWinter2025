@@ -84,7 +84,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->IsOnGround()) {
+			if (!GetOwner<Player>()->GetIsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -141,7 +141,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->IsOnGround()) {
+			if (!GetOwner<Player>()->GetIsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -198,7 +198,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->IsOnGround()) {
+			if (!GetOwner<Player>()->GetIsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -241,7 +241,7 @@ namespace app
 				return true;
 			}
 
-			if (GetOwner<Player>()->IsOnGround()) {
+			if (GetOwner<Player>()->GetIsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;
@@ -299,7 +299,7 @@ namespace app
 				return true;
 			}
 
-			if (GetOwner<Player>()->IsOnGround()) {
+			if (GetOwner<Player>()->GetIsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;
