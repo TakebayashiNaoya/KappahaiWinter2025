@@ -29,6 +29,14 @@ BasicEnemy::BasicEnemy()
 	m_stateMachine = std::make_unique<app::basicEnemy::BasicEnemyStateMachine>(this);
 }
 
+BasicEnemy::~BasicEnemy()
+{
+	if (m_bodyCollider)
+	{
+		DeleteBodyCollider();
+	}
+}
+
 /// <summary>
 /// プレイヤーに向かって走ります。
 /// </summary>

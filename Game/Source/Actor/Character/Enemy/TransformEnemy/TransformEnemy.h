@@ -15,6 +15,7 @@ class TransformEnemy : public Enemy
 {
 public:
 	TransformEnemy();
+	~TransformEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。

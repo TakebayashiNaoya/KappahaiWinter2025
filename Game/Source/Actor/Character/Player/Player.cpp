@@ -43,11 +43,11 @@ Player::Player()
 
 Player::~Player()
 {
-	if (m_bodyCollider != nullptr)
+	if (m_bodyCollider)
 	{
 		DeleteBodyCollider();
 	}
-	if (m_stompCollider != nullptr)
+	if (m_stompCollider)
 	{
 		DeleteStompCollider();
 	}
@@ -266,6 +266,10 @@ void Player::Update()
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
+
+	if (m_life <= 0) {
+		SetIsDead(true);
+	}
 }
 
 void Player::Render(RenderContext& rc)

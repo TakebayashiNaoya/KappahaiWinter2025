@@ -30,6 +30,14 @@ TransformEnemy::TransformEnemy()
 	m_stateMachine = std::make_unique<app::transformEnemy::TransformEnemyStateMachine>(this);
 }
 
+TransformEnemy::~TransformEnemy()
+{
+	if (m_bodyCollider)
+	{
+		DeleteBodyCollider();
+	}
+}
+
 /// <summary>
 /// プレイヤーが一定範囲内にいる場合、プレイヤーから逃げる。
 /// </summary>

@@ -2,10 +2,10 @@
 #include "Enemy.h"
 #include "Source/Actor/Character/Player/Player.h"
 
-Enemy::~Enemy()
-{
-	if (m_bodyCollider != nullptr)
-	{
-		DeleteBodyCollider();
-	}
-}
+//Enemy::~Enemy()
+//{
+//	if (m_bodyCollider)
+//	{
+//		DeleteBodyCollider();
+//	}
+//}

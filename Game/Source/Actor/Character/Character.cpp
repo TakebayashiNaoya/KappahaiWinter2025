@@ -21,7 +21,7 @@ namespace
 /// 当たった座標と自分の座標の距離が一定未満、
 /// あるいはレイが当たらなけらば接地していると判定します。
 /// </summary>
-const bool& Character::IsOnGround()
+const bool& Character::GetIsOnGround()
 {
 	// 移動処理でhitPositionをm_positionに代入しており、レイの判定が不安定になるため、rayStartをm_positionから少し離す。
 	Vector3 rayStart = m_position + m_upDirection * 0.1f;
@@ -153,13 +153,13 @@ void Character::UpdateBodyCollider(const float offset)
 		return;
 	}
 
-	// ゴーストオブジェクト用の座標を計算する。
+	// ボディコライダー用の座標を計算する。
 	Vector3 ghostPos = m_position + m_upDirection * offset;
 
-	// ゴーストオブジェクトの座標をモデルの座標に合わせる。
+	// ボディコライダー用の座標をモデルの座標に合わせる。
 	m_bodyCollider->SetPosition(ghostPos);
 
-	// ゴーストオブジェクトの回転をモデルの回転に合わせる。
+	// ボディコライダー用の回転をモデルの回転に合わせる。
 	m_bodyCollider->SetRotation(m_rotation);
 }
 
@@ -169,7 +169,9 @@ void Character::UpdateBodyCollider(const float offset)
 void Character::DeleteBodyCollider()
 {
 	// コリジョンヒットマネージャーから登録解除。
-	CollisionHitManager::GetInstance()->Unregister(m_bodyCollider);
+	if (CollisionHitManager::GetInstance()) {
+		CollisionHitManager::GetInstance()->Unregister(m_bodyCollider);
+	}
 	delete m_bodyCollider;
 	m_bodyCollider = nullptr;
 }

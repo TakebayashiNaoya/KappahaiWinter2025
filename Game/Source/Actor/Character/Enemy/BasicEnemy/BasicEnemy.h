@@ -15,6 +15,7 @@ class BasicEnemy : public Enemy
 {
 public:
 	BasicEnemy();
+	~BasicEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
