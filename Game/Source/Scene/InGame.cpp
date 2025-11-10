@@ -42,10 +42,11 @@ bool InGame::Start()
 
 void InGame::Update()
 {
-	if (g_pad[0]->IsTrigger(enButtonB)) {
-		m_player->SetIsDead(true);
-		m_gameCamera->SetPlayerTarget(nullptr);
-	}
+	//@NOTE: デバッグ用、Bボタンで即死。
+	//if (g_pad[0]->IsTrigger(enButtonB)) {
+	//	m_player->SetIsDead(true);
+	//	m_gameCamera->SetPlayerTarget(nullptr);
+	//}
 	// プレイヤーが死亡したらゲームオーバーへ移行。
 	if (m_player->GetIsDead()) {
 		SceneManager::GetInstance()->ChangeScene(SceneID::GameOver);

@@ -42,7 +42,7 @@ void BackGround::InitModel(const std::string& filePath, const Vector3& position)
 
 FirstPlanet::FirstPlanet()
 {
-	m_filePath = "Planet2";
+	m_filePath = "FirstPlanet";
 	m_position = Vector3(0.0f, 0.0f, 0.0f);
 	InitModel(m_filePath, m_position);
 }
