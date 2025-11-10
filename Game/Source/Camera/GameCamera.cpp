@@ -27,6 +27,9 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
+	//@FIXME:プレイヤー死亡時、どこかでプレイヤーが削除されているので毎フレームFindGOしている。
+	m_player = FindGO<Player>("Player");
+
 	if (m_player == nullptr)
 	{
 		return;
