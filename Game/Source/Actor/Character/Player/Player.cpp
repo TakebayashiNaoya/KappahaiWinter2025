@@ -6,11 +6,11 @@
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
 const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
-   {"idle",	true},
-   {"walk", true},
-   {"run",	true},
-   {"jump", false},
-   {"kneelDown", false}
+   {"Player/idle",	true},
+   {"Player/walk",	true},
+   {"Player/run",	true},
+   {"Player/down",	true},
+   {"Player/dead",	false},
 };
 
 namespace
@@ -148,6 +148,9 @@ void Player::UpdateStompCollider()
 /// </summary>
 void Player::DeleteStompCollider()
 {
+	if (m_stompCollider == nullptr) {
+		return;
+	}
 	// コリジョンヒットマネージャーから登録解除。
 	CollisionHitManager::GetInstance()->Unregister(m_stompCollider);
 	delete m_stompCollider;
@@ -227,7 +230,8 @@ void Player::TakeDamage()
 bool Player::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "unityChan");
+	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "Player/rabbit");
+	m_modelRender.SetScale(Vector3(200.0f, 200.0f, 200.0f));
 
 	InitLife(LIFE);
 
