@@ -6,23 +6,22 @@
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
 const Character::AnimationOption TransformEnemy::TRANSFORM_ENEMY_ANIMATION_OPTIONS[] = {
-   {"idle",	true},
-   {"walk", true},
-   {"run",	true},
-   {"jump", false}
+   {"Spider/idle",	true},
+   {"Spider/walk",	true},
+   {"Spider/run",	true},
+   {"Spider/dead",	false},
 };
 
 namespace
 {
-	constexpr float BODY_COLLIDER_RADIUS = 25.0f;					// ゴーストオブジェクトの半径。
-	constexpr float BODY_COLLIDER_HEIGHT = 75.0f;					// ゴーストオブジェクトの高さ。
-	constexpr float BODY_COLLIDER_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
+	constexpr float BODY_COLLIDER_RADIUS = 30.0f;					// ゴーストオブジェクトの半径。
+	constexpr float BODY_COLLIDER_OFFSET = 30.0f;					// ゴーストオブジェクトのオフセット値。
 
 	constexpr float RUN_SPEED = 3.0f;								// 走る速度
-	constexpr float SLIDE_SPEED = 15.0f;								// 滑走速度
+	constexpr float SLIDE_SPEED = 16.0f;							// 滑走速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(100.0f, 0.0f, 2001.0f);	// スポーン座標。
+	const Vector3 SPAWN_POSITION = Vector3(100.0f, 0.0f, 2000.0f);	// スポーン座標。
 }
 
 TransformEnemy::TransformEnemy()
@@ -91,7 +90,8 @@ void TransformEnemy::DeleteEnemy()
 bool TransformEnemy::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, "unityChan");
+	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, "Spider/spider");
+	m_modelRender.SetScale(Vector3(30.0f, 30.0f, 30.0f));
 
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
@@ -101,11 +101,10 @@ bool TransformEnemy::Start()
 
 	// ゴーストオブジェクトを作成。
 	m_bodyCollider = new CollisionObject();
-	m_bodyCollider->CreateCapsule(
+	m_bodyCollider->CreateSphere(
 		m_position,
 		m_rotation,
-		BODY_COLLIDER_RADIUS,
-		BODY_COLLIDER_HEIGHT
+		BODY_COLLIDER_RADIUS
 	);
 
 	// コリジョンヒットマネージャーに登録。

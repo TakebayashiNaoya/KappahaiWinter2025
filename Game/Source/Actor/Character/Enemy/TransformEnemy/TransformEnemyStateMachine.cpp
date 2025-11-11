@@ -26,6 +26,7 @@ namespace app
 
 		void IdleState::Update()
 		{
+			GetOwner<TransformEnemy>()->ModelRotation();
 		}
 
 
@@ -95,7 +96,7 @@ namespace app
 
 		void TransformState::Enter()
 		{
-			GetOwner<TransformEnemy>()->PlayAnimation(TransformEnemy::enAnimationClip_Jump);
+			GetOwner<TransformEnemy>()->PlayAnimation(TransformEnemy::enAnimationClip_Dead);
 		}
 
 
@@ -112,7 +113,7 @@ namespace app
 		bool TransformState::RequestState(int& requestStateId)
 		{
 			if (GetOwner<TransformEnemy>()->GetIsDead()) {
-				requestStateId = enBasicEnemyState_Die;
+				requestStateId = enTransformEnemyState_Die;
 				return true;
 			}
 			if (GetOwner<TransformEnemy>()->GetIsSliding()) {
@@ -149,6 +150,10 @@ namespace app
 		{
 			if (GetOwner<TransformEnemy>()->GetIsDead()) {
 				requestStateId = enTransformEnemyState_Die;
+				return true;
+			}
+			if (!GetOwner<TransformEnemy>()->GetIsSliding()) {
+				requestStateId = enTransformEnemyState_Transform;
 				return true;
 			}
 			return false;
