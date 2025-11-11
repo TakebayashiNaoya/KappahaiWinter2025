@@ -31,7 +31,7 @@ namespace
 	constexpr float INVINCIBLE_TIME = 5.0f;							// 無敵時間。
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.1f, 0.0f);	// スポーン座標。
+	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.0f, 0.0f);	// スポーン座標。
 
 	constexpr int LIFE = 3;											// 初期ライフ数。
 }
