@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
+#include "Source/Scene/SceneManager.h"
 
 #if _DEBUG
 #define AddjustConst
@@ -27,11 +28,12 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
-	//@FIXME:プレイヤー死亡時、どこかでプレイヤーが削除されているので毎フレームFindGOしている。
-	m_player = FindGO<Player>("Player");
+	// シーン切り替え中は更新しない。
+	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+		return;
+	}
 
-	if (m_player == nullptr)
-	{
+	if (m_player == nullptr) {
 		return;
 	}
 
