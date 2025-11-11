@@ -221,6 +221,12 @@ bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
 			transformEnemy->CalcInitialSlideDirection(player->GetPosition());
 			return true;
 		}
+		// プレイヤーがエネミーを踏んだ場合。
+		if (player->GetStompCollider()->IsHit(transformEnemy->GetBodyCollider())) {
+			player->StompJump();
+			transformEnemy->SetIsSliding(true);
+			transformEnemy->CalcInitialSlideDirection(player->GetPosition());
+		}
 		return true;
 	}
 
