@@ -26,6 +26,7 @@ namespace app
 
 		void IdleState::Update()
 		{
+			GetOwner<BasicEnemy>()->ModelRotation();
 		}
 
 
@@ -60,6 +61,7 @@ namespace app
 
 		void ChaseState::Enter()
 		{
+			GetOwner<BasicEnemy>()->PlayAnimation(BasicEnemy::enAnimationClip_Run);
 		}
 
 
