@@ -14,7 +14,7 @@ const Character::AnimationOption TransformEnemy::TRANSFORM_ENEMY_ANIMATION_OPTIO
 
 namespace
 {
-	constexpr float BODY_COLLIDER_RADIUS = 30.0f;					// ゴーストオブジェクトの半径。
+	constexpr float BODY_COLLIDER_RADIUS = 40.0f;					// ゴーストオブジェクトの半径。
 	constexpr float BODY_COLLIDER_OFFSET = 30.0f;					// ゴーストオブジェクトのオフセット値。
 
 	constexpr float RUN_SPEED = 3.0f;								// 走る速度
