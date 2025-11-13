@@ -7,8 +7,6 @@
 class Enemy : public Character
 {
 public:
-	//~Enemy();
-
 	/// <summary>
 	/// プレイヤーが見つかったかどうかを取得します。
 	/// </summary>
@@ -31,10 +29,11 @@ public:
 	}
 
 
-
+protected:
 	bool m_isFoundPlayer = false;
 	Vector3 m_playerFoundPos = Vector3::Zero;
 	bool m_isDead = false;						// 死亡状態かどうか。
+
 
 protected:
 	/// <summary>
