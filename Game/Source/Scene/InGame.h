@@ -7,6 +7,8 @@ class BasicEnemy;
 class TransformEnemy;
 class GameCamera;
 class InGameUI;
+class BattleManagerObject;
+class CollisionManagerObject;
 
 class InGame :public IScene
 {
@@ -27,6 +29,8 @@ private:
 	TransformEnemy* m_transformEnemy = nullptr;
 	GameCamera* m_gameCamera = nullptr;
 	InGameUI* m_inGameUI = nullptr;
+	BattleManagerObject* m_battleManager = nullptr;
+	CollisionManagerObject* m_collisionManager = nullptr;
 
 
 private:

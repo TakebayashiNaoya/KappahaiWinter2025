@@ -49,15 +49,19 @@ BattleManager* BattleManager::m_instance = nullptr;
 
 void BattleManager::Update()
 {
-	//// シーン切り替えリクエストがある場合、バトル処理を全てスキップ。
-	//if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
-	//	return;
-	//}
+	// シーン切り替えリクエストがある場合、バトル処理を全てスキップ。
+	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+		return;
+	}
 
 
 
 	// キャラの数は少なく、FindGOs内で最適化されているため、毎フレーム取得しても問題ないと判断。
 	Player* player = FindGO<Player>("Player");
+
+	if (player == nullptr) {
+		return;
+	}
 
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
 	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");

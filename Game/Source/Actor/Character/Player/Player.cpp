@@ -6,11 +6,11 @@
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
 const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
-   {"idle",	true},
-   {"walk", true},
-   {"run",	true},
-   {"jump", false},
-   {"kneelDown", false}
+   {"Player/idle",	true},
+   {"Player/walk",	true},
+   {"Player/run",	true},
+   {"Player/down",	true},
+   {"Player/dead",	false},
 };
 
 namespace
@@ -31,7 +31,7 @@ namespace
 	constexpr float INVINCIBLE_TIME = 5.0f;							// 無敵時間。
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.1f, 0.0f);	// スポーン座標。
+	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.0f, 0.0f);	// スポーン座標。
 
 	constexpr int LIFE = 3;											// 初期ライフ数。
 }
@@ -148,6 +148,9 @@ void Player::UpdateStompCollider()
 /// </summary>
 void Player::DeleteStompCollider()
 {
+	if (m_stompCollider == nullptr) {
+		return;
+	}
 	// コリジョンヒットマネージャーから登録解除。
 	CollisionHitManager::GetInstance()->Unregister(m_stompCollider);
 	delete m_stompCollider;
@@ -227,7 +230,8 @@ void Player::TakeDamage()
 bool Player::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "unityChan");
+	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "Player/rabbit");
+	m_modelRender.SetScale(Vector3(200.0f, 200.0f, 200.0f));
 
 	InitLife(LIFE);
 

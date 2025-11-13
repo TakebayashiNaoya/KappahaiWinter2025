@@ -72,10 +72,6 @@ void Character::ApplyJumpImpulse(const float jumpPower)
 /// </summary>
 void Character::ModelRotation()
 {
-	if (m_moveSpeed.Length() <= DEADZONE) {
-		return;
-	}
-
 	// キャラクターの新しい前方ベクトルを計算 (目標の移動方向)
 	Vector3 targetForward = m_moveSpeed;
 
@@ -87,19 +83,22 @@ void Character::ModelRotation()
 	// Player.cppで使用されている ProjectOnPlane() 関数を流用します。
 	targetForward = ProjectOnPlane(targetForward, upDirection);
 
-	// 投影後のベクトルの長さがデッドゾーン以下なら回転しない
-	if (targetForward.LengthSq() <= DEADZONE) {
+	// モデルのデフォルトの上方向(0, 1, 0)を、惑星の上方向(upDirection)に回転させるクォータニオンを計算
+	Quaternion planetAlignmentRotation;
+	planetAlignmentRotation.SetRotation(Vector3::Up, upDirection);
+
+	// 投影後のベクトル長で判断し、停止時もアライメント回転を適用する
+	if (targetForward.LengthSq() <= DEADZONE * DEADZONE) { // (Length()よりLengthSq()の方が高速)
+		// 停止時は、惑星の表面に合わせた回転のみを適用
+		m_rotation = planetAlignmentRotation;
+		m_modelRender.SetRotation(m_rotation);
 		return;
 	}
 
 	targetForward.Normalize();
 
-	// モデルのデフォルトの上方向(0, 1, 0)を、惑星の上方向(upDirection)に回転させるクォータニオンを計算
-	Quaternion planetAlignmentRotation;
-	planetAlignmentRotation.SetRotation(Vector3::Up, upDirection);
-
 	// 回転前のモデルの前方向(0, 0, 1)を、ターゲットの移動方向(targetForward)に回転させるクォータニオンを計算
-	Quaternion movementRotation;
+
 	// 惑星にアライメントされた状態で、モデルの前方向（Vector3::Front）がどこに向いているかを求める
 	// これは、planetAlignmentRotationをVector3::Frontに適用することで得られる
 	Vector3 currentForward = Vector3::Front;

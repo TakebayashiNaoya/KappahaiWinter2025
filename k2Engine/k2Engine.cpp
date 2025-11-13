@@ -34,7 +34,7 @@ namespace nsK2Engine {
 		g_camera3D->SetTarget({ 0.0f, 50.0f, 0.0f });
 #ifdef K2_DEBUG
 		// デバッグベクトルレンダラーを作成する。
-		m_vectorRenderer = NewGO<nsDbg::VectorRenderer>(254);
+		m_vectorRenderer = NewGO<nsDbg::VectorRenderer>(254, "VectorRender");
 #endif // #ifdef K2_DEBUG
 	}
 	K2Engine::~K2Engine()

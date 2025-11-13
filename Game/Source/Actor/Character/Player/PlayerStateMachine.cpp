@@ -4,10 +4,10 @@
 
 namespace
 {
-	constexpr float JUMP_POWER = 40.0f;		// ジャンプパワー。
+	constexpr float JUMP_POWER = 40.0f;			// ジャンプパワー。
 	constexpr float STICK_DEAD_ZONE = 0.01f;	// スティックのデッドゾーン。
-	const float DASH_SPEED = 10.0f;			// ダッシュスピード。
-	const float WALK_SPEED = 5.0f;			// 歩くスピード。
+	const float DASH_SPEED = 15.0f;				// ダッシュスピード。
+	const float WALK_SPEED = 10.0f;				// 歩くスピード。
 
 	/// <summary>
 	/// 左スティックの現在の位置を取得します。
@@ -214,7 +214,7 @@ namespace app
 
 		void app::player::JumpState::Enter()
 		{
-			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Jump);
+			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
 			GetOwner<Player>()->CreateStompCollider();
 		}
 
@@ -269,7 +269,7 @@ namespace app
 		void app::player::KnockBackState::Enter()
 		{
 			GetOwner<Player>()->TakeDamage();
-			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Idle);
+			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Down);
 			GetOwner<Player>()->SetIsInvincible(true);
 		}
 
@@ -328,7 +328,7 @@ namespace app
 
 		void app::player::DieState::Enter()
 		{
-			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_KneelDown);
+			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Dead);
 		}
 
 

@@ -6,19 +6,17 @@
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
 const Character::AnimationOption BasicEnemy::BASIC_ENEMY_ANIMATION_OPTIONS[] = {
-   {"idle",	true},
-   {"walk", true},
-   {"run",	true},
-   {"jump", false}
+   {"Wolf/idle",	true},
+   {"Wolf/walk", true},
+   {"Wolf/run",	true},
 };
 
 namespace
 {
-	constexpr float BODY_COLLIDER_RADIUS = 25.0f;					// ゴーストオブジェクトの半径。
-	constexpr float BODY_COLLIDER_HEIGHT = 75.0f;					// ゴーストオブジェクトの高さ。
-	constexpr float BODY_COLLIDER_OFFSET = 60.0f;					// ゴーストオブジェクトのオフセット値。
+	constexpr float BODY_COLLIDER_RADIUS = 50.0f;					// ゴーストオブジェクトの半径。
+	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ゴーストオブジェクトのオフセット値。
 
-	constexpr float RUN_SPEED = 3.0f;								// 走る速度
+	constexpr float RUN_SPEED = 8.0f;								// 走る速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
@@ -82,7 +80,8 @@ void BasicEnemy::DeleteEnemy()
 bool BasicEnemy::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, "unityChan");
+	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, "Wolf/wolf");
+	m_modelRender.SetScale(Vector3(70.0f, 70.0f, 70.0f));
 
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
@@ -92,11 +91,10 @@ bool BasicEnemy::Start()
 
 	// ゴーストオブジェクトを作成。
 	m_bodyCollider = new CollisionObject();
-	m_bodyCollider->CreateCapsule(
+	m_bodyCollider->CreateSphere(
 		m_position,
 		m_rotation,
-		BODY_COLLIDER_RADIUS,
-		BODY_COLLIDER_HEIGHT
+		BODY_COLLIDER_RADIUS
 	);
 
 	// コリジョンヒットマネージャーに登録。

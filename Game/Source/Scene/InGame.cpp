@@ -7,6 +7,8 @@
 #include "Source/Camera/GameCamera.h"
 #include "Source/Scene/GameOver.h"
 #include "Source/UI/InGameUI.h"
+#include "Source/Battle/BattleManager.h"
+#include "Source/Collision/CollisionManager.h"
 
 
 InGame::InGame()
@@ -17,6 +19,8 @@ InGame::InGame()
 
 InGame::~InGame()
 {
+	DeleteGO(m_battleManager);
+	DeleteGO(m_collisionManager);
 	DeleteGO(m_skyCube);
 	DeleteGO(m_backGround);
 	DeleteGO(m_gameCamera);
@@ -29,6 +33,8 @@ InGame::~InGame()
 
 bool InGame::Start()
 {
+	m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
+	m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
 	InitSky();
 	m_backGround = NewGO<FirstPlanet>(0, "BackGround");
 	m_player = NewGO<Player>(0, "Player");

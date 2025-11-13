@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
+#include "Source/Scene/SceneManager.h"
 
 #if _DEBUG
 #define AddjustConst
@@ -27,8 +28,12 @@ bool GameCamera::Start()
 
 void GameCamera::Update()
 {
-	if (m_player == nullptr)
-	{
+	// シーン切り替え中は更新しない。
+	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+		return;
+	}
+
+	if (m_player == nullptr) {
 		return;
 	}
 

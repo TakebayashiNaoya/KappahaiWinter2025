@@ -3,8 +3,6 @@
 
 
 class SceneManagerObject;
-class BattleManagerObject;
-class CollisionManagerObject;
 
 
 class Game : public IGameObject
@@ -22,6 +20,4 @@ private:
 
 private:
 	SceneManagerObject* m_sceneManager = nullptr;
-	BattleManagerObject* m_battleManager = nullptr;
-	CollisionManagerObject* m_collisionManager = nullptr;
 };
