@@ -97,7 +97,7 @@ bool TransformEnemy::Start()
 	m_position = SPAWN_POSITION;
 
 	// 初期ステートを設定
-	m_stateMachine->InitializeState(enPlayerState_Idle);
+	m_stateMachine->InitializeState(enTransformEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
 	m_bodyCollider = new CollisionObject();

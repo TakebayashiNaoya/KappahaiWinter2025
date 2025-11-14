@@ -19,7 +19,7 @@ namespace
 	constexpr float RUN_SPEED = 8.0f;								// 走る速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2001.0f);	// スポーン座標。
+	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2000.0f);	// スポーン座標。
 }
 
 BasicEnemy::BasicEnemy()
@@ -87,7 +87,7 @@ bool BasicEnemy::Start()
 	m_position = SPAWN_POSITION;
 
 	// 初期ステートを設定
-	m_stateMachine->InitializeState(enPlayerState_Idle);
+	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
 	m_bodyCollider = new CollisionObject();
