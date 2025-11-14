@@ -7,6 +7,7 @@ enum EnCollisionType
 	enCollisionType_Player,
 	enCollisionType_BasicEnemy,
 	enCollisionType_TransformEnemy,
+	enCollisionType_BossEnemy,
 	//
 	enCollisionType_Num,
 };
@@ -75,19 +76,24 @@ private:
 
 
 	/// <summary>
-	///　「プレイヤー」と「基本エネミー」の衝突処理を行います。
+	/// 「プレイヤー」と「基本エネミー」の衝突処理を行います。
 	/// </summary>
 	bool UpdateHitPlayerBasicEnemy(CollisionPair& pair);
 
 	/// <summary>
-	///　「プレイヤー」と「変形エネミー」の衝突処理を行います。
+	/// 「プレイヤー」と「変形エネミー」の衝突処理を行います。
 	/// </summary>
-	bool UpdateHitPlayerTransformEnemy(CollisionPair& pair);
+	bool UpdateHitPlayerDeformEnemy(CollisionPair& pair);
 
 	/// <summary>
-	///　「基本エネミー」と「変形エネミー」の衝突処理を行います。
+	/// 「プレイヤー」と「ボスエネミー」の衝突処理を行います。
 	/// </summary>
-	bool UpdateHitBasicEnemyTransformEnemy(CollisionPair& pair);
+	bool UpdateHitPlayerBossEnemy(CollisionPair& pair);
+
+	/// <summary>
+	/// 「基本エネミー」と「変形エネミー」の衝突処理を行います。
+	/// </summary>
+	bool UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair);
 
 
 private:

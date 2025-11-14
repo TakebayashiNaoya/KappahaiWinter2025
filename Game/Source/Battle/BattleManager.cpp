@@ -3,7 +3,8 @@
 #include "Source/Scene/SceneManager.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
-#include "Source/Actor/Character/Enemy/TransformEnemy/TransformEnemy.h"
+#include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
+#include "Source/Actor/Character/Enemy/BossEnemy/BossEnemy.h"
 #include "Source/UI/InGameUI.h"
 
 
@@ -54,22 +55,11 @@ void BattleManager::Update()
 		return;
 	}
 
-
-
 	// キャラの数は少なく、FindGOs内で最適化されているため、毎フレーム取得しても問題ないと判断。
 	Player* player = FindGO<Player>("Player");
-
 	if (player == nullptr) {
 		return;
 	}
-
-	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
-	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, PLAYER_SEARCH_RADIUS);
-
-	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	std::vector<TransformEnemy*> transformEnemys = FindGOs<TransformEnemy>("TransformEnemy");
-	CheckEnemyDetection<TransformEnemy>(player, transformEnemys, PLAYER_SEARCH_RADIUS);
 
 	// インゲームUIにライフを反映。
 	InGameUI* inGameUI = FindGO<InGameUI>("InGameUI");
@@ -77,6 +67,20 @@ void BattleManager::Update()
 		if (player) {
 			inGameUI->SetLife(player->GetLife());
 		}
+	}
+
+	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
+	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
+	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, PLAYER_SEARCH_RADIUS);
+
+	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
+	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("TransformEnemy");
+	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, PLAYER_SEARCH_RADIUS);
+
+	// ボスエネミーにプレイヤーの座標を伝える。
+	BossEnemy* bossEnemy = FindGO<BossEnemy>("BossEnemy");
+	if (bossEnemy) {
+		bossEnemy->SetIsFoundPlayer(true, player->GetPosition());
 	}
 }
 

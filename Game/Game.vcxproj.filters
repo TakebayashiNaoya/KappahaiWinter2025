@@ -28,9 +28,6 @@
     <Filter Include="Source\Actor\Character\Enemy\BasicEnemy">
       <UniqueIdentifier>{e2beb5b2-14b2-4636-9a43-2d074f8fa8ef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Actor\Character\Enemy\TransformEnemy">
-      <UniqueIdentifier>{4901d8ae-2e0f-4a18-878d-07faa1a1ec1f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Collision">
       <UniqueIdentifier>{3393a522-fc3e-46a3-8adf-6b7d10eac9e4}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,9 @@
     </Filter>
     <Filter Include="Source\Actor\Character\Enemy\BossEnemy">
       <UniqueIdentifier>{6b8fbc50-493d-467e-8cf3-0c9ebe6f21da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Character\Enemy\DeformEnemy">
+      <UniqueIdentifier>{4901d8ae-2e0f-4a18-878d-07faa1a1ec1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -83,12 +83,6 @@
     </ClCompile>
     <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.cpp">
       <Filter>Source\Actor\Character\Enemy\BasicEnemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.cpp">
-      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.cpp">
-      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
     </ClCompile>
     <ClCompile Include="Source\Collision\CollisionManager.cpp">
       <Filter>Source\Collision</Filter>
@@ -129,6 +123,12 @@
     <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemyStateMachine.cpp">
       <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemy.cpp">
+      <Filter>Source\Actor\Character\Enemy\DeformEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemyStateMachine.cpp">
+      <Filter>Source\Actor\Character\Enemy\DeformEnemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -165,12 +165,6 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.h">
       <Filter>Source\Actor\Character\Enemy\BasicEnemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.h">
-      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.h">
-      <Filter>Source\Actor\Character\Enemy\TransformEnemy</Filter>
     </ClInclude>
     <ClInclude Include="Source\Collision\CollisionManager.h">
       <Filter>Source\Collision</Filter>
@@ -210,6 +204,12 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemyStateMachine.h">
       <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemy.h">
+      <Filter>Source\Actor\Character\Enemy\DeformEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemyStateMachine.h">
+      <Filter>Source\Actor\Character\Enemy\DeformEnemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

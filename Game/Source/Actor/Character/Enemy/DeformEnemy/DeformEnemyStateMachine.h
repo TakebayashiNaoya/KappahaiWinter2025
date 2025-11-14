@@ -5,16 +5,16 @@
 #include "Source/Actor/Character/Types.h"
 #include "Source/Actor/Character/StateMachine.h"
 
-class TransformEnemy;
+class DeformEnemy;
 
 namespace app
 {
-	namespace transformEnemy
+	namespace deformEnemy
 	{
 		class IdleState : public IState
 		{
 		public:
-			IdleState(TransformEnemy* owner) : IState(owner) {}
+			IdleState(DeformEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -25,7 +25,7 @@ namespace app
 		class EscapeState : public IState
 		{
 		public:
-			EscapeState(TransformEnemy* owner) : IState(owner) {}
+			EscapeState(DeformEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -36,7 +36,7 @@ namespace app
 		class TransformState : public IState
 		{
 		public:
-			TransformState(TransformEnemy* owner) : IState(owner) {}
+			TransformState(DeformEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -47,7 +47,7 @@ namespace app
 		class SlideState : public IState
 		{
 		public:
-			SlideState(TransformEnemy* owner) : IState(owner) {}
+			SlideState(DeformEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -58,7 +58,7 @@ namespace app
 		class DieState : public IState
 		{
 		public:
-			DieState(TransformEnemy* owner) : IState(owner) {}
+			DieState(DeformEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -66,19 +66,19 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
-		class TransformEnemyStateMachine : public StateMachineBase
+		class DeformEnemyStateMachine : public StateMachineBase
 		{
 		private:
-			TransformEnemy* m_owner = nullptr;
+			DeformEnemy* m_owner = nullptr;
 
 		public:
-			TransformEnemyStateMachine(TransformEnemy* owner) : m_owner(owner)
+			DeformEnemyStateMachine(DeformEnemy* owner) : m_owner(owner)
 			{
-				AddState<IdleState, TransformEnemy>(enTransformEnemyState_Idle, owner);
-				AddState<EscapeState, TransformEnemy>(enTransformEnemyState_Escape, owner);
-				AddState<TransformState, TransformEnemy>(enTransformEnemyState_Transform, owner);
-				AddState<SlideState, TransformEnemy>(enTransformEnemyState_Slide, owner);
-				AddState<DieState, TransformEnemy>(enTransformEnemyState_Die, owner);
+				AddState<IdleState, DeformEnemy>(enDeformEnemyState_Idle, owner);
+				AddState<EscapeState, DeformEnemy>(enDeformEnemyState_Escape, owner);
+				AddState<TransformState, DeformEnemy>(enDeformEnemyState_Transform, owner);
+				AddState<SlideState, DeformEnemy>(enDeformEnemyState_Slide, owner);
+				AddState<DieState, DeformEnemy>(enDeformEnemyState_Die, owner);
 			}
 
 			void Update() override final;

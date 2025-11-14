@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "CollisionManager.h"
-
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
-#include "Source/Actor/Character/Enemy/TransformEnemy/TransformEnemy.h"
+#include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
+#include "Source/Actor/Character/Enemy/BossEnemy/BossEnemy.h"
 #include "Source/Scene/SceneManager.h"
 
 
@@ -83,12 +83,17 @@ void CollisionHitManager::Update()
 		}
 
 		// プレイヤー vs 変形エネミー
-		if (UpdateHitPlayerTransformEnemy(pair)) {
+		if (UpdateHitPlayerDeformEnemy(pair)) {
+			continue;
+		}
+
+		// プレイヤー vs ボスエネミー
+		if (UpdateHitPlayerBossEnemy(pair)) {
 			continue;
 		}
 
 		// 基本エネミー vs 変形エネミー
-		if (UpdateHitBasicEnemyTransformEnemy(pair)) {
+		if (UpdateHitBasicEnemyDeformEnemy(pair)) {
 			continue;
 		}
 	}
@@ -125,17 +130,16 @@ void CollisionHitManager::Unregister(CollisionObject* collisionObject)
 
 
 /// <summary>
-///　「プレイヤー」と「基本エネミー」の衝突処理を行います。
+/// 「プレイヤー」と「基本エネミー」の衝突処理を行います。
 /// </summary>
 bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 {
 	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
-	BasicEnemy* basicEnemy = GetTargetObject<BasicEnemy>(pair, enCollisionType_BasicEnemy);
-
-
 	if (player == nullptr) {
 		return false;
 	}
+
+	BasicEnemy* basicEnemy = GetTargetObject<BasicEnemy>(pair, enCollisionType_BasicEnemy);
 	if (basicEnemy == nullptr) {
 		return false;
 	}
@@ -171,29 +175,28 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 }
 
 /// <summary>
-///　「プレイヤー」と「変形エネミー」の衝突処理を行います。
+/// 「プレイヤー」と「変形エネミー」の衝突処理を行います。
 /// </summary>
-bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
+bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 {
 	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
-	TransformEnemy* transformEnemy = GetTargetObject<TransformEnemy>(pair, enCollisionType_TransformEnemy);
-
-
 	if (player == nullptr) {
 		return false;
 	}
-	if (transformEnemy == nullptr) {
+
+	DeformEnemy* deformEnemy = GetTargetObject<DeformEnemy>(pair, enCollisionType_TransformEnemy);
+	if (deformEnemy == nullptr) {
 		return false;
 	}
 
 
 	// エネミーが変形していない場合。
-	if (!transformEnemy->GetIsTransform())
+	if (!deformEnemy->IsDeformed())
 	{
 		// プレイヤーの攻撃。
-		if (player->GetStompCollider()->IsHit(transformEnemy->GetBodyCollider())) {
+		if (player->GetStompCollider()->IsHit(deformEnemy->GetBodyCollider())) {
 			player->StompJump();
-			transformEnemy->SetIsTransform(true);
+			deformEnemy->SetIsDeformed(true);
 			return true;
 		}
 
@@ -203,9 +206,9 @@ bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
 		}
 
 		// エネミーの攻撃。
-		if (transformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+		if (deformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
 			player->SetIsAttacked(true);
-			player->ComputeKnockBackDirection(transformEnemy->GetPosition());
+			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
 			return true;
 		}
 
@@ -213,30 +216,30 @@ bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
 	}
 
 	// エネミーが変形していて、滑走していない場合。
-	else if (transformEnemy->GetIsTransform() && !transformEnemy->GetIsSliding())
+	else if (deformEnemy->IsDeformed() && !deformEnemy->IsSliding())
 	{
 		// プレイヤーがエネミーに当たった場合。
-		if (player->GetBodyCollider()->IsHit(transformEnemy->GetBodyCollider())) {
-			transformEnemy->SetIsSliding(true);
-			transformEnemy->CalcInitialSlideDirection(player->GetPosition());
+		if (player->GetBodyCollider()->IsHit(deformEnemy->GetBodyCollider())) {
+			deformEnemy->SetIsSliding(true);
+			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
 			return true;
 		}
 		// プレイヤーがエネミーを踏んだ場合。
-		if (player->GetStompCollider()->IsHit(transformEnemy->GetBodyCollider())) {
+		if (player->GetStompCollider()->IsHit(deformEnemy->GetBodyCollider())) {
 			player->StompJump();
-			transformEnemy->SetIsSliding(true);
-			transformEnemy->CalcInitialSlideDirection(player->GetPosition());
+			deformEnemy->SetIsSliding(true);
+			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
 		}
 		return true;
 	}
 
 	// エネミーが変形していて、滑走している場合。
-	else if (transformEnemy->GetIsTransform() && transformEnemy->GetIsSliding())
+	else if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
 	{
 		// 滑走中にプレイヤーが踏んだら、エネミーを止める。
-		if (player->GetStompCollider()->IsHit(transformEnemy->GetBodyCollider())) {
+		if (player->GetStompCollider()->IsHit(deformEnemy->GetBodyCollider())) {
 			player->StompJump();
-			transformEnemy->SetIsSliding(false);
+			deformEnemy->SetIsSliding(false);
 			return true;
 		}
 
@@ -246,10 +249,10 @@ bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
 		}
 
 		// エネミーの攻撃。
-		if (transformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+		if (deformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
 			player->SetIsAttacked(true);
-			player->ComputeKnockBackDirection(transformEnemy->GetPosition());
-			transformEnemy->SetIsDead(true);
+			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
+			deformEnemy->SetIsDead(true);
 			return true;
 		}
 		return true;
@@ -259,29 +262,58 @@ bool CollisionHitManager::UpdateHitPlayerTransformEnemy(CollisionPair& pair)
 }
 
 /// <summary>
-///　「基本エネミー」と「変形エネミー」の衝突処理を行います。
+/// 「プレイヤー」と「ボスエネミー」の衝突処理を行います。
 /// </summary>
-bool CollisionHitManager::UpdateHitBasicEnemyTransformEnemy(CollisionPair& pair)
+bool CollisionHitManager::UpdateHitPlayerBossEnemy(CollisionPair& pair)
+{
+	Player* player = GetTargetObject<Player>(pair, enCollisionType_Player);
+	if (player == nullptr) {
+		return false;
+	}
+
+	BossEnemy* bossEnemy = GetTargetObject<BossEnemy>(pair, enCollisionType_BossEnemy);
+	if (bossEnemy == nullptr) {
+		return false;
+	}
+
+
+	// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
+	if (player->GetIsInvincible()) {
+		return true;
+	}
+
+
+	// ボスの攻撃。
+	if (bossEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+		player->SetIsAttacked(true);
+		player->ComputeKnockBackDirection(bossEnemy->GetPosition());
+		return true;
+	}
+}
+
+/// <summary>
+/// 「基本エネミー」と「変形エネミー」の衝突処理を行います。
+/// </summary>
+bool CollisionHitManager::UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair)
 {
 	BasicEnemy* basicEnemy = GetTargetObject<BasicEnemy>(pair, enCollisionType_BasicEnemy);
-	TransformEnemy* transformEnemy = GetTargetObject<TransformEnemy>(pair, enCollisionType_TransformEnemy);
-
-
 	if (basicEnemy == nullptr) {
 		return false;
 	}
-	if (transformEnemy == nullptr) {
+
+	DeformEnemy* deformEnemy = GetTargetObject<DeformEnemy>(pair, enCollisionType_TransformEnemy);
+	if (deformEnemy == nullptr) {
 		return false;
 	}
 
 
 	// 変形エネミーが変形していて、滑走している場合。
-	if (transformEnemy->GetIsTransform() && transformEnemy->GetIsSliding())
+	if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
 	{
 		// 変形エネミーの攻撃。
-		if (transformEnemy->GetBodyCollider()->IsHit(basicEnemy->GetBodyCollider())) {
+		if (deformEnemy->GetBodyCollider()->IsHit(basicEnemy->GetBodyCollider())) {
 			basicEnemy->SetIsDead(true);
-			transformEnemy->SetIsDead(true);
+			deformEnemy->SetIsDead(true);
 			return true;
 		}
 		return true;

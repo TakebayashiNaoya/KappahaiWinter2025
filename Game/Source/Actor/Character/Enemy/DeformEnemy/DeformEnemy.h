@@ -3,19 +3,18 @@
 /// </summary>
 #pragma once
 #include "Source/Actor/Character/Enemy/Enemy.h"
-#include "Source/Actor/Character/Types.h"
 
 namespace app {
-	namespace transformEnemy {
-		class TransformEnemyStateMachine;
+	namespace deformEnemy {
+		class DeformEnemyStateMachine;
 	}
 }
 
-class TransformEnemy : public Enemy
+class DeformEnemy : public Enemy
 {
 public:
-	TransformEnemy();
-	~TransformEnemy();
+	DeformEnemy();
+	~DeformEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
@@ -43,16 +42,16 @@ public:
 	/// 変形しているかどうかを取得します。
 	/// </summary>
 	/// <returns> 変形しているならtrueを返す。</returns>
-	const bool GetIsTransform() const
+	const bool IsDeformed() const
 	{
-		return m_isTransform;
+		return m_isDeformed;
 	}
 
 	/// <summary>
 	/// 滑走しているかどうかを取得します。
 	/// </summary>
 	/// <returns> 滑走しているならtrueを返す。</returns>
-	const bool& GetIsSliding() const
+	const bool& IsSliding() const
 	{
 		return m_isSliding;
 	}
@@ -61,9 +60,9 @@ public:
 	/// 変形しているかどうかを設定します。
 	/// </summary>
 	/// <param name="isTransform"> 変形しているならtrueを入れる。</param>
-	void SetIsTransform(const bool isTransform)
+	void SetIsDeformed(const bool isDeformed)
 	{
-		m_isTransform = isTransform;
+		m_isDeformed = isDeformed;
 	}
 
 	/// <summary>
@@ -120,12 +119,12 @@ private:
 	void UpdateSlideDirection();
 
 	// 変形エネミーのステートマシン。
-	std::unique_ptr<app::transformEnemy::TransformEnemyStateMachine> m_stateMachine;
+	std::unique_ptr<app::deformEnemy::DeformEnemyStateMachine> m_stateMachine;
 
 	// クラススコープで宣言し、cppで定義。
 	static const Character::AnimationOption TRANSFORM_ENEMY_ANIMATION_OPTIONS[];
 
-	bool m_isTransform = false;					// 変形しているかどうか。
+	bool m_isDeformed = false;					// 変形しているかどうか。
 	bool m_isSliding = false;					// 滑っているかどうか。
 	Vector3 m_slideDirection = Vector3::Zero;	// 滑走方向。
 	Vector3 m_beforePosition = Vector3::Zero;	// 1フレーム前の座標。

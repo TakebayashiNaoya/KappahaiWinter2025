@@ -4,7 +4,8 @@
 class BackGround;
 class Player;
 class BasicEnemy;
-class TransformEnemy;
+class DeformEnemy;
+class BossEnemy;
 class GameCamera;
 class InGameUI;
 class BattleManagerObject;
@@ -26,7 +27,8 @@ private:
 	BackGround* m_backGround = nullptr;
 	Player* m_player = nullptr;
 	BasicEnemy* m_basicEnemy = nullptr;
-	TransformEnemy* m_transformEnemy = nullptr;
+	DeformEnemy* m_deformEnemy = nullptr;
+	BossEnemy* m_bossEnemy = nullptr;
 	GameCamera* m_gameCamera = nullptr;
 	InGameUI* m_inGameUI = nullptr;
 	BattleManagerObject* m_battleManager = nullptr;
