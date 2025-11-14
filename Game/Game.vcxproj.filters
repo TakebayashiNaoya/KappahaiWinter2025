@@ -43,6 +43,9 @@
     <Filter Include="Source\UI">
       <UniqueIdentifier>{fe0eed91-9dca-4dc8-b9ab-61780a859434}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actor\Character\Enemy\BossEnemy">
+      <UniqueIdentifier>{6b8fbc50-493d-467e-8cf3-0c9ebe6f21da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -120,6 +123,12 @@
     <ClCompile Include="Source\UI\GameClearUI.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.cpp">
+      <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemyStateMachine.cpp">
+      <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -195,6 +204,12 @@
     </ClInclude>
     <ClInclude Include="Source\UI\GameClearUI.h">
       <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.h">
+      <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemyStateMachine.h">
+      <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
