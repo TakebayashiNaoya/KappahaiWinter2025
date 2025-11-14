@@ -21,7 +21,7 @@ namespace
 /// 当たった座標と自分の座標の距離が一定未満、
 /// あるいはレイが当たらなけらば接地していると判定します。
 /// </summary>
-const bool& Character::GetIsOnGround()
+const bool& Character::IsOnGround()
 {
 	// 移動処理でhitPositionをm_positionに代入しており、レイの判定が不安定になるため、rayStartをm_positionから少し離す。
 	Vector3 rayStart = m_position + m_upDirection * 0.1f;

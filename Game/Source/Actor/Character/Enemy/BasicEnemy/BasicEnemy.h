@@ -42,7 +42,7 @@ public:
 	/// クールダウン状態かどうかを取得します。
 	/// </summary>
 	/// <returns> クールダウン状態であれば true。</returns>
-	const bool GetIsCoolDown() const
+	const bool IsOnCoolDown() const
 	{
 		return m_isCoolDown;
 	}

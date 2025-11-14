@@ -11,7 +11,7 @@ public:
 	/// プレイヤーが見つかったかどうかを取得します。
 	/// </summary>
 	/// <returns> プレイヤーが見つかったらtrueを返す。</returns>
-	const bool& GetIsFoundPlayer() const
+	const bool& IsFoundPlayer() const
 	{
 		return m_isFoundPlayer;
 	}

@@ -62,7 +62,7 @@ public:
 	/// 攻撃されているかどうかを取得します。
 	/// </summary>
 	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
-	const bool GetIsAttacked() const
+	const bool IsAttacked() const
 	{
 		return m_isAttacked;
 	}
@@ -71,7 +71,7 @@ public:
 	/// 無敵中かどうかを取得します。
 	/// </summary>
 	/// <returns> 無敵中ならtrue、そうでなければfalseを返す。</returns>
-	const bool GetIsInvincible() const
+	const bool IsInvincible() const
 	{
 		return m_isInvincible;
 	}

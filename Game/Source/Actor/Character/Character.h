@@ -51,7 +51,7 @@ public:
 	/// 地面に向かってレイを飛ばし、当たった座標と自分の座標の距離が一定未満なら接地していると判定します。
 	/// </summary>
 	/// <returns>接地していれば true、そうでなければ false を示す。</returns>
-	const bool& GetIsOnGround();
+	const bool& IsOnGround();
 
 
 	/// <summary>
@@ -75,7 +75,7 @@ public:
 	/// 死亡状態を取得します。
 	/// </summary>
 	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
-	const bool GetIsDead() const
+	const bool IsDead() const
 	{
 		return m_isDead;
 	}

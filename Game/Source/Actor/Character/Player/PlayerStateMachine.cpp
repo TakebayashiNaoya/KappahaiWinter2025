@@ -68,7 +68,7 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -84,7 +84,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetIsOnGround()) {
+			if (!GetOwner<Player>()->IsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -120,7 +120,7 @@ namespace app
 
 		bool app::player::WalkState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -141,7 +141,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetIsOnGround()) {
+			if (!GetOwner<Player>()->IsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -177,7 +177,7 @@ namespace app
 
 		bool app::player::RunState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -198,7 +198,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetIsOnGround()) {
+			if (!GetOwner<Player>()->IsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -236,12 +236,12 @@ namespace app
 
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
-			if (GetOwner<Player>()->GetIsOnGround()) {
+			if (GetOwner<Player>()->IsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;
@@ -290,7 +290,7 @@ namespace app
 
 		bool app::player::KnockBackState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				return false;
 			}
 
@@ -299,7 +299,7 @@ namespace app
 				return true;
 			}
 
-			if (GetOwner<Player>()->GetIsOnGround()) {
+			if (GetOwner<Player>()->IsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;

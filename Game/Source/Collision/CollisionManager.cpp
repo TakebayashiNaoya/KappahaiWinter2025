@@ -14,7 +14,7 @@ namespace
 	// プレイヤーが無敵中か、プレイヤーの攻撃が先に当たっている場合、trueを返す。
 	const bool IsAttackBlocked(Player* player, const bool isStomp)
 	{
-		if (player->GetIsInvincible()) {
+		if (player->IsInvincible()) {
 			return true;
 		}
 		else if (isStomp) {
@@ -159,7 +159,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 	}
 
 	// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-	if (player->GetIsInvincible()) {
+	if (player->IsInvincible()) {
 		return true;
 	}
 
@@ -201,7 +201,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		}
 
 		// プレイヤーが無敵中の場合、またはプレイヤーの攻撃が先に当たっている場合、エネミーの攻撃は無効にする。
-		if (player->GetIsInvincible()) {
+		if (player->IsInvincible()) {
 			return true;
 		}
 
@@ -244,7 +244,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		}
 
 		// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-		if (player->GetIsInvincible()) {
+		if (player->IsInvincible()) {
 			return true;
 		}
 
@@ -278,7 +278,7 @@ bool CollisionHitManager::UpdateHitPlayerBossEnemy(CollisionPair& pair)
 
 
 	// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-	if (player->GetIsInvincible()) {
+	if (player->IsInvincible()) {
 		return true;
 	}
 
