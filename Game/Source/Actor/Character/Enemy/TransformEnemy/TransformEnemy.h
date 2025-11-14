@@ -26,7 +26,7 @@ public:
 		enAnimationClip_Idle,	// 待機アニメーション。
 		enAnimationClip_Walk,	// 歩きアニメーション。
 		enAnimationClip_Run,	// 走りアニメーション。
-		enAnimationClip_Dead,	// ジャンプアニメーション。
+		enAnimationClip_Dead,	// 死亡アニメーション。
 		enAnimationClip_Num,
 	};
 
