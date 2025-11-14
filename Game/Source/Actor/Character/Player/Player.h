@@ -153,10 +153,6 @@ public:
 	/// </summary>
 	void StompJump();
 
-	/// <summary>
-	/// ƒ‰ƒCƒt‚ğ1Œ¸‚ç‚µ‚Ü‚·B
-	/// </summary>
-	void TakeDamage();
 
 private:
 	bool Start()override final;

@@ -215,17 +215,6 @@ void Player::StompJump()
 	m_fallTimer = 0.0f;
 }
 
-/// <summary>
-/// ƒ‰ƒCƒt‚ğ1Œ¸‚ç‚µ‚Ü‚·B
-/// </summary>
-void Player::TakeDamage()
-{
-	m_life--;
-}
-
-
-
-
 
 bool Player::Start()
 {
