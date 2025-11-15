@@ -72,6 +72,24 @@ public:
 
 
 	/// <summary>
+	/// 攻撃されているかどうかを取得します。
+	/// </summary>
+	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
+	const bool IsAttacked() const
+	{
+		return m_isAttacked;
+	}
+	/// <summary>
+	/// 攻撃されているどうかのフラグを設定します。
+	/// </summary>
+	/// <param name="isAttacked"> 攻撃されている場合はtrue、されていない場合はfalseを入れる。</param>
+	void SetIsAttacked(const bool isAttacked)
+	{
+		m_isAttacked = isAttacked;
+	}
+
+
+	/// <summary>
 	/// 死亡状態を取得します。
 	/// </summary>
 	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
@@ -126,6 +144,14 @@ public:
 		m_life--;
 	}
 
+	/// <summary>
+	/// ライフを取得します。
+	/// </summary>
+	/// <returns> ライフ。</returns>
+	const int GetLife() const
+	{
+		return m_life;
+	}
 
 	/// <summary>
 	/// ボディコライダーの座標と回転を更新します。
@@ -147,6 +173,7 @@ protected:
 	Vector3		m_position = Vector3::Zero;							// ポジション。
 	Quaternion  m_rotation = Quaternion::Identity;					// 回転。
 	int			m_life = 0;											// ライフ。
+	bool	m_isAttacked = false;					// ダメージを受けたかどうか。
 
 	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。

@@ -58,14 +58,6 @@ public:
 		return m_xzAdditionalRot;
 	}
 
-	/// <summary>
-	/// 攻撃されているかどうかを取得します。
-	/// </summary>
-	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
-	const bool IsAttacked() const
-	{
-		return m_isAttacked;
-	}
 
 	/// <summary>
 	/// 無敵中かどうかを取得します。
@@ -76,23 +68,6 @@ public:
 		return m_isInvincible;
 	}
 
-	/// <summary>
-	/// ライフを取得します。
-	/// </summary>
-	/// <returns> ライフ。</returns>
-	const int GetLife() const
-	{
-		return m_life;
-	}
-
-	/// <summary>
-	/// 攻撃されているどうかのフラグを設定します。
-	/// </summary>
-	/// <param name="isAttacked"> 攻撃されている場合はtrue、されていない場合はfalseを入れる。</param>
-	void SetIsAttacked(const bool isAttacked)
-	{
-		m_isAttacked = isAttacked;
-	}
 
 	/// <summary>
 	/// 無敵中かどうかを設定します。
@@ -164,7 +139,6 @@ private:
 	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
 
 	/// ダメージ関連。
-	bool	m_isAttacked = false;					// ダメージを受けたかどうか。
 	Vector3 m_knockBackDirection = Vector3::Zero;	// ノックバック方向。
 	float	m_knockBackTimer = 0.0f;				// ノックバックタイマー。
 	bool	m_isBlinking = false;					// 点滅中かどうか。
