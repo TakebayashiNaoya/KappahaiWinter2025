@@ -27,14 +27,6 @@ BasicEnemy::BasicEnemy()
 	m_stateMachine = std::make_unique<app::basicEnemy::BasicEnemyStateMachine>(this);
 }
 
-BasicEnemy::~BasicEnemy()
-{
-	if (m_bodyCollider)
-	{
-		DeleteBodyCollider();
-	}
-}
-
 /// <summary>
 /// プレイヤーに向かって走ります。
 /// </summary>
@@ -62,20 +54,6 @@ void BasicEnemy::CoolDownCount()
 	}
 }
 
-/// <summary>
-/// エネミーを消滅させます。
-/// </summary>
-void BasicEnemy::DeleteEnemy()
-{
-	DeleteBodyCollider();
-
-	m_modelRender.SetScale(Vector3(1.0f, 0.5f, 1.0f));
-
-	m_deleteTimer += g_gameTime->GetFrameDeltaTime();
-	if (m_deleteTimer >= 1.0f) {
-		DeleteGO(this);
-	}
-}
 
 bool BasicEnemy::Start()
 {
@@ -123,19 +101,4 @@ void BasicEnemy::Render(RenderContext& rc)
 	m_modelRender.Draw(rc);
 }
 
-/// <summary>
-/// プレイヤーを追いかける方向を計算して返します。
-/// </summary>
-/// <returns> 追跡方向。</returns>
-const Vector3 BasicEnemy::ComputeMoveDirection() const
-{
-	// プレイヤーへの方向ベクトルを計算。
-	Vector3 directionToPlayer = m_playerFoundPos - m_position;
-	directionToPlayer.Normalize();
 
-	// プレイヤーへの方向ベクトルから、接線方向を取得。
-	Vector3 moveDirection = ProjectOnPlane(directionToPlayer, m_upDirection);
-	moveDirection.Normalize();
-
-	return moveDirection;
-}

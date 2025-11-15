@@ -7,6 +7,8 @@
 class Enemy : public Character
 {
 public:
+	virtual ~Enemy();
+
 	/// <summary>
 	/// プレイヤーが見つかったかどうかを取得します。
 	/// </summary>
@@ -37,7 +39,8 @@ protected:
 
 protected:
 	/// <summary>
-	/// エネミー削除の処理を行います。
+	/// プレイヤーを追いかける方向を計算して返します。
 	/// </summary>
-	virtual void DeleteEnemy() = 0;
+	/// <returns> 追跡方向。</returns>
+	const Vector3 ComputeMoveDirection()const override;
 };

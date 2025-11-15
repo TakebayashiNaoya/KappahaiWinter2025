@@ -167,7 +167,7 @@ namespace app
 
 		void DieState::Enter()
 		{
-			GetOwner<DeformEnemy>()->DeleteEnemy();
+			DeleteGO(GetOwner<DeformEnemy>());
 		}
 
 

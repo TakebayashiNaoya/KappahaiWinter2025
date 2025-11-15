@@ -141,13 +141,12 @@ namespace app
 
 		void DieState::Enter()
 		{
+			DeleteGO(GetOwner<BasicEnemy>());
 		}
 
 
 		void DieState::Update()
 		{
-			// Á–Åˆ—
-			GetOwner<BasicEnemy>()->DeleteEnemy();
 		}
 
 

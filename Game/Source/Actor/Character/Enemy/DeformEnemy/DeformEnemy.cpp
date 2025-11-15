@@ -29,13 +29,6 @@ DeformEnemy::DeformEnemy()
 	m_stateMachine = std::make_unique<app::deformEnemy::DeformEnemyStateMachine>(this);
 }
 
-DeformEnemy::~DeformEnemy()
-{
-	if (m_bodyCollider)
-	{
-		DeleteBodyCollider();
-	}
-}
 
 /// <summary>
 /// プレイヤーが一定範囲内にいる場合、プレイヤーから逃げる。
@@ -43,7 +36,7 @@ DeformEnemy::~DeformEnemy()
 void DeformEnemy::EscapePlayer()
 {
 	// 水平方向に速度加算。
-	m_moveSpeed += CalcHorizontalVelocity(RUN_SPEED);
+	m_moveSpeed -= CalcHorizontalVelocity(RUN_SPEED);
 
 	// 垂直方向に速度加算。
 	m_moveSpeed += CalcVerticalVelocity();
@@ -79,13 +72,6 @@ void DeformEnemy::Sliding()
 	ComputePosition();
 }
 
-void DeformEnemy::DeleteEnemy()
-{
-	// コライダーを削除。
-	DeleteBodyCollider();
-	// 自分自身を削除。
-	DeleteGO(this);
-}
 
 bool DeformEnemy::Start()
 {
@@ -131,21 +117,4 @@ void DeformEnemy::Update()
 void DeformEnemy::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
-}
-
-/// <summary>
-/// プレイヤーから逃げる方向を計算して返します。
-/// </summary>
-/// <returns> 逃走方向。</returns>
-const Vector3 DeformEnemy::ComputeMoveDirection() const
-{
-	// プレイヤーからの方向ベクトルを計算。
-	Vector3 directionFromPlayer = m_position - m_playerFoundPos;
-	directionFromPlayer.Normalize();
-
-	// プレイヤーからの方向ベクトルから、接線方向を取得。
-	Vector3 moveDirection = ProjectOnPlane(directionFromPlayer, m_upDirection);
-	moveDirection.Normalize();
-
-	return moveDirection;
 }

@@ -14,7 +14,6 @@ class DeformEnemy : public Enemy
 {
 public:
 	DeformEnemy();
-	~DeformEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
@@ -95,23 +94,11 @@ public:
 	/// </summary>
 	void Sliding();
 
-	/// <summary>
-	/// エネミーを消滅させます。
-	/// 1.コライダーを削除。
-	/// 2.DeleteGO(this)。
-	/// </summary>
-	void DeleteEnemy()override final;
 
 private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
-
-	/// <summary>
-	/// プレイヤーから逃げる方向を計算して返します。
-	/// </summary>
-	/// <returns> 逃走方向。</returns>
-	const Vector3 ComputeMoveDirection()const override final;
 
 	/// <summary>
 	/// 滑走する方向を更新します。
