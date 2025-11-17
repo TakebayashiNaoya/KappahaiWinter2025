@@ -13,6 +13,9 @@ const Character::AnimationOption BasicEnemy::BASIC_ENEMY_ANIMATION_OPTIONS[] = {
 
 namespace
 {
+	const std::string MODEL_PATH = "Wolf/wolf";
+	constexpr float MODEL_SCALE = 70.0f;
+
 	constexpr float BODY_COLLIDER_RADIUS = 50.0f;					// ゴーストオブジェクトの半径。
 	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ゴーストオブジェクトのオフセット値。
 
@@ -58,8 +61,7 @@ void BasicEnemy::CoolDownCount()
 bool BasicEnemy::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, "Wolf/wolf");
-	m_modelRender.SetScale(Vector3(70.0f, 70.0f, 70.0f));
+	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
@@ -68,15 +70,7 @@ bool BasicEnemy::Start()
 	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
-	m_bodyCollider = new CollisionObject();
-	m_bodyCollider->CreateSphere(
-		m_position,
-		m_rotation,
-		BODY_COLLIDER_RADIUS
-	);
-
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(enCollisionType_BasicEnemy, m_bodyCollider, this);
+	CreateCollider(m_hurtCollider, enCollisionType_BasicEnemy, BODY_COLLIDER_OFFSET);
 
 	return true;
 }
@@ -90,7 +84,7 @@ void BasicEnemy::Update()
 
 	m_stateMachine->Update();
 
-	UpdateBodyCollider(BODY_COLLIDER_OFFSET);
+	UpdateCollider(m_hurtCollider, BODY_COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();

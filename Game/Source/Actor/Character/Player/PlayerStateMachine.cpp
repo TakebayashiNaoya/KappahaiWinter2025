@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Player/PlayerStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 namespace
 {
@@ -215,7 +216,7 @@ namespace app
 		void app::player::JumpState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
-			GetOwner<Player>()->CreateStompCollider();
+			GetOwner<Player>()->CreateCollider(GetOwner<Player>()->GetStompCollider(), enCollisionType_Player, 40.0f);
 		}
 
 
@@ -224,13 +225,13 @@ namespace app
 			GetOwner<Player>()->MoveUpdate(GetOwner<Player>()->GetSpeedBeforeJump());
 			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
-			GetOwner<Player>()->UpdateStompCollider();
+			GetOwner<Player>()->UpdateCollider(GetOwner<Player>()->GetStompCollider());
 		}
 
 
 		void app::player::JumpState::Exit()
 		{
-			GetOwner<Player>()->DeleteStompCollider();
+			GetOwner<Player>()->DeleteCollider(GetOwner<Player>()->GetStompCollider());
 		}
 
 

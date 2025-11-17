@@ -14,6 +14,9 @@ const Character::AnimationOption DeformEnemy::TRANSFORM_ENEMY_ANIMATION_OPTIONS[
 
 namespace
 {
+	const std::string MODEL_PATH = "Spider/spider";
+	constexpr float MODEL_SCALE = 30.0f;
+
 	constexpr float BODY_COLLIDER_RADIUS = 40.0f;					// ゴーストオブジェクトの半径。
 	constexpr float BODY_COLLIDER_OFFSET = 30.0f;					// ゴーストオブジェクトのオフセット値。
 
@@ -76,8 +79,7 @@ void DeformEnemy::Sliding()
 bool DeformEnemy::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, "Spider/spider");
-	m_modelRender.SetScale(Vector3(30.0f, 30.0f, 30.0f));
+	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
@@ -86,15 +88,7 @@ bool DeformEnemy::Start()
 	m_stateMachine->InitializeState(enDeformEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
-	m_bodyCollider = new CollisionObject();
-	m_bodyCollider->CreateSphere(
-		m_position,
-		m_rotation,
-		BODY_COLLIDER_RADIUS
-	);
-
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(enCollisionType_TransformEnemy, m_bodyCollider, this);
+	CreateCollider(m_hurtCollider, enCollisionType_TransformEnemy, BODY_COLLIDER_OFFSET);
 
 	return true;
 }
@@ -108,7 +102,7 @@ void DeformEnemy::Update()
 
 	m_stateMachine->Update();
 
-	UpdateBodyCollider(BODY_COLLIDER_OFFSET);
+	UpdateCollider(m_hurtCollider, BODY_COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();

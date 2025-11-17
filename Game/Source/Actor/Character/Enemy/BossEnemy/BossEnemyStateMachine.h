@@ -22,6 +22,28 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
+		class WalkState : public IState
+		{
+		public:
+			WalkState(BossEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
+		class RunState : public IState
+		{
+		public:
+			RunState(BossEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
 		class AttackState : public IState
 		{
 		public:
@@ -33,10 +55,21 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
-		class DieState : public IState
+		class DamageState : public IState
 		{
 		public:
-			DieState(BossEnemy* owner) : IState(owner) {}
+			DamageState(BossEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
+		class DeadState : public IState
+		{
+		public:
+			DeadState(BossEnemy* owner) : IState(owner) {}
 
 			void Enter() override final;
 			void Update() override final;
@@ -53,8 +86,11 @@ namespace app
 			BossEnemyStateMachine(BossEnemy* owner) : m_owner(owner)
 			{
 				AddState<IdleState, BossEnemy>(enBossEnemyState_Idle, owner);
+				AddState<WalkState, BossEnemy>(enBossEnemyState_Walk, owner);
+				AddState<RunState, BossEnemy>(enBossEnemyState_Run, owner);
 				AddState<AttackState, BossEnemy>(enBossEnemyState_Attack, owner);
-				AddState<DieState, BossEnemy>(enBossEnemyState_Die, owner);
+				AddState<DamageState, BossEnemy>(enBossEnemyState_Damage, owner);
+				AddState<DeadState, BossEnemy>(enBossEnemyState_Dead, owner);
 			}
 
 			void Update() override final;

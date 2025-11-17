@@ -3,10 +3,7 @@
 
 Enemy::~Enemy()
 {
-	if (m_bodyCollider)
-	{
-		DeleteBodyCollider();
-	}
+	DeleteCollider(m_hurtCollider);
 }
 
 /// <summary>

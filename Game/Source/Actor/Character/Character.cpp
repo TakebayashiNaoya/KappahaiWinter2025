@@ -146,33 +146,78 @@ void Character::ModelRotation()
 	m_modelRender.SetRotation(m_rotation);
 }
 
-void Character::UpdateBodyCollider(const float offset)
+void Character::CreateCollider(CollisionObject*& collider, const EnCollisionType type, const Vector3 size)
 {
-	if (m_bodyCollider == nullptr) {
+	// ゴーストオブジェクトを作成。
+	collider = new CollisionObject();
+	collider->CreateBox(
+		m_position,
+		m_rotation,
+		size
+	);
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(type, collider, this);
+}
+
+void Character::CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius)
+{
+	// ゴーストオブジェクトを作成。
+	collider = new CollisionObject();
+	collider->CreateSphere(
+		m_position,
+		m_rotation,
+		radius
+	);
+
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(type, collider, this);
+}
+
+void Character::CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius, const float height)
+{
+	// ゴーストオブジェクトを作成。
+	collider = new CollisionObject();
+	collider->CreateCapsule(
+		m_position,
+		m_rotation,
+		radius,
+		height
+	);
+	// コリジョンヒットマネージャーに登録。
+	CollisionHitManager::GetInstance()->Register(type, collider, this);
+}
+
+void Character::UpdateCollider(CollisionObject* collider, const float offset)
+{
+	if (collider == nullptr) {
 		return;
 	}
 
-	// ボディコライダー用の座標を計算する。
+	// コライダーの座標を計算する。
 	Vector3 ghostPos = m_position + m_upDirection * offset;
 
-	// ボディコライダー用の座標をモデルの座標に合わせる。
-	m_bodyCollider->SetPosition(ghostPos);
+	// コライダーの座標をモデルの座標に合わせる。
+	collider->SetPosition(ghostPos);
 
-	// ボディコライダー用の回転をモデルの回転に合わせる。
-	m_bodyCollider->SetRotation(m_rotation);
+	// コライダーの回転をモデルの回転に合わせる。
+	collider->SetRotation(m_rotation);
 }
 
 /// <summary>
-/// ボディコライダーをdelete、nullptrします。
+/// やられ判定をdelete、nullptrします。
 /// </summary>
-void Character::DeleteBodyCollider()
+void Character::DeleteCollider(CollisionObject*& collider)
 {
+	if (collider == nullptr) {
+		return;
+	}
+
 	// コリジョンヒットマネージャーから登録解除。
 	if (CollisionHitManager::GetInstance()) {
-		CollisionHitManager::GetInstance()->Unregister(m_bodyCollider);
+		CollisionHitManager::GetInstance()->Unregister(collider);
 	}
-	delete m_bodyCollider;
-	m_bodyCollider = nullptr;
+	delete collider;
+	collider = nullptr;
 }
 
 /// <summary>
@@ -181,7 +226,8 @@ void Character::DeleteBodyCollider()
 /// <param name="count">アニメーションクリップの数。</param>
 /// <param name="option">各アニメーションクリップの設定情報が格納されたAnimationOption型の配列。</param>
 /// <param name="path">モデルファイルのパス。</param>
-void Character::InitModel(const size_t count, const AnimationOption* option, const std::string path)
+/// <param name="scale">モデルの拡大率。（規定値は1.0f）</param>
+void Character::InitModel(const size_t count, const AnimationOption* option, const std::string path, const float scale)
 {
 	// ポインタに配列でnewすると、連続で確保される。
 	m_animationClips = new AnimationClip[count];
@@ -195,6 +241,9 @@ void Character::InitModel(const size_t count, const AnimationOption* option, con
 	// モデルの初期化。
 	std::string fullModelPath = MODEL_FILE_PATH + path + MODEL_EXTENSION;
 	m_modelRender.Init(fullModelPath.c_str(), m_animationClips, count, enModelUpAxisY);
+
+	// モデルの拡大率を設定。
+	m_modelRender.SetScale(scale, scale, scale);
 }
 
 /// <summary>

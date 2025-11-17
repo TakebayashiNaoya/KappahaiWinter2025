@@ -35,7 +35,7 @@ public:
 	/// 踏みつけ用のコライダーのポインタを取得します。
 	/// </summary>
 	/// <returns> 踏みつけ用のコライダーのポインタ。</returns>
-	CollisionObject* GetStompCollider()
+	CollisionObject*& GetStompCollider()
 	{
 		return m_stompCollider;
 	}
@@ -96,21 +96,6 @@ public:
 	/// </summary>
 	/// <param name="speed">移動速度を表す値。</param>
 	void MoveUpdate(const float speed);
-
-	/// <summary>
-	/// 踏みつけ判定用コライダーを作成します。
-	/// </summary>
-	void CreateStompCollider();
-
-	/// <summary>
-	/// 踏みつけ判定用コライダーの座標と回転を更新します。
-	/// </summary>
-	void UpdateStompCollider();
-
-	/// <summary>
-	/// 踏みつけ判定用コライダーをdelete、nullptrします。
-	/// </summary>
-	void DeleteStompCollider();
 
 	/// <summary>
 	/// ノックバック方向を計算します。

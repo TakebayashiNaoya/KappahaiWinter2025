@@ -3,6 +3,8 @@
 /// </summary>
 #pragma once
 
+enum EnCollisionType;
+
 class Character :public IGameObject
 {
 public:
@@ -12,7 +14,7 @@ public:
 	/// <returns> ボディのコライダーのポインタ。</returns>
 	CollisionObject* GetBodyCollider()
 	{
-		return m_bodyCollider;
+		return m_hurtCollider;
 	}
 
 
@@ -121,7 +123,14 @@ public:
 	/// </summary>
 	/// <param name="animNo">再生するアニメーションの番号。</param>
 	void PlayAnimation(const int animNo);
-
+	/// <summary>
+	/// アニメーションが再生中かどうかを返します。
+	/// </summary>
+	/// <returns>アニメーションが再生中であれば true、そうでなければ false を返します。</returns>
+	const bool IsPlayingAnimation() const
+	{
+		return m_modelRender.IsPlayingAnimation();
+	};
 
 	/// <summary>
 	/// ジャンプパワーをジャンプスピードとムーブスピードに即座に適用します。
@@ -153,21 +162,47 @@ public:
 		return m_life;
 	}
 
+
+public:
 	/// <summary>
-	/// ボディコライダーの座標と回転を更新します。
-	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、y方向に位置補正を行う必要があります。
+	/// 箱型のコライダーを生成し、コリジョンマネージャーに登録します。
 	/// </summary>
-	/// <param name="offset"> y方向の位置補正の値。</param>
-	void UpdateBodyCollider(const float offset);
+	/// <param name="collider">作成先の CollisionObject を指すポインタ。</param>
+	/// <param name="type">作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size">箱のサイズ（幅・高さ・奥行き）。</param>
+	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const Vector3 size);
 	/// <summary>
-	/// コリジョンヒットマネージャーの登録解除を行い、ボディコライダーをdelete、nullptrします。
+	/// 球型のコライダーを生成し、コリジョンマネージャーに登録します。
 	/// </summary>
-	void DeleteBodyCollider();
+	/// <param name="collider">作成先の CollisionObject を指すポインタ。</param>
+	/// <param name="type">作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size">球の半径。</param>
+	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius);
+	/// <summary>
+	/// カプセル型のコライダーを生成し、コリジョンマネージャーに登録します。
+	/// </summary>
+	/// <param name="collider">作成先の CollisionObject を指すポインタ。</param>
+	/// <param name="type">作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size">カプセルのサイズ。（半径・高さ）。</param>
+	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius, const float height);
+	/// <summary>
+	/// コライダーの座標と回転を更新します。
+	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
+	/// </summary>
+	/// <param name="collider"> 更新するコライダーのポインタ。</param>
+	/// <param name="offset"> up方向の位置補正の値。</param>
+	void UpdateCollider(CollisionObject* collider, const float offset = 0.0f);
+	/// <summary>
+	/// コリジョンヒットマネージャーの登録解除を行い、コライダーをdelete、nullptrします。
+	/// </summary>
+	/// <param name="collision"> 削除するコライダーのポインタの参照。</param>
+	void DeleteCollider(CollisionObject*& collision);
 
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
-	CollisionObject* m_bodyCollider = nullptr;						// キャラクター同士の当たり判定用ゴーストオブジェクト。
+	CollisionObject* m_hitCollider = nullptr;						// 攻撃判定。
+	CollisionObject* m_hurtCollider = nullptr;						// やられ判定。
 
 	ModelRender	m_modelRender;										// モデルレンダー。
 	Vector3		m_position = Vector3::Zero;							// ポジション。
@@ -218,7 +253,8 @@ protected:
 	/// <param name="count">アニメーションクリップの数。</param>
 	/// <param name="option">各アニメーションクリップの設定情報が格納されたAnimationOption型の配列。</param>
 	/// <param name="path">モデルファイルのパス。</param>
-	void InitModel(const size_t count, const AnimationOption* option, const std::string path);
+	/// <param name="scale">モデルの拡大率。（規定値は1.0f）</param>
+	void InitModel(const size_t count, const AnimationOption* option, const std::string path, const float scale = 1.0f);
 
 
 protected:

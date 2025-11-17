@@ -43,14 +43,8 @@ Player::Player()
 
 Player::~Player()
 {
-	if (m_bodyCollider)
-	{
-		DeleteBodyCollider();
-	}
-	if (m_stompCollider)
-	{
-		DeleteStompCollider();
-	}
+	DeleteCollider(m_hurtCollider);
+	DeleteCollider(m_stompCollider);
 }
 
 /// <summary>
@@ -118,44 +112,6 @@ void Player::MoveUpdate(const float speed)
 	ComputePosition();
 }
 
-/// <summary>
-/// 踏みつけ判定用ゴーストオブジェクトを作成します。
-/// </summary>
-void Player::CreateStompCollider()
-{
-	m_stompCollider = new CollisionObject();
-	m_stompCollider->CreateSphere(
-		m_position,
-		m_rotation,
-		STOMP_COLLIDER_RADIUS
-	);
-
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_stompCollider, this);
-}
-
-/// <summary>
-/// 踏みつけ判定用ゴーストオブジェクトの座標と回転を更新します。
-/// </summary>
-void Player::UpdateStompCollider()
-{
-	m_stompCollider->SetPosition(m_position);
-	m_stompCollider->SetRotation(m_rotation);
-}
-
-/// <summary>
-/// 踏みつけ判定用コライダーをdelete、nullptrします。
-/// </summary>
-void Player::DeleteStompCollider()
-{
-	if (m_stompCollider == nullptr) {
-		return;
-	}
-	// コリジョンヒットマネージャーから登録解除。
-	CollisionHitManager::GetInstance()->Unregister(m_stompCollider);
-	delete m_stompCollider;
-	m_stompCollider = nullptr;
-}
 
 /// <summary>
 /// ノックバック方向を計算します。
@@ -231,15 +187,8 @@ bool Player::Start()
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
 	// ボディのゴーストオブジェクトを作成。
-	m_bodyCollider = new CollisionObject();
-	m_bodyCollider->CreateCapsule(
-		m_position,
-		m_rotation,
-		BODY_COLLIDER_RADIUS,
-		BODY_COLLIDER_HEIGHT
-	);
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_bodyCollider, this);
+	CreateCollider(m_hurtCollider, enCollisionType_Player, BODY_COLLIDER_RADIUS, BODY_COLLIDER_HEIGHT);
+
 	return true;
 }
 
@@ -253,7 +202,7 @@ void Player::Update()
 
 	m_stateMachine->Update();
 
-	UpdateBodyCollider(BODY_COLLIDER_OFFSET);
+	UpdateCollider(m_hurtCollider, BODY_COLLIDER_OFFSET);
 
 	InvincibleTimer();
 
