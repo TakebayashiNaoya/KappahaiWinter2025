@@ -15,9 +15,12 @@ const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
 
 namespace
 {
+	const std::string MODEL_PATH = "Player/rabbit";
+	constexpr float MODEL_SCALE = 200.0f;
+
 	// プレイヤーのヒットボックスは小さめに設定。
-	constexpr float BODY_COLLIDER_RADIUS = 15.0f;					// ボディコライダーの半径。
-	constexpr float BODY_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
+	constexpr float HURT_COLLIDER_RADIUS = 15.0f;					// ボディコライダーの半径。
+	constexpr float HURT_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
 	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
 
 	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;					// 踏みつけ用コライダーの半径。
@@ -44,7 +47,7 @@ Player::Player()
 Player::~Player()
 {
 	DeleteCollider(m_hurtCollider);
-	DeleteCollider(m_stompCollider);
+	DeleteCollider(m_attackCollider);
 }
 
 /// <summary>
@@ -175,8 +178,7 @@ void Player::StompJump()
 bool Player::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "Player/rabbit");
-	m_modelRender.SetScale(Vector3(200.0f, 200.0f, 200.0f));
+	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
 	InitLife(LIFE);
 
@@ -187,7 +189,7 @@ bool Player::Start()
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
 	// ボディのゴーストオブジェクトを作成。
-	CreateCollider(m_hurtCollider, enCollisionType_Player, BODY_COLLIDER_RADIUS, BODY_COLLIDER_HEIGHT);
+	CreateCollider(m_hurtCollider, enCollisionType_Player, HURT_COLLIDER_RADIUS, HURT_COLLIDER_HEIGHT);
 
 	return true;
 }

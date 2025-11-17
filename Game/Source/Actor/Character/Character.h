@@ -12,7 +12,7 @@ public:
 	/// ボディのコライダーを取得します。
 	/// </summary>
 	/// <returns> ボディのコライダーのポインタ。</returns>
-	CollisionObject* GetBodyCollider()
+	CollisionObject* GetHurtCollider()
 	{
 		return m_hurtCollider;
 	}
@@ -165,29 +165,30 @@ public:
 
 public:
 	/// <summary>
-	/// 箱型のコライダーを生成し、コリジョンマネージャーに登録します。
+	/// 箱型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
-	/// <param name="collider">作成先の CollisionObject を指すポインタ。</param>
-	/// <param name="type">作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
-	/// <param name="size">箱のサイズ（幅・高さ・奥行き）。</param>
+	/// <param name="collider"> 作成先の CollisionObject を指すポインタ。</param>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> 箱のサイズ（幅・高さ・奥行き）。</param>
 	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const Vector3 size);
 	/// <summary>
-	/// 球型のコライダーを生成し、コリジョンマネージャーに登録します。
+	/// 球型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
-	/// <param name="collider">作成先の CollisionObject を指すポインタ。</param>
-	/// <param name="type">作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
-	/// <param name="size">球の半径。</param>
+	/// <param name="collider"> 作成先の CollisionObject を指すポインタ。</param>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> 球の半径。</param>
 	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius);
 	/// <summary>
-	/// カプセル型のコライダーを生成し、コリジョンマネージャーに登録します。
+	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
-	/// <param name="collider">作成先の CollisionObject を指すポインタ。</param>
-	/// <param name="type">作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
-	/// <param name="size">カプセルのサイズ。（半径・高さ）。</param>
+	/// <param name="collider"> 作成先の CollisionObject を指すポインタ。</param>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> カプセルのサイズ。（半径・高さ）。</param>
 	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius, const float height);
 	/// <summary>
 	/// コライダーの座標と回転を更新します。
 	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
+	/// MEMO:コライダーの実体自体を生成・削除するわけではないので、*（値渡し）でOK。
 	/// </summary>
 	/// <param name="collider"> 更新するコライダーのポインタ。</param>
 	/// <param name="offset"> up方向の位置補正の値。</param>
@@ -201,14 +202,16 @@ public:
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
+	ModelRender	m_modelRender;										// モデルレンダー。
+
 	CollisionObject* m_hitCollider = nullptr;						// 攻撃判定。
 	CollisionObject* m_hurtCollider = nullptr;						// やられ判定。
+	CollisionObject* m_attackCollider = nullptr;					// 一時的な攻撃判定。
 
-	ModelRender	m_modelRender;										// モデルレンダー。
 	Vector3		m_position = Vector3::Zero;							// ポジション。
 	Quaternion  m_rotation = Quaternion::Identity;					// 回転。
 	int			m_life = 0;											// ライフ。
-	bool	m_isAttacked = false;					// ダメージを受けたかどうか。
+	bool		m_isAttacked = false;								// ダメージを受けたかどうか。
 
 	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。

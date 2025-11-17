@@ -35,9 +35,9 @@ public:
 	/// 踏みつけ用のコライダーのポインタを取得します。
 	/// </summary>
 	/// <returns> 踏みつけ用のコライダーのポインタ。</returns>
-	CollisionObject*& GetStompCollider()
+	CollisionObject*& GetAttackCollider()
 	{
-		return m_stompCollider;
+		return m_attackCollider;
 	}
 
 	/// <summary>
@@ -119,7 +119,6 @@ private:
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
 
-	CollisionObject* m_stompCollider = nullptr;		// 踏みつけ用のゴーストオブジェクト。
 
 	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
 

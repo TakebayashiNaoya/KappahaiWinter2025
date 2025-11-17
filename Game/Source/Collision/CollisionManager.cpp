@@ -147,12 +147,12 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 
 	// エネミー死亡時、コライダーを消してから一定時間後にモデルを消しているため、
 	// コライダーがnullptrの場合はスキップする。
-	if (basicEnemy->GetBodyCollider() == nullptr) {
+	if (basicEnemy->GetHurtCollider() == nullptr) {
 		return true;
 	}
 
 	// プレイヤーの攻撃。
-	if (player->GetStompCollider()->IsHit(basicEnemy->GetBodyCollider())) {
+	if (player->GetAttackCollider()->IsHit(basicEnemy->GetHurtCollider())) {
 		player->StompJump();
 		basicEnemy->SetIsDead(true);
 		return true;
@@ -164,7 +164,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 	}
 
 	// エネミーの攻撃。
-	if (basicEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+	if (basicEnemy->GetHurtCollider()->IsHit(player->GetHurtCollider())) {
 		player->SetIsAttacked(true);
 		player->ComputeKnockBackDirection(basicEnemy->GetPosition());
 		basicEnemy->SetIsCoolDown(true);
@@ -194,7 +194,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 	if (!deformEnemy->IsDeformed())
 	{
 		// プレイヤーの攻撃。
-		if (player->GetStompCollider()->IsHit(deformEnemy->GetBodyCollider())) {
+		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsDeformed(true);
 			return true;
@@ -206,7 +206,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		}
 
 		// エネミーの攻撃。
-		if (deformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+		if (deformEnemy->GetHurtCollider()->IsHit(player->GetHurtCollider())) {
 			player->SetIsAttacked(true);
 			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
 			return true;
@@ -219,13 +219,13 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 	else if (deformEnemy->IsDeformed() && !deformEnemy->IsSliding())
 	{
 		// プレイヤーがエネミーに当たった場合。
-		if (player->GetBodyCollider()->IsHit(deformEnemy->GetBodyCollider())) {
+		if (player->GetHurtCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			deformEnemy->SetIsSliding(true);
 			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
 			return true;
 		}
 		// プレイヤーがエネミーを踏んだ場合。
-		if (player->GetStompCollider()->IsHit(deformEnemy->GetBodyCollider())) {
+		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsSliding(true);
 			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
@@ -237,7 +237,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 	else if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
 	{
 		// 滑走中にプレイヤーが踏んだら、エネミーを止める。
-		if (player->GetStompCollider()->IsHit(deformEnemy->GetBodyCollider())) {
+		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsSliding(false);
 			return true;
@@ -249,7 +249,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		}
 
 		// エネミーの攻撃。
-		if (deformEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+		if (deformEnemy->GetHurtCollider()->IsHit(player->GetHurtCollider())) {
 			player->SetIsAttacked(true);
 			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
 			deformEnemy->SetIsDead(true);
@@ -284,7 +284,7 @@ bool CollisionHitManager::UpdateHitPlayerBossEnemy(CollisionPair& pair)
 
 
 	// ボスの攻撃。
-	if (bossEnemy->GetBodyCollider()->IsHit(player->GetBodyCollider())) {
+	if (bossEnemy->GetHurtCollider()->IsHit(player->GetHurtCollider())) {
 		player->SetIsAttacked(true);
 		player->ComputeKnockBackDirection(bossEnemy->GetPosition());
 		return true;
@@ -311,7 +311,7 @@ bool CollisionHitManager::UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair)
 	if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
 	{
 		// 変形エネミーの攻撃。
-		if (deformEnemy->GetBodyCollider()->IsHit(basicEnemy->GetBodyCollider())) {
+		if (deformEnemy->GetHurtCollider()->IsHit(basicEnemy->GetHurtCollider())) {
 			basicEnemy->SetIsDead(true);
 			deformEnemy->SetIsDead(true);
 			return true;
