@@ -12,7 +12,7 @@ public:
 	/// 一時攻撃用のコライダーのポインタを取得します。
 	/// </summary>
 	/// <returns> コライダーのポインタ。</returns>
-	CollisionObject* GetAttackCollider()
+	CollisionObject* GetAttackCollider()const
 	{
 		return m_attackCollider;
 	}
@@ -25,10 +25,18 @@ public:
 		m_attackCollider = collider;
 	}
 	/// <summary>
+	/// 攻撃用のコライダーのポインタを設定します。
+	/// </summary>
+	/// <param name="collider"> コライダーのポインタ。</param>
+	CollisionObject* GetHitCollider()const
+	{
+		return m_hitCollider;
+	}
+	/// <summary>
 	/// やられ判定のコライダーを取得します。
 	/// </summary>
 	/// <returns> やられ判定のコライダーのポインタ。</returns>
-	CollisionObject* GetHurtCollider()
+	CollisionObject* GetHurtCollider()const
 	{
 		return m_hurtCollider;
 	}

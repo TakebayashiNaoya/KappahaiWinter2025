@@ -129,7 +129,7 @@ public:
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> 箱のサイズ（幅・高さ・奥行き）。</param>
 	/// <returns> コライダーのポインタ。</returns>
-	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const Vector3 size);
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const Vector3 size, const bool isTrigger);
 	/// <summary>
 	/// 球型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
@@ -137,7 +137,7 @@ public:
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> 球の半径。</param>
 	/// <returns> コライダーのポインタ。</returns>
-	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius);
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const bool isTrigger);
 	/// <summary>
 	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
@@ -145,7 +145,7 @@ public:
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> カプセルのサイズ。（半径・高さ）。</param>
 	/// <returns> コライダーのポインタ。</returns>
-	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const float height);
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const float height, const bool isTrigger);
 	/// <summary>
 	/// コライダーの座標と回転を更新します。
 	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
@@ -155,14 +155,19 @@ public:
 	/// <param name="collider"> 更新するコライダーのポインタ。</param>
 	/// <param name="offset"> up方向の位置補正の値。</param>
 	void UpdateCollider(const Character* ins, CollisionObject* collider, const float offset = 0.0f);
-
-
 	/// <summary>
 	/// コリジョンヒットマネージャーの登録解除を行い、コライダーをdelete、nullptrします。
 	/// </summary>
 	/// <param name="collision"> 削除するコライダーのポインタの参照。</param>
 	static CollisionObject* DeleteCollider(CollisionObject* collision);
 
+
+	/// <summary>
+	/// コライダーに属性IDを設定します。（RayTestで無視させるために使用）
+	/// </summary>
+	/// <param name="collider"> 属性IDを設定するコライダーのポインタ。</param>
+	/// <param name="isTrigger"> trueならトリガー、falseなら通常のコライダー。</param>
+	void SetIsTrigger(CollisionObject* collider, bool isTrigger);
 
 	/**
 	 * シングルトン関連

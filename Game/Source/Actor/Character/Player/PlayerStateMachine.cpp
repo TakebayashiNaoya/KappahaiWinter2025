@@ -221,7 +221,7 @@ namespace app
 			// 踏みつけ用コライダーの作成。
 			GetOwner<Player>()->SetAttackCollider(
 				CollisionHitManager::GetInstance()->CreateCollider(
-					GetOwner<Player>(), enCollisionType_Player, STOMP_COLLIDER_RADIUS));
+					GetOwner<Player>(), enCollisionType_Player, STOMP_COLLIDER_RADIUS, true));
 		}
 
 

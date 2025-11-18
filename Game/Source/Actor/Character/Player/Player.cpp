@@ -19,9 +19,9 @@ namespace
 	constexpr float MODEL_SCALE = 200.0f;
 
 	// プレイヤーのヒットボックスは小さめに設定。
-	constexpr float HURT_COLLIDER_RADIUS = 15.0f;					// ボディコライダーの半径。
+	constexpr float HURT_COLLIDER_RADIUS = 30.0f;					// ボディコライダーの半径。
 	constexpr float HURT_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
-	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
+	constexpr float COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
 
 	constexpr float STOMP_JUMP_POWER = 30.0f;						// 踏みつけジャンプの初速。
 
@@ -191,7 +191,8 @@ bool Player::Start()
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_Player,
-		HURT_COLLIDER_RADIUS, HURT_COLLIDER_HEIGHT
+		HURT_COLLIDER_RADIUS,
+		true
 	);
 
 	return true;
@@ -207,7 +208,7 @@ void Player::Update()
 
 	m_stateMachine->Update();
 
-	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, COLLIDER_OFFSET);
 
 	InvincibleTimer();
 

@@ -18,7 +18,7 @@ namespace
 	constexpr float MODEL_SCALE = 30.0f;
 
 	constexpr float BODY_COLLIDER_RADIUS = 40.0f;					// ゴーストオブジェクトの半径。
-	constexpr float BODY_COLLIDER_OFFSET = 30.0f;					// ゴーストオブジェクトのオフセット値。
+	constexpr float COLLIDER_OFFSET = 30.0f;					// ゴーストオブジェクトのオフセット値。
 
 	constexpr float RUN_SPEED = 3.0f;								// 走る速度
 	constexpr float SLIDE_SPEED = 16.0f;							// 滑走速度
@@ -91,7 +91,8 @@ bool DeformEnemy::Start()
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_TransformEnemy,
-		BODY_COLLIDER_RADIUS
+		BODY_COLLIDER_RADIUS,
+		true
 	);
 
 	return true;
@@ -106,7 +107,7 @@ void DeformEnemy::Update()
 
 	m_stateMachine->Update();
 
-	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();

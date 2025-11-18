@@ -34,8 +34,17 @@ namespace nsK2EngineLow {
 			Vector3 rayEnd;
 			bool isHit = false;
 			float hitFraction = 1.0f;
-			btScalar	addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace) override			
+
+			btScalar	addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace) override
 			{
+				///---ここから---///
+				// 相手の UserIndex が 1 (SetIsTrigger(true)されたもの) なら、問答無用で無視する
+				if (rayResult.m_collisionObject->getUserIndex() == 1) {
+					// 1.0f を返すと、BulletPhysicsは「当たらなかった」として処理を続行します
+					return 1.0f;
+				}
+				///---ここまで---///
+
 				if (rayResult.m_hitFraction < hitFraction) {
 					// こちらの方が近い。
 					hitPos.Lerp(rayResult.m_hitFraction, rayStart, rayEnd);
@@ -50,27 +59,49 @@ namespace nsK2EngineLow {
 		btTransform start, end;
 		start.setIdentity();
 		end.setIdentity();
-		
+
 		start.setOrigin(btVector3(rayStart.x, rayStart.y, rayStart.z));
 		end.setOrigin(btVector3(rayEnd.x, rayEnd.y, rayEnd.z));
 		ResultConvexSweepTest result;
 		ConvexSweepTest(
-			(const btConvexShape*)collider.GetBody(), 
-			start, 
-			end, 
+			(const btConvexShape*)collider.GetBody(),
+			start,
+			end,
 			result
 		);
 		return result.isHit;
 	}
+	//bool PhysicsWorld::RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const
+	//{
+	//	btVector3 start, end;
+	//	start.setValue(rayStart.x, rayStart.y, rayStart.z);
+	//	end.setValue(rayEnd.x, rayEnd.y, rayEnd.z);
+	//	MyRayResultCallback cb;
+	//	cb.rayStart = rayStart;
+	//	cb.rayEnd = rayEnd;
+	//	m_dynamicWorld->rayTest(start, end, cb);
+	//	if (cb.isHit) {
+	//		hitPos = cb.hitPos;
+	//	}
+	//	return cb.isHit;
+	//}
+
+	/// <summary>
+	/// 自作関数。
+	/// </summary>
 	bool PhysicsWorld::RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const
 	{
 		btVector3 start, end;
 		start.setValue(rayStart.x, rayStart.y, rayStart.z);
 		end.setValue(rayEnd.x, rayEnd.y, rayEnd.z);
+
+		// 先ほど修正した構造体を使う
 		MyRayResultCallback cb;
 		cb.rayStart = rayStart;
 		cb.rayEnd = rayEnd;
+
 		m_dynamicWorld->rayTest(start, end, cb);
+
 		if (cb.isHit) {
 			hitPos = cb.hitPos;
 		}
@@ -120,7 +151,7 @@ namespace nsK2EngineLow {
 			m_overlappingPairCache.get(),
 			m_constraintSolver.get(),
 			m_collisionConfig.get()
-			);
+		);
 
 		m_dynamicWorld->setGravity(btVector3(0, -10, 0));
 

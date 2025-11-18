@@ -19,8 +19,10 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	const Vector3 BODY_COLLIDER_SIZE = Vector3(300.0f, 300.0f, 400.0f);	// ボディコライダーのサイズ。
-	constexpr float BODY_COLLIDER_OFFSET = 100.0f;						// ボディコライダーのオフセット値。
+	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
+
+	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
+	constexpr float HURT_COLLIDER_RADIUS = 300.0f;						// やられコライダーのサイズ。
 
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2000.0f);		// スポーン座標。
 
@@ -83,7 +85,8 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 		m_attackCollider = CollisionHitManager::GetInstance()->CreateCollider(
 			this,
 			enCollisionType_BossEnemy,
-			ATTACK_RADIUS
+			ATTACK_RADIUS,
+			true
 		);
 
 		Vector3 attackPosition = m_position + m_attackDirection * ATTACK_RANGE;
@@ -111,11 +114,20 @@ bool BossEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
+	// 攻撃判定のコライダーを作成。
+	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BossEnemy,
+		HIT_COLLIDER_RADIUS,
+		true
+	);
+
 	// やられ判定のコライダーを作成。
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_BossEnemy,
-		BODY_COLLIDER_OFFSET
+		HURT_COLLIDER_RADIUS,
+		true
 	);
 
 	//アニメーションイベント用の関数を設定する。
@@ -135,7 +147,8 @@ void BossEnemy::Update()
 
 	m_stateMachine->Update();
 
-	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hitCollider, COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
