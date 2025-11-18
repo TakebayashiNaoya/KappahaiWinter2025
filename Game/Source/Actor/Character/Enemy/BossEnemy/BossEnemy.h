@@ -56,6 +56,11 @@ public:
 	/// <returns>プレイヤーまでの距離を表す float 値を返します（戻り値は const）。</returns>
 	const float GetDistanceToPlayer()const;
 
+	/// <summary>
+	/// アニメーションイベントを処理します。
+	/// </summary>
+	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
+
 private:
 	bool Start() override final;
 	void Update() override final;

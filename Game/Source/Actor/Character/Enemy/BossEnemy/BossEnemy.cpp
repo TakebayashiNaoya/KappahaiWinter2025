@@ -25,6 +25,8 @@ namespace
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2000.0f);		// スポーン座標。
 
 	constexpr float COOLDOWN_DURATION = 3.0f;							// 攻撃のクールダウン時間。
+	constexpr float ATTACK_RANGE = 300.0f;								// 攻撃範囲。
+	constexpr float ATTACK_RADIUS = 200.0f;								// 攻撃判定の半径。
 }
 
 BossEnemy::BossEnemy()
@@ -46,6 +48,9 @@ void BossEnemy::ChasePlayer(const float speed)
 
 	// 移動速度から座標更新。
 	ComputePosition();
+
+	// 攻撃方向を設定。
+	SetAttackDirection(m_moveSpeed);
 }
 
 void BossEnemy::UpdateCooldown()
@@ -69,6 +74,30 @@ const float BossEnemy::GetDistanceToPlayer()const
 	return distance.Length();
 }
 
+
+void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+{
+	//キーの名前が「attack_start」の時。
+	if (wcscmp(eventName, L"attack_start") == 0)
+	{
+		m_attackCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_BossEnemy,
+			ATTACK_RADIUS
+		);
+
+		Vector3 attackPosition = m_position + m_attackDirection * ATTACK_RANGE;
+		m_attackCollider->SetPosition(attackPosition);
+	}
+	//キーの名前が「attack_end」の時。
+	else if (wcscmp(eventName, L"attack_end") == 0)
+	{
+		//攻撃用コライダーを削除。
+		CollisionHitManager::GetInstance()->DeleteCollider(m_attackCollider);
+	}
+}
+
+
 bool BossEnemy::Start()
 {
 	// モデルとアニメーションを初期化。
@@ -88,6 +117,11 @@ bool BossEnemy::Start()
 		enCollisionType_BossEnemy,
 		BODY_COLLIDER_OFFSET
 	);
+
+	//アニメーションイベント用の関数を設定する。
+	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
+		OnAnimationEvent(clipName, eventName);
+		});
 
 	return true;
 }
