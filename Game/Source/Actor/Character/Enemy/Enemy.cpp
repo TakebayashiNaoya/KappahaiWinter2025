@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Enemy.h"
+#include "Source/Collision/CollisionManager.h"
 
 Enemy::~Enemy()
 {
-	DeleteCollider(m_hurtCollider);
+	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
 }
 
 /// <summary>

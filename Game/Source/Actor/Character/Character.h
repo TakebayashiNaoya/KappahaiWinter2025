@@ -9,9 +9,22 @@ class Character :public IGameObject
 {
 public:
 	/// <summary>
-	/// ボディのコライダーを取得します。
+	/// 一時攻撃用のコライダーのポインタを取得します。
 	/// </summary>
-	/// <returns> ボディのコライダーのポインタ。</returns>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* GetAttackCollider()
+	{
+		return m_attackCollider;
+	}
+	void SetAttackCollider(CollisionObject* collider)
+	{
+		m_attackCollider = collider;
+	}
+
+	/// <summary>
+	/// やられ判定のコライダーを取得します。
+	/// </summary>
+	/// <returns> やられ判定のコライダーのポインタ。</returns>
 	CollisionObject* GetHurtCollider()
 	{
 		return m_hurtCollider;
@@ -163,41 +176,7 @@ public:
 	}
 
 
-public:
-	/// <summary>
-	/// 箱型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
-	/// </summary>
-	/// <param name="collider"> 作成先の CollisionObject を指すポインタ。</param>
-	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
-	/// <param name="size"> 箱のサイズ（幅・高さ・奥行き）。</param>
-	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const Vector3 size);
-	/// <summary>
-	/// 球型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
-	/// </summary>
-	/// <param name="collider"> 作成先の CollisionObject を指すポインタ。</param>
-	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
-	/// <param name="size"> 球の半径。</param>
-	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius);
-	/// <summary>
-	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
-	/// </summary>
-	/// <param name="collider"> 作成先の CollisionObject を指すポインタ。</param>
-	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
-	/// <param name="size"> カプセルのサイズ。（半径・高さ）。</param>
-	void CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius, const float height);
-	/// <summary>
-	/// コライダーの座標と回転を更新します。
-	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
-	/// MEMO:コライダーの実体自体を生成・削除するわけではないので、*（値渡し）でOK。
-	/// </summary>
-	/// <param name="collider"> 更新するコライダーのポインタ。</param>
-	/// <param name="offset"> up方向の位置補正の値。</param>
-	void UpdateCollider(CollisionObject* collider, const float offset = 0.0f);
-	/// <summary>
-	/// コリジョンヒットマネージャーの登録解除を行い、コライダーをdelete、nullptrします。
-	/// </summary>
-	/// <param name="collision"> 削除するコライダーのポインタの参照。</param>
-	void DeleteCollider(CollisionObject*& collision);
+
 
 
 protected:

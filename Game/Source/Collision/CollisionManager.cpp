@@ -34,6 +34,7 @@ CollisionHitManager::CollisionHitManager()
 CollisionHitManager::~CollisionHitManager()
 {
 	m_collisionInformationList.clear();
+	m_collisionPairList.clear();
 }
 
 
@@ -327,16 +328,103 @@ bool CollisionHitManager::UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair)
 /********************************/
 
 
+CollisionObject* CollisionHitManager::CreateCollider(Character* ins, const EnCollisionType type, const Vector3 size)
+{
+	// ゴーストオブジェクトを作成。
+	CollisionObject* collider = new CollisionObject();
+	collider->CreateBox(
+		ins->GetPosition(),
+		ins->GetRotation(),
+		size
+	);
+	// コリジョンヒットマネージャーに登録。
+	m_instance->Register(type, collider, ins);
+	return collider;
+}
+
+
+CollisionObject* CollisionHitManager::CreateCollider(Character* ins, const EnCollisionType type, const float radius)
+{
+	// ゴーストオブジェクトを作成。
+	CollisionObject* collider = new CollisionObject();
+	collider->CreateSphere(
+		ins->GetPosition(),
+		ins->GetRotation(),
+		radius
+	);
+
+	// コリジョンヒットマネージャーに登録。
+	m_instance->Register(type, collider, ins);
+	return collider;
+}
+
+
+CollisionObject* CollisionHitManager::CreateCollider(Character* ins, const EnCollisionType type, const float radius, const float height)
+{
+	// ゴーストオブジェクトを作成。
+	CollisionObject* collider = new CollisionObject();
+	collider->CreateCapsule(
+		ins->GetPosition(),
+		ins->GetRotation(),
+		radius,
+		height
+	);
+	// コリジョンヒットマネージャーに登録。
+	m_instance->Register(type, collider, ins);
+	return collider;
+}
+
+
+void CollisionHitManager::UpdateCollider(const Character* ins, CollisionObject* collider, const float offset)
+{
+	if (collider == nullptr) {
+		return;
+	}
+
+	// コライダーの座標を計算する。
+	Vector3 ghostPos = ins->GetPosition() + ins->GetUpDirection() * offset;
+
+	// コライダーの座標をモデルの座標に合わせる。
+	collider->SetPosition(ghostPos);
+
+	// コライダーの回転をモデルの回転に合わせる。
+	collider->SetRotation(ins->GetRotation());
+}
+
+
+/// <summary>
+/// やられ判定をdelete、nullptrします。
+/// </summary>
+CollisionObject* CollisionHitManager::DeleteCollider(CollisionObject* collider)
+{
+	if (collider == nullptr) {
+		return nullptr;
+	}
+
+	// コリジョンヒットマネージャーから登録解除。
+	if (IsAvailable()) {
+		GetInstance()->Unregister(collider);
+	}
+
+	delete collider;
+	return nullptr;
+}
+
+
+
+
+/********************************/
+
+
 CollisionManagerObject::CollisionManagerObject()
 {
-	m_collisionHitManager = CollisionHitManager::CreateInstance();
+	CollisionHitManager::CreateInstance();
 }
 
 
 CollisionManagerObject::~CollisionManagerObject()
 {
 	CollisionHitManager::Delete();
-	m_collisionHitManager = nullptr;
 }
 
 
@@ -348,5 +436,5 @@ bool CollisionManagerObject::Start()
 
 void CollisionManagerObject::Update()
 {
-	m_collisionHitManager->Update();
+	CollisionHitManager::GetInstance()->Update();
 }

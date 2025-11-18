@@ -31,23 +31,7 @@ public:
 		enAnimationClip_Num,
 	};
 
-	/// <summary>
-	/// 踏みつけ用のコライダーのポインタを取得します。
-	/// </summary>
-	/// <returns> 踏みつけ用のコライダーのポインタ。</returns>
-	CollisionObject*& GetAttackCollider()
-	{
-		return m_attackCollider;
-	}
 
-	/// <summary>
-	/// プレイヤーの座標を取得します。
-	/// </summary>
-	/// <returns>プレイヤーの現在の座標値（float型）。</returns>
-	const Vector3& GetPosition()const
-	{
-		return m_position;
-	}
 
 	/// <summary>
 	/// 毎フレームのXZ軸回転角度を取得します。

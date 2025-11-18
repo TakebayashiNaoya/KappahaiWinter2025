@@ -146,79 +146,7 @@ void Character::ModelRotation()
 	m_modelRender.SetRotation(m_rotation);
 }
 
-void Character::CreateCollider(CollisionObject*& collider, const EnCollisionType type, const Vector3 size)
-{
-	// ゴーストオブジェクトを作成。
-	collider = new CollisionObject();
-	collider->CreateBox(
-		m_position,
-		m_rotation,
-		size
-	);
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(type, collider, this);
-}
 
-void Character::CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius)
-{
-	// ゴーストオブジェクトを作成。
-	collider = new CollisionObject();
-	collider->CreateSphere(
-		m_position,
-		m_rotation,
-		radius
-	);
-
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(type, collider, this);
-}
-
-void Character::CreateCollider(CollisionObject*& collider, const EnCollisionType type, const float radius, const float height)
-{
-	// ゴーストオブジェクトを作成。
-	collider = new CollisionObject();
-	collider->CreateCapsule(
-		m_position,
-		m_rotation,
-		radius,
-		height
-	);
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(type, collider, this);
-}
-
-void Character::UpdateCollider(CollisionObject* collider, const float offset)
-{
-	if (collider == nullptr) {
-		return;
-	}
-
-	// コライダーの座標を計算する。
-	Vector3 ghostPos = m_position + m_upDirection * offset;
-
-	// コライダーの座標をモデルの座標に合わせる。
-	collider->SetPosition(ghostPos);
-
-	// コライダーの回転をモデルの回転に合わせる。
-	collider->SetRotation(m_rotation);
-}
-
-/// <summary>
-/// やられ判定をdelete、nullptrします。
-/// </summary>
-void Character::DeleteCollider(CollisionObject*& collider)
-{
-	if (collider == nullptr) {
-		return;
-	}
-
-	// コリジョンヒットマネージャーから登録解除。
-	if (CollisionHitManager::GetInstance()) {
-		CollisionHitManager::GetInstance()->Unregister(collider);
-	}
-	delete collider;
-	collider = nullptr;
-}
 
 /// <summary>
 /// キャラクターのモデルとアニメーションクリップを初期化します。

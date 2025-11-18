@@ -217,8 +217,11 @@ namespace app
 		void app::player::JumpState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
-			GetOwner<Player>()->CreateCollider(GetOwner<Player>()->GetAttackCollider(),
-				enCollisionType_Player, STOMP_COLLIDER_RADIUS);
+
+			// 踏みつけ用コライダーの作成。
+			GetOwner<Player>()->SetAttackCollider(
+				CollisionHitManager::GetInstance()->CreateCollider(
+					GetOwner<Player>(), enCollisionType_Player, STOMP_COLLIDER_RADIUS));
 		}
 
 
@@ -227,13 +230,20 @@ namespace app
 			GetOwner<Player>()->MoveUpdate(GetOwner<Player>()->GetSpeedBeforeJump());
 			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
-			GetOwner<Player>()->UpdateCollider(GetOwner<Player>()->GetAttackCollider());
+
+			// 踏みつけ用コライダーの更新。
+			CollisionHitManager::GetInstance()->UpdateCollider(
+				GetOwner<Player>(), GetOwner<Player>()->GetAttackCollider());
 		}
 
 
 		void app::player::JumpState::Exit()
 		{
-			GetOwner<Player>()->DeleteCollider(GetOwner<Player>()->GetAttackCollider());
+			// 踏みつけ用コライダーの削除。
+			GetOwner<Player>()->SetAttackCollider(
+				CollisionHitManager::GetInstance()->DeleteCollider(
+					GetOwner<Player>()->GetAttackCollider()));
+
 		}
 
 

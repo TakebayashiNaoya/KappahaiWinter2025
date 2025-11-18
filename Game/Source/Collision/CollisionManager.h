@@ -1,5 +1,6 @@
 #pragma once
 
+class Character;
 
 enum EnCollisionType
 {
@@ -120,6 +121,43 @@ private:
 	// ここに関数を追加していく。
 
 
+public:
+	/// <summary>
+	/// 箱型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
+	/// </summary>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> 箱のサイズ（幅・高さ・奥行き）。</param>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const Vector3 size);
+	/// <summary>
+	/// 球型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
+	/// </summary>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> 球の半径。</param>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius);
+	/// <summary>
+	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
+	/// </summary>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> カプセルのサイズ。（半径・高さ）。</param>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const float height);
+	/// <summary>
+	/// コライダーの座標と回転を更新します。
+	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
+	/// MEMO:コライダーの実体自体を生成・削除するわけではないので、*（値渡し）でOK。
+	/// </summary>
+	/// <param name="collider"> 更新するコライダーのポインタ。</param>
+	/// <param name="offset"> up方向の位置補正の値。</param>
+	void UpdateCollider(const Character* ins, CollisionObject* collider, const float offset = 0.0f);
+
+
+	/// <summary>
+	/// コリジョンヒットマネージャーの登録解除を行い、コライダーをdelete、nullptrします。
+	/// </summary>
+	/// <param name="collision"> 削除するコライダーのポインタの参照。</param>
+	static CollisionObject* DeleteCollider(CollisionObject* collision);
 
 
 	/**
@@ -140,6 +178,10 @@ public:
 	static CollisionHitManager* GetInstance()
 	{
 		return m_instance;
+	}
+	static bool IsAvailable()
+	{
+		return m_instance != nullptr;
 	}
 	static void Delete()
 	{
@@ -163,9 +205,5 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& renderContext) override {}	// Renderはない
-
-
-private:
-	CollisionHitManager* m_collisionHitManager = nullptr;
 };
 

@@ -21,7 +21,6 @@ InGame::InGame()
 InGame::~InGame()
 {
 	DeleteGO(m_battleManager);
-	DeleteGO(m_collisionManager);
 	DeleteGO(m_skyCube);
 	DeleteGO(m_backGround);
 	DeleteGO(m_gameCamera);
@@ -30,6 +29,7 @@ InGame::~InGame()
 	DeleteGO(m_bossEnemy);
 	DeleteGO(m_player);
 	DeleteGO(m_inGameUI);
+	DeleteGO(m_collisionManager);
 }
 
 

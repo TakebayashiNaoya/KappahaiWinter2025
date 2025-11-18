@@ -70,7 +70,8 @@ bool BasicEnemy::Start()
 	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
-	CreateCollider(m_hurtCollider, enCollisionType_BasicEnemy, BODY_COLLIDER_OFFSET);
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_BasicEnemy, BODY_COLLIDER_OFFSET);
+
 
 	return true;
 }
@@ -84,7 +85,7 @@ void BasicEnemy::Update()
 
 	m_stateMachine->Update();
 
-	UpdateCollider(m_hurtCollider, BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, BODY_COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();

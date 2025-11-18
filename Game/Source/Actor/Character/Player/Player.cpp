@@ -23,7 +23,6 @@ namespace
 	constexpr float HURT_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
 	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
 
-	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;					// 踏みつけ用コライダーの半径。
 	constexpr float STOMP_JUMP_POWER = 30.0f;						// 踏みつけジャンプの初速。
 
 	constexpr float GRAVITY_POWER = 9.8f * 10;						// 重力。
@@ -46,8 +45,8 @@ Player::Player()
 
 Player::~Player()
 {
-	DeleteCollider(m_hurtCollider);
-	DeleteCollider(m_attackCollider);
+	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
+	m_attackCollider = CollisionHitManager::DeleteCollider(m_attackCollider);
 }
 
 /// <summary>
@@ -189,8 +188,7 @@ bool Player::Start()
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
 	// ボディのゴーストオブジェクトを作成。
-	CreateCollider(m_hurtCollider, enCollisionType_Player, HURT_COLLIDER_RADIUS, HURT_COLLIDER_HEIGHT);
-
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_Player, HURT_COLLIDER_RADIUS, HURT_COLLIDER_HEIGHT);
 	return true;
 }
 
@@ -204,7 +202,7 @@ void Player::Update()
 
 	m_stateMachine->Update();
 
-	UpdateCollider(m_hurtCollider, BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, BODY_COLLIDER_OFFSET);
 
 	InvincibleTimer();
 

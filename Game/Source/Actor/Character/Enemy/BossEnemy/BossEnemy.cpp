@@ -82,8 +82,8 @@ bool BossEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
-	// ゴーストオブジェクトを作成。
-	CreateCollider(m_hurtCollider, enCollisionType_BossEnemy, BODY_COLLIDER_OFFSET);
+	// やられ判定のコライダーを作成。
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_BossEnemy, BODY_COLLIDER_OFFSET);
 
 	return true;
 }
@@ -97,7 +97,7 @@ void BossEnemy::Update()
 
 	m_stateMachine->Update();
 
-	UpdateCollider(m_hurtCollider, BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, BODY_COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
