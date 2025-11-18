@@ -22,6 +22,17 @@ namespace app
 			bool RequestState(int& requestStateId) override final;
 		};
 
+		class CooldownState : public IState
+		{
+		public:
+			CooldownState(BossEnemy* owner) : IState(owner) {}
+
+			void Enter() override final;
+			void Update() override final;
+			void Exit() override final;
+			bool RequestState(int& requestStateId) override final;
+		};
+
 		class WalkState : public IState
 		{
 		public:
@@ -86,6 +97,7 @@ namespace app
 			BossEnemyStateMachine(BossEnemy* owner) : m_owner(owner)
 			{
 				AddState<IdleState, BossEnemy>(enBossEnemyState_Idle, owner);
+				AddState<CooldownState, BossEnemy>(enBossEnemyState_Cooldown, owner);
 				AddState<WalkState, BossEnemy>(enBossEnemyState_Walk, owner);
 				AddState<RunState, BossEnemy>(enBossEnemyState_Run, owner);
 				AddState<AttackState, BossEnemy>(enBossEnemyState_Attack, owner);

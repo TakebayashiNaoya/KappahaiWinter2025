@@ -32,6 +32,7 @@ enum enDeformEnemyState {
 
 enum enBossEnemyState {
 	enBossEnemyState_Idle,			// 待機。
+	enBossEnemyState_Cooldown,		// クールダウン。
 	enBossEnemyState_Walk,			// 歩き。
 	enBossEnemyState_Run,			// 走り。
 	enBossEnemyState_Attack,		// 攻撃。

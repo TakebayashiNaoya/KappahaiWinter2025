@@ -24,9 +24,7 @@ namespace
 
 	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2000.0f);		// スポーン座標。
 
-	constexpr float RUN_SPEED = 8.0f;									// 走る速度
-
-	constexpr float COOLDOWN_DURATION = 1.0f;							// 攻撃のクールダウン時間。
+	constexpr float COOLDOWN_DURATION = 3.0f;							// 攻撃のクールダウン時間。
 }
 
 BossEnemy::BossEnemy()
@@ -38,10 +36,10 @@ BossEnemy::BossEnemy()
 /// <summary>
 /// プレイヤーに向かって走ります。
 /// </summary>
-void BossEnemy::ChasePlayer()
+void BossEnemy::ChasePlayer(const float speed)
 {
 	// 水平方向に速度加算。
-	m_moveSpeed += CalcHorizontalVelocity(RUN_SPEED);
+	m_moveSpeed += CalcHorizontalVelocity(speed);
 
 	// 垂直方向に速度加算。
 	m_moveSpeed += CalcVerticalVelocity();
@@ -57,7 +55,7 @@ void BossEnemy::UpdateCooldown()
 
 const bool BossEnemy::IsOnCooldown()const
 {
-	return m_cooldownTimer < 0.0f;
+	return m_cooldownTimer > 0.0f;
 }
 
 const void BossEnemy::ResetCooldownTimer()
@@ -79,11 +77,17 @@ bool BossEnemy::Start()
 	// 星に埋もれないように初期位置を調整。
 	m_position = SPAWN_POSITION;
 
+	ResetRotation();
+
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
 	// やられ判定のコライダーを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_BossEnemy, BODY_COLLIDER_OFFSET);
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BossEnemy,
+		BODY_COLLIDER_OFFSET
+	);
 
 	return true;
 }

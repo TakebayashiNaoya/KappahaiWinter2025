@@ -33,7 +33,8 @@ public:
 	/// <summary>
 	/// プレイヤーに向かって走ります。
 	/// </summary>
-	void ChasePlayer();
+	/// <param name="speed">移動速度。</param>
+	void ChasePlayer(const float speed);
 
 	/// <summary>
 	/// クールダウンを更新します。
