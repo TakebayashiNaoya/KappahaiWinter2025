@@ -7,6 +7,15 @@ Enemy::~Enemy()
 	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
 }
 
+void Enemy::SetAttackDirection(const Vector3& direction)
+{
+	if (direction.Length() < 0.01) {
+		return;
+	}
+	m_attackDirection = direction;
+	m_attackDirection.Normalize();
+}
+
 /// <summary>
 /// プレイヤーを追いかける方向を計算して返します。
 /// </summary>

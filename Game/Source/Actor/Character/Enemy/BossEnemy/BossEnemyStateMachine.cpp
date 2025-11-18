@@ -9,7 +9,7 @@ namespace
 
 	constexpr float WALK_RANGE = 500.0f;	// 歩く範囲。
 	constexpr float RUN_RANGE = 1000.0f;	// 歩く範囲。
-	constexpr float ATTACK_RANGE = 200.0f;	// 攻撃範囲。
+	constexpr float ATTACK_RANGE = 300.0f;	// 攻撃範囲。
 }
 
 namespace app
@@ -216,12 +216,12 @@ namespace app
 
 		void AttackState::Update()
 		{
-			GetOwner<BossEnemy>()->ModelRotation();
 		}
 
 
 		void AttackState::Exit()
 		{
+			GetOwner<BossEnemy>()->ResetAttackDirection();
 		}
 
 

@@ -17,8 +17,6 @@ public:
 	{
 		return m_isFoundPlayer;
 	}
-
-
 	/// <summary>
 	/// プレイヤーが見つかったかどうかと、その座標を設定します。
 	/// </summary>
@@ -30,12 +28,26 @@ public:
 		m_playerFoundPos = playerPos;
 	}
 
+	/// <summary>
+	/// 攻撃方向を設定します。
+	/// </summary>
+	/// <param name="direction"> 攻撃方向。</param>
+	void SetAttackDirection(const Vector3& direction);
+	/// <summary>
+	/// 攻撃方向をリセットします。
+	/// </summary>
+	void ResetAttackDirection()
+	{
+		m_attackDirection = Vector3::Zero;
+	}
+
 
 protected:
 	bool m_isFoundPlayer = false;
 	Vector3 m_playerFoundPos = Vector3::Zero;
 	bool m_isDead = false;						// 死亡状態かどうか。
-
+	Vector3 m_attackDirection = Vector3::Zero;	// 攻撃方向。
+	bool m_isAttack = false;					// 攻撃中かどうか。
 
 protected:
 	/// <summary>
