@@ -72,62 +72,44 @@ void Character::ApplyJumpImpulse(const float jumpPower)
 /// </summary>
 void Character::ModelRotation()
 {
-	// キャラクターの新しい前方ベクトルを計算 (目標の移動方向)
-	Vector3 targetForward = m_moveSpeed;
-
 	// 惑星の中心からキャラクターへの上方向ベクトルを計算
 	Vector3 upDirection = m_upDirection;
 	upDirection.Normalize();
 
 	// m_moveSpeedを惑星の接平面に投影し、ジャンプによる垂直成分を除去する。
-	targetForward = ProjectOnPlane(targetForward, upDirection);
+	Vector3 forward = ProjectOnPlane(m_moveSpeed, upDirection);
 
-	// 投影後のベクトル長で判定
-	if (targetForward.LengthSq() <= DEADZONE * DEADZONE) {
-		// 【修正箇所】
-		// 停止時は、現在のキャラクターの向き（Forward）を維持するように targetForward を更新する
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	///--- 停止時・moveSpeedが真上を向いているときに現在のキャラクターの向きを維持する処理。---///
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	if (forward.Length() < DEADZONE) {
+		//// 現在の回転から、ワールド空間での「前方向」を取得
+		//Vector3 currentForward = Vector3::Front;
+		//m_rotation.Apply(currentForward);
+		//// それを現在の接平面に投影しなおす（惑星表面を移動して法線が変わっている可能性があるため）
+		//forward = ProjectOnPlane(currentForward, upDirection);
 
-		// 現在の回転から、ワールド空間での「前方向」を取得
-		Vector3 currentForward = Vector3::Front;
-		m_rotation.Apply(currentForward);
-
-		// それを現在の接平面に投影しなおす（惑星表面を移動して法線が変わっている可能性があるため）
-		targetForward = ProjectOnPlane(currentForward, upDirection);
+		// 長さが0の場合は回転できないので、そのまま返す。
+		return;
 	}
+
+	forward.Normalize();
 
 	// モデルのデフォルトの上方向(0, 1, 0)を、惑星の上方向(upDirection)に回転させるクォータニオンを計算
 	Quaternion planetAlignmentRotation;
 	planetAlignmentRotation.SetRotation(Vector3::Up, upDirection);
 
-	// targetForward がゼロに近い（完全に真上を向いている等）場合の安全策
-	if (targetForward.LengthSq() <= 0.0001f) {
-		// 計算不能な場合は更新せず終了
-		return;
-	}
-
-	targetForward.Normalize();
-
-	// --- 以降は元のコードと同じ回転計算ロジックを使用 ---
-
-	// 回転前のモデルの前方向(0, 0, 1)を、ターゲットの移動方向(targetForward)に回転させるクォータニオンを計算
-
 	// 惑星にアライメントされた状態で、モデルの前方向（Vector3::Front）がどこに向いているかを求める
-	Vector3 currentAlignedForward = Vector3::Front;
-	planetAlignmentRotation.Apply(currentAlignedForward); // これが惑星に沿った状態での「前」
+	Vector3 projectedDefaultForward = Vector3::Front;
+	planetAlignmentRotation.Apply(projectedDefaultForward); // これが惑星に沿った状態での「前」
+	projectedDefaultForward.Normalize();
 
-	// currentAlignedForward（回転後の前）をtargetForwardに回転させるためのクォータニオンを求める
-	// ただし、回転軸はupDirection（キャラクターの真上）に限定する必要がある
-
-	// 回転軸を計算: 上方向
-	Vector3 rotationAxis = upDirection;
-
-	// 回転角度を計算: currentAlignedForwardとtargetForwardの間の角度
-	Vector3 projectedCurrentForward = currentAlignedForward;
-	projectedCurrentForward.Normalize();
-	Vector3 projectedTargetForward = targetForward;
+	// キャラクターが今向いている方向。
+	Vector3 projectedTargetForward = forward;
 	projectedTargetForward.Normalize();
 
-	float dotResult = projectedCurrentForward.Dot(projectedTargetForward);
+	// 惑星に沿った状態のデフォルトの前方向から、moveSpeedの方向への回転角度を求める。
+	float dotResult = projectedDefaultForward.Dot(projectedTargetForward);
 	// acosの引数をクランプ
 	if (dotResult < -1.0f) {
 		dotResult = -1.0f;
@@ -139,22 +121,20 @@ void Character::ModelRotation()
 
 	// 回転の向き（符号）を外積で判定。
 	Vector3 crossProduct = Vector3::Zero;
-	crossProduct.Cross(projectedCurrentForward, projectedTargetForward);
-
-	if (crossProduct.Dot(rotationAxis) < 0.0f) {
+	crossProduct.Cross(projectedDefaultForward, projectedTargetForward);
+	if (crossProduct.Dot(upDirection) < 0.0f) {
 		rotationAngle *= -1.0f;
 	}
 
 	// Y軸周りの回転クォータニオンを作成。
 	Quaternion yRotation;
-	yRotation.SetRotation(rotationAxis, rotationAngle);
+	yRotation.SetRotation(upDirection, rotationAngle);
 
 	// 「惑星アライメント」と「Y軸回転」を乗算。
 	Quaternion targetRotation = yRotation * planetAlignmentRotation;
 
-	// 球面線形補間(Slerp)を入れると、回転が急にパキッと変わらず滑らかになります（お好みで）
+	// 球面線形補間(Slerp)を入れると、回転が滑らかになる。
 	// m_rotation.Slerp(m_rotation, targetRotation, 0.2f); 
-	// 今回は即座に適用する元の仕様のままにします
 	m_rotation = targetRotation;
 
 	m_modelRender.SetRotation(m_rotation);
