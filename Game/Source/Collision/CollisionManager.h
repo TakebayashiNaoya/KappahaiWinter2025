@@ -125,6 +125,7 @@ public:
 	/// <summary>
 	/// 箱型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
+	/// <param name="ins"> コライダーを作成するキャラクターのポインタ。</param>
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> 箱のサイズ（幅・高さ・奥行き）。</param>
 	/// <returns> コライダーのポインタ。</returns>
@@ -132,6 +133,7 @@ public:
 	/// <summary>
 	/// 球型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
+	/// <param name="ins"> コライダーを作成するキャラクターのポインタ。</param>
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> 球の半径。</param>
 	/// <returns> コライダーのポインタ。</returns>
@@ -139,6 +141,7 @@ public:
 	/// <summary>
 	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
+	/// <param name="ins"> コライダーを作成するキャラクターのポインタ。</param>
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> カプセルのサイズ。（半径・高さ）。</param>
 	/// <returns> コライダーのポインタ。</returns>
@@ -148,6 +151,7 @@ public:
 	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
 	/// MEMO:コライダーの実体自体を生成・削除するわけではないので、*（値渡し）でOK。
 	/// </summary>
+	/// <param name="ins"> コライダーを更新するキャラクターのポインタ。</param>
 	/// <param name="collider"> 更新するコライダーのポインタ。</param>
 	/// <param name="offset"> up方向の位置補正の値。</param>
 	void UpdateCollider(const Character* ins, CollisionObject* collider, const float offset = 0.0f);

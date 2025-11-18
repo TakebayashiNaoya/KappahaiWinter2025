@@ -16,11 +16,14 @@ public:
 	{
 		return m_attackCollider;
 	}
+	/// <summary>
+	/// 一時攻撃用のコライダーのポインタを設定します。
+	/// </summary>
+	/// <param name="collider"> コライダーのポインタ。</param>
 	void SetAttackCollider(CollisionObject* collider)
 	{
 		m_attackCollider = collider;
 	}
-
 	/// <summary>
 	/// やられ判定のコライダーを取得します。
 	/// </summary>
