@@ -70,7 +70,11 @@ bool BasicEnemy::Start()
 	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_BasicEnemy, BODY_COLLIDER_OFFSET);
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BasicEnemy,
+		BODY_COLLIDER_OFFSET
+	);
 
 
 	return true;

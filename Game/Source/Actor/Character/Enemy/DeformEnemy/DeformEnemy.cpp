@@ -88,7 +88,11 @@ bool DeformEnemy::Start()
 	m_stateMachine->InitializeState(enDeformEnemyState_Idle);
 
 	// ゴーストオブジェクトを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_TransformEnemy, BODY_COLLIDER_OFFSET);
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_TransformEnemy,
+		BODY_COLLIDER_RADIUS
+	);
 
 	return true;
 }

@@ -188,7 +188,12 @@ bool Player::Start()
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
 	// ボディのゴーストオブジェクトを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(this, enCollisionType_Player, HURT_COLLIDER_RADIUS, HURT_COLLIDER_HEIGHT);
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_Player,
+		HURT_COLLIDER_RADIUS, HURT_COLLIDER_HEIGHT
+	);
+
 	return true;
 }
 
