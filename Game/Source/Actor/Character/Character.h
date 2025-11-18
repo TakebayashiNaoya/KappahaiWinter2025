@@ -179,7 +179,10 @@ public:
 	}
 
 
-
+	/// <summary>
+	/// 現在の座標に合わせて、強制的にキャラクターを惑星に対して直立させます。
+	/// </summary>
+	void ResetRotation();
 
 
 protected:
