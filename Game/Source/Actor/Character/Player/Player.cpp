@@ -216,7 +216,7 @@ void Player::Update()
 	m_modelRender.Update();
 
 	if (m_life <= 0) {
-		SetIsDead(true);
+		SetIsDying(true);
 	}
 }
 

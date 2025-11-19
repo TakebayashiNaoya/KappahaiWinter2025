@@ -57,7 +57,7 @@ void InGame::Update()
 	//	m_gameCamera->SetPlayerTarget(nullptr);
 	//}
 	// プレイヤーが死亡したらゲームオーバーへ移行。
-	if (m_player->IsDead()) {
+	if (m_player->IsDying()) {
 		SceneManager::GetInstance()->ChangeScene(SceneID::GameOver);
 	}
 }

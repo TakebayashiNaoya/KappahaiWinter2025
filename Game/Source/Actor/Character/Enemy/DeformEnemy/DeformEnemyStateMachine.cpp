@@ -37,7 +37,7 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<DeformEnemy>()->IsDead()) {
+			if (GetOwner<DeformEnemy>()->IsDying()) {
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
@@ -73,7 +73,7 @@ namespace app
 
 		bool EscapeState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<DeformEnemy>()->IsDead()) {
+			if (GetOwner<DeformEnemy>()->IsDying()) {
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
@@ -112,7 +112,7 @@ namespace app
 
 		bool TransformState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<DeformEnemy>()->IsDead()) {
+			if (GetOwner<DeformEnemy>()->IsDying()) {
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
@@ -148,7 +148,7 @@ namespace app
 
 		bool SlideState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<DeformEnemy>()->IsDead()) {
+			if (GetOwner<DeformEnemy>()->IsDying()) {
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}

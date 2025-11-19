@@ -37,7 +37,7 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<BasicEnemy>()->IsDead()) {
+			if (GetOwner<BasicEnemy>()->IsDying()) {
 				requestStateId = enBasicEnemyState_Die;
 				return true;
 			}
@@ -79,7 +79,7 @@ namespace app
 
 		bool app::basicEnemy::ChaseState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<BasicEnemy>()->IsDead()) {
+			if (GetOwner<BasicEnemy>()->IsDying()) {
 				requestStateId = enBasicEnemyState_Die;
 				return true;
 			}
@@ -120,7 +120,7 @@ namespace app
 
 		bool CoolDownState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<BasicEnemy>()->IsDead()) {
+			if (GetOwner<BasicEnemy>()->IsDying()) {
 				requestStateId = enBasicEnemyState_Die;
 				return true;
 			}

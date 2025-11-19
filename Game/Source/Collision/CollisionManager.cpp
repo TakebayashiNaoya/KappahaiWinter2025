@@ -154,7 +154,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 	// プレイヤーの攻撃。
 	if (player->GetAttackCollider()->IsHit(basicEnemy->GetHurtCollider())) {
 		player->StompJump();
-		basicEnemy->SetIsDead(true);
+		basicEnemy->SetIsDying(true);
 		return true;
 	}
 
@@ -252,7 +252,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (deformEnemy->GetHitCollider()->IsHit(player->GetHurtCollider())) {
 			player->SetIsAttacked(true);
 			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
-			deformEnemy->SetIsDead(true);
+			deformEnemy->SetIsDying(true);
 			return true;
 		}
 		return true;
@@ -321,8 +321,8 @@ bool CollisionHitManager::UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair)
 	{
 		// 変形エネミーの攻撃。
 		if (deformEnemy->GetHitCollider()->IsHit(basicEnemy->GetHurtCollider())) {
-			basicEnemy->SetIsDead(true);
-			deformEnemy->SetIsDead(true);
+			basicEnemy->SetIsDying(true);
+			deformEnemy->SetIsDying(true);
 			return true;
 		}
 		return true;
@@ -351,7 +351,7 @@ bool CollisionHitManager::UpdateHitDeformEnemyBossEnemy(CollisionPair& pair)
 		// 変形エネミーの攻撃。
 		if (deformEnemy->GetHitCollider()->IsHit(bossEnemy->GetHurtCollider())) {
 			bossEnemy->SetIsAttacked(true);
-			deformEnemy->SetIsDead(true);
+			deformEnemy->SetIsDying(true);
 			return true;
 		}
 		return true;

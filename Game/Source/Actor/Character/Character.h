@@ -119,17 +119,17 @@ public:
 	/// 死亡状態を取得します。
 	/// </summary>
 	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
-	const bool IsDead() const
+	const bool IsDying() const
 	{
-		return m_isDead;
+		return m_isDying;
 	}
 	/// <summary>
 	/// 死亡状態を設定します。
 	/// </summary>
 	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
-	void SetIsDead(const bool isDead)
+	void SetIsDying(const bool isDead)
 	{
-		m_isDead = isDead;
+		m_isDying = isDead;
 	}
 
 
@@ -205,6 +205,7 @@ protected:
 	Quaternion  m_rotation = Quaternion::Identity;					// 回転。
 	int			m_life = 0;											// ライフ。
 	bool		m_isAttacked = false;								// ダメージを受けたかどうか。
+	bool 		m_isDying = false;										// 死亡状態かどうか。
 
 	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
