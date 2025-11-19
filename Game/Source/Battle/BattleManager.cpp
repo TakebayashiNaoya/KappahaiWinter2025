@@ -5,7 +5,8 @@
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
 #include "Source/Actor/Character/Enemy/BossEnemy/BossEnemy.h"
-#include "Source/UI/InGameUI.h"
+#include "Source/UI/UIPlayerHp.h"
+#include "Source/UI/UIDamageFlash.h"
 
 
 namespace
@@ -61,13 +62,25 @@ void BattleManager::Update()
 		return;
 	}
 
-	// インゲームUIにライフを反映。
-	InGameUI* inGameUI = FindGO<InGameUI>("InGameUI");
-	if (inGameUI) {
-		if (player) {
-			inGameUI->SetLife(player->GetLife());
-		}
+	// プレイヤーのライフをUIに反映。
+	UIPlayerHp* playerHpUI = FindGO<UIPlayerHp>("UIPlayerHp");
+	if (playerHpUI) {
+		playerHpUI->SetPlayerHp(player->GetLife());
 	}
+
+	// ダメージフラッシュUIにプレイヤーのダメージ状態を反映。
+	UIDamageFlash* damageFlashUI = FindGO<UIDamageFlash>("UIDamageFlash");
+	if (damageFlashUI) {
+		damageFlashUI->SetPlayerHp(player->GetLife());
+	}
+
+	//// インゲームUIにライフを反映。
+	//UIInGame* inGameUI = FindGO<UIInGame>("UIInGame");
+	//if (inGameUI) {
+	//	if (player) {
+	//		inGameUI->SetLife(player->GetLife());
+	//	}
+	//}
 
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
 	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");

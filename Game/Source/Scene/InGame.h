@@ -7,7 +7,7 @@ class BasicEnemy;
 class DeformEnemy;
 class BossEnemy;
 class GameCamera;
-class InGameUI;
+class UIInGame;
 class BattleManagerObject;
 class CollisionManagerObject;
 
@@ -30,7 +30,7 @@ private:
 	DeformEnemy* m_deformEnemy = nullptr;
 	BossEnemy* m_bossEnemy = nullptr;
 	GameCamera* m_gameCamera = nullptr;
-	InGameUI* m_inGameUI = nullptr;
+	UIInGame* m_inGameUI = nullptr;
 	BattleManagerObject* m_battleManager = nullptr;
 	CollisionManagerObject* m_collisionManager = nullptr;
 

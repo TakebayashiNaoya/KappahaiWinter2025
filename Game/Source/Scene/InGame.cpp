@@ -6,8 +6,7 @@
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
 #include "Source/Actor/Character/Enemy/BossEnemy/BossEnemy.h"
 #include "Source/Camera/GameCamera.h"
-#include "Source/Scene/GameOver.h"
-#include "Source/UI/InGameUI.h"
+#include "Source/UI/UIInGame.h"
 #include "Source/Battle/BattleManager.h"
 #include "Source/Collision/CollisionManager.h"
 
@@ -44,7 +43,7 @@ bool InGame::Start()
 	m_deformEnemy = NewGO<DeformEnemy>(0, "DeformEnemy");
 	m_bossEnemy = NewGO<BossEnemy>(0, "BossEnemy");
 	m_gameCamera = NewGO<GameCamera>(0, "GameCamera");
-	m_inGameUI = NewGO<InGameUI>(0, "InGameUI");
+	m_inGameUI = NewGO<UIInGame>(0, "UIInGame");
 	return true;
 }
 

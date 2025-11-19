@@ -105,18 +105,6 @@
     <ClCompile Include="Source\Scene\InGame.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\TitleUI.cpp">
-      <Filter>Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\InGameUI.cpp">
-      <Filter>Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\GameOverUI.cpp">
-      <Filter>Source\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\UI\GameClearUI.cpp">
-      <Filter>Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.cpp">
       <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
     </ClCompile>
@@ -128,6 +116,27 @@
     </ClCompile>
     <ClCompile Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemyStateMachine.cpp">
       <Filter>Source\Actor\Character\Enemy\DeformEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UITitle.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIPlayerHp.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIInGame.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIGameOver.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIGameClear.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIDamageFlash.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIBossHp.cpp">
+      <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,18 +196,6 @@
     <ClInclude Include="Source\Scene\InGame.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\TitleUI.h">
-      <Filter>Source\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\InGameUI.h">
-      <Filter>Source\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\GameOverUI.h">
-      <Filter>Source\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\UI\GameClearUI.h">
-      <Filter>Source\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.h">
       <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
     </ClInclude>
@@ -210,6 +207,27 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemyStateMachine.h">
       <Filter>Source\Actor\Character\Enemy\DeformEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UITitle.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIPlayerHp.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIInGame.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIGameOver.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIGameClear.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIDamageFlash.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIBossHp.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

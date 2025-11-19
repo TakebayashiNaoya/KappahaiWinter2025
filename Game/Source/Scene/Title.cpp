@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Title.h"
 #include "InGame.h"
-#include "Source/UI/TitleUI.h"
+#include "Source/UI/UITitle.h"
 
 
 Title::Title()
@@ -18,7 +18,7 @@ Title::~Title()
 
 bool Title::Start()
 {
-	m_titleUI = NewGO<TitleUI>(0, "TitleUI");
+	m_titleUI = NewGO<UITitle>(0, "UITitle");
 	return true;
 }
 

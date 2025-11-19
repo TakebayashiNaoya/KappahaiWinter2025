@@ -73,7 +73,7 @@ void GameCamera::Update()
 	m_cameraPos = desiredCameraPos;
 
 	// ’‹“_‚ÌŒvZ
-	Vector3 target = playerPos + up * 80.0f;
+	Vector3 target = playerPos + up * 100.0f;
 
 	g_camera3D->SetPosition(m_cameraPos);
 	g_camera3D->SetTarget(target);
