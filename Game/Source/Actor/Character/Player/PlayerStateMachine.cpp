@@ -1,13 +1,15 @@
 #include "stdafx.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Player/PlayerStateMachine.h"
+#include "Source/Collision/CollisionManager.h"
 
 namespace
 {
-	constexpr float JUMP_POWER = 40.0f;			// ジャンプパワー。
-	constexpr float STICK_DEAD_ZONE = 0.01f;	// スティックのデッドゾーン。
-	const float DASH_SPEED = 15.0f;				// ダッシュスピード。
-	const float WALK_SPEED = 10.0f;				// 歩くスピード。
+	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;	// 踏みつけ用コライダーの半径。
+	constexpr float JUMP_POWER = 40.0f;				// ジャンプパワー。
+	constexpr float STICK_DEAD_ZONE = 0.01f;		// スティックのデッドゾーン。
+	const float DASH_SPEED = 15.0f;					// ダッシュスピード。
+	const float WALK_SPEED = 10.0f;					// 歩くスピード。
 
 	/// <summary>
 	/// 左スティックの現在の位置を取得します。
@@ -68,7 +70,7 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -84,7 +86,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetIsOnGround()) {
+			if (!GetOwner<Player>()->IsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -120,7 +122,7 @@ namespace app
 
 		bool app::player::WalkState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -141,7 +143,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetIsOnGround()) {
+			if (!GetOwner<Player>()->IsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -177,7 +179,7 @@ namespace app
 
 		bool app::player::RunState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -198,7 +200,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->GetIsOnGround()) {
+			if (!GetOwner<Player>()->IsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -215,7 +217,11 @@ namespace app
 		void app::player::JumpState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
-			GetOwner<Player>()->CreateStompCollider();
+
+			// 踏みつけ用コライダーの作成。
+			GetOwner<Player>()->SetAttackCollider(
+				CollisionHitManager::GetInstance()->CreateCollider(
+					GetOwner<Player>(), enCollisionType_Player, STOMP_COLLIDER_RADIUS, true));
 		}
 
 
@@ -224,24 +230,31 @@ namespace app
 			GetOwner<Player>()->MoveUpdate(GetOwner<Player>()->GetSpeedBeforeJump());
 			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
-			GetOwner<Player>()->UpdateStompCollider();
+
+			// 踏みつけ用コライダーの更新。
+			CollisionHitManager::GetInstance()->UpdateCollider(
+				GetOwner<Player>(), GetOwner<Player>()->GetAttackCollider());
 		}
 
 
 		void app::player::JumpState::Exit()
 		{
-			GetOwner<Player>()->DeleteStompCollider();
+			// 踏みつけ用コライダーの削除。
+			GetOwner<Player>()->SetAttackCollider(
+				CollisionHitManager::GetInstance()->DeleteCollider(
+					GetOwner<Player>()->GetAttackCollider()));
+
 		}
 
 
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
-			if (GetOwner<Player>()->GetIsOnGround()) {
+			if (GetOwner<Player>()->IsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;
@@ -290,7 +303,7 @@ namespace app
 
 		bool app::player::KnockBackState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->GetIsAttacked()) {
+			if (GetOwner<Player>()->IsAttacked()) {
 				return false;
 			}
 
@@ -299,7 +312,7 @@ namespace app
 				return true;
 			}
 
-			if (GetOwner<Player>()->GetIsOnGround()) {
+			if (GetOwner<Player>()->IsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;

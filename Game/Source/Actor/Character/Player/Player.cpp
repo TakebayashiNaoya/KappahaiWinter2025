@@ -15,12 +15,14 @@ const Character::AnimationOption Player::PLAYER_ANIMATION_OPTIONS[] = {
 
 namespace
 {
-	// プレイヤーのヒットボックスは小さめに設定。
-	constexpr float BODY_COLLIDER_RADIUS = 15.0f;					// ボディコライダーの半径。
-	constexpr float BODY_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
-	constexpr float BODY_COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
+	const std::string MODEL_PATH = "Player/rabbit";
+	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;					// 踏みつけ用コライダーの半径。
+	// プレイヤーのヒットボックスは小さめに設定。
+	constexpr float HURT_COLLIDER_RADIUS = 30.0f;					// ボディコライダーの半径。
+	constexpr float HURT_COLLIDER_HEIGHT = 60.0f;					// ボディコライダーの高さ。
+	constexpr float COLLIDER_OFFSET = 50.0f;					// ボディコライダーのオフセット値。
+
 	constexpr float STOMP_JUMP_POWER = 30.0f;						// 踏みつけジャンプの初速。
 
 	constexpr float GRAVITY_POWER = 9.8f * 10;						// 重力。
@@ -43,14 +45,8 @@ Player::Player()
 
 Player::~Player()
 {
-	if (m_bodyCollider)
-	{
-		DeleteBodyCollider();
-	}
-	if (m_stompCollider)
-	{
-		DeleteStompCollider();
-	}
+	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
+	m_attackCollider = CollisionHitManager::DeleteCollider(m_attackCollider);
 }
 
 /// <summary>
@@ -118,44 +114,6 @@ void Player::MoveUpdate(const float speed)
 	ComputePosition();
 }
 
-/// <summary>
-/// 踏みつけ判定用ゴーストオブジェクトを作成します。
-/// </summary>
-void Player::CreateStompCollider()
-{
-	m_stompCollider = new CollisionObject();
-	m_stompCollider->CreateSphere(
-		m_position,
-		m_rotation,
-		STOMP_COLLIDER_RADIUS
-	);
-
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_stompCollider, this);
-}
-
-/// <summary>
-/// 踏みつけ判定用ゴーストオブジェクトの座標と回転を更新します。
-/// </summary>
-void Player::UpdateStompCollider()
-{
-	m_stompCollider->SetPosition(m_position);
-	m_stompCollider->SetRotation(m_rotation);
-}
-
-/// <summary>
-/// 踏みつけ判定用コライダーをdelete、nullptrします。
-/// </summary>
-void Player::DeleteStompCollider()
-{
-	if (m_stompCollider == nullptr) {
-		return;
-	}
-	// コリジョンヒットマネージャーから登録解除。
-	CollisionHitManager::GetInstance()->Unregister(m_stompCollider);
-	delete m_stompCollider;
-	m_stompCollider = nullptr;
-}
 
 /// <summary>
 /// ノックバック方向を計算します。
@@ -215,23 +173,11 @@ void Player::StompJump()
 	m_fallTimer = 0.0f;
 }
 
-/// <summary>
-/// ライフを1減らします。
-/// </summary>
-void Player::TakeDamage()
-{
-	m_life--;
-}
-
-
-
-
 
 bool Player::Start()
 {
 	// モデルとアニメーションを初期化。
-	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, "Player/rabbit");
-	m_modelRender.SetScale(Vector3(200.0f, 200.0f, 200.0f));
+	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
 	InitLife(LIFE);
 
@@ -241,16 +187,14 @@ bool Player::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
-	// ボディのゴーストオブジェクトを作成。
-	m_bodyCollider = new CollisionObject();
-	m_bodyCollider->CreateCapsule(
-		m_position,
-		m_rotation,
-		BODY_COLLIDER_RADIUS,
-		BODY_COLLIDER_HEIGHT
+	// やられ判定のコライダーを作成。
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_Player,
+		HURT_COLLIDER_RADIUS,
+		true
 	);
-	// コリジョンヒットマネージャーに登録。
-	CollisionHitManager::GetInstance()->Register(enCollisionType_Player, m_bodyCollider, this);
+
 	return true;
 }
 
@@ -264,7 +208,7 @@ void Player::Update()
 
 	m_stateMachine->Update();
 
-	UpdateBodyCollider(BODY_COLLIDER_OFFSET);
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, COLLIDER_OFFSET);
 
 	InvincibleTimer();
 
@@ -272,7 +216,7 @@ void Player::Update()
 	m_modelRender.Update();
 
 	if (m_life <= 0) {
-		SetIsDead(true);
+		SetIsDying(true);
 	}
 }
 

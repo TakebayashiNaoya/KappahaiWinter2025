@@ -3,16 +3,42 @@
 /// </summary>
 #pragma once
 
+enum EnCollisionType;
+
 class Character :public IGameObject
 {
 public:
 	/// <summary>
-	/// ボディのコライダーを取得します。
+	/// 一時攻撃用のコライダーのポインタを取得します。
 	/// </summary>
-	/// <returns> ボディのコライダーのポインタ。</returns>
-	CollisionObject* GetBodyCollider()
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* GetAttackCollider()const
 	{
-		return m_bodyCollider;
+		return m_attackCollider;
+	}
+	/// <summary>
+	/// 一時攻撃用のコライダーのポインタを設定します。
+	/// </summary>
+	/// <param name="collider"> コライダーのポインタ。</param>
+	void SetAttackCollider(CollisionObject* collider)
+	{
+		m_attackCollider = collider;
+	}
+	/// <summary>
+	/// 攻撃用のコライダーのポインタを設定します。
+	/// </summary>
+	/// <param name="collider"> コライダーのポインタ。</param>
+	CollisionObject* GetHitCollider()const
+	{
+		return m_hitCollider;
+	}
+	/// <summary>
+	/// やられ判定のコライダーを取得します。
+	/// </summary>
+	/// <returns> やられ判定のコライダーのポインタ。</returns>
+	CollisionObject* GetHurtCollider()const
+	{
+		return m_hurtCollider;
 	}
 
 
@@ -51,7 +77,7 @@ public:
 	/// 地面に向かってレイを飛ばし、当たった座標と自分の座標の距離が一定未満なら接地していると判定します。
 	/// </summary>
 	/// <returns>接地していれば true、そうでなければ false を示す。</returns>
-	const bool& GetIsOnGround();
+	const bool& IsOnGround();
 
 
 	/// <summary>
@@ -72,20 +98,38 @@ public:
 
 
 	/// <summary>
+	/// 攻撃されているかどうかを取得します。
+	/// </summary>
+	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
+	const bool IsAttacked() const
+	{
+		return m_isAttacked;
+	}
+	/// <summary>
+	/// 攻撃されているどうかのフラグを設定します。
+	/// </summary>
+	/// <param name="isAttacked"> 攻撃されている場合はtrue、されていない場合はfalseを入れる。</param>
+	void SetIsAttacked(const bool isAttacked)
+	{
+		m_isAttacked = isAttacked;
+	}
+
+
+	/// <summary>
 	/// 死亡状態を取得します。
 	/// </summary>
 	/// <returns> 死亡している場合はtrue、そうでない場合はfalseを返します。</returns>
-	const bool GetIsDead() const
+	const bool IsDying() const
 	{
-		return m_isDead;
+		return m_isDying;
 	}
 	/// <summary>
 	/// 死亡状態を設定します。
 	/// </summary>
 	/// <param name="isDead"> true の場合は死亡、false の場合は生存を表します。</param>
-	void SetIsDead(const bool isDead)
+	void SetIsDying(const bool isDead)
 	{
-		m_isDead = isDead;
+		m_isDying = isDead;
 	}
 
 
@@ -103,7 +147,14 @@ public:
 	/// </summary>
 	/// <param name="animNo">再生するアニメーションの番号。</param>
 	void PlayAnimation(const int animNo);
-
+	/// <summary>
+	/// アニメーションが再生中かどうかを返します。
+	/// </summary>
+	/// <returns>アニメーションが再生中であれば true、そうでなければ false を返します。</returns>
+	const bool IsPlayingAnimation() const
+	{
+		return m_modelRender.IsPlayingAnimation();
+	};
 
 	/// <summary>
 	/// ジャンプパワーをジャンプスピードとムーブスピードに即座に適用します。
@@ -119,25 +170,42 @@ public:
 
 
 	/// <summary>
-	/// ボディコライダーの座標と回転を更新します。
-	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、y方向に位置補正を行う必要があります。
+	/// ライフを1減らします。
 	/// </summary>
-	/// <param name="offset"> y方向の位置補正の値。</param>
-	void UpdateBodyCollider(const float offset);
+	void TakeDamage()
+	{
+		m_life--;
+	}
+
 	/// <summary>
-	/// コリジョンヒットマネージャーの登録解除を行い、ボディコライダーをdelete、nullptrします。
+	/// ライフを取得します。
 	/// </summary>
-	void DeleteBodyCollider();
+	/// <returns> ライフ。</returns>
+	const int GetLife() const
+	{
+		return m_life;
+	}
+
+
+	/// <summary>
+	/// 現在の座標に合わせて、強制的にキャラクターを惑星に対して直立させます。
+	/// </summary>
+	void ResetRotation();
 
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
-	CollisionObject* m_bodyCollider = nullptr;						// キャラクター同士の当たり判定用ゴーストオブジェクト。
-
 	ModelRender	m_modelRender;										// モデルレンダー。
+
+	CollisionObject* m_hitCollider = nullptr;						// 攻撃判定。
+	CollisionObject* m_hurtCollider = nullptr;						// やられ判定。
+	CollisionObject* m_attackCollider = nullptr;					// 一時的な攻撃判定。
+
 	Vector3		m_position = Vector3::Zero;							// ポジション。
 	Quaternion  m_rotation = Quaternion::Identity;					// 回転。
 	int			m_life = 0;											// ライフ。
+	bool		m_isAttacked = false;								// ダメージを受けたかどうか。
+	bool 		m_isDying = false;										// 死亡状態かどうか。
 
 	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
@@ -182,7 +250,8 @@ protected:
 	/// <param name="count">アニメーションクリップの数。</param>
 	/// <param name="option">各アニメーションクリップの設定情報が格納されたAnimationOption型の配列。</param>
 	/// <param name="path">モデルファイルのパス。</param>
-	void InitModel(const size_t count, const AnimationOption* option, const std::string path);
+	/// <param name="scale">モデルの拡大率。（規定値は1.0f）</param>
+	void InitModel(const size_t count, const AnimationOption* option, const std::string path, const float scale = 1.0f);
 
 
 protected:

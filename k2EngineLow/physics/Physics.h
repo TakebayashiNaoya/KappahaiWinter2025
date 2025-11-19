@@ -94,7 +94,7 @@ namespace nsK2EngineLow {
 		{
 			m_dynamicWorld->removeRigidBody(rb.GetBody());
 		}
-		
+
 		void ConvexSweepTest(
 			const btConvexShape* castShape,
 			const btTransform& convexFromWorld,
@@ -120,7 +120,20 @@ namespace nsK2EngineLow {
 		/// <param name="rayEnd">レイの終点</param>
 		/// <param name="hitPos">交点の格納先</param>
 		/// <returns>trueが返ってきたら衝突している。</returns>
+		/// bool RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const;
+
+		/// <summary>
+		/// 自作関数。
+		/// レイテストを実施。
+		/// </summary>
+		/// <param name="rayStart">レイの始点</param>
+		/// <param name="rayEnd">レイの終点</param>
+		/// <param name="hitPos">交点の格納先</param>
+		/// <returns>trueが返ってきたら衝突している。</returns>
 		bool RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const;
+
+
+
 		/*!
 		* @brief	コリジョンオブジェクトをワールドに登録。
 		*@param[in]	colliObj	コリジョンオブジェクト。

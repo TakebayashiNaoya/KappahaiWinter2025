@@ -2,7 +2,7 @@
 #include "Source/Scene/SceneManager.h"
 
 
-class TitleUI;
+class UITitle;
 
 
 class Title :public IScene
@@ -18,5 +18,5 @@ private:
 
 
 private:
-	TitleUI* m_titleUI = nullptr;
+	UITitle* m_titleUI = nullptr;
 };

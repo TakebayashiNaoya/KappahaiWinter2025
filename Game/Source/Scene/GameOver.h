@@ -1,7 +1,7 @@
 #pragma once
 #include "Source/Scene/SceneManager.h"
 
-class GameOverUI;
+class UIGameOver;
 
 class GameOver :public IScene
 {
@@ -16,6 +16,6 @@ private:
 
 
 private:
-	GameOverUI* m_gameOverUI = nullptr;
+	UIGameOver* m_gameOverUI = nullptr;
 };
 

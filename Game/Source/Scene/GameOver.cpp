@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameOver.h"
-#include "Source/UI/GameOverUI.h"
+#include "Source/UI/UIGameOver.h"
 #include "Source/Scene/SceneManager.h"
 
 
@@ -18,7 +18,7 @@ GameOver::~GameOver()
 
 bool GameOver::Start()
 {
-	m_gameOverUI = NewGO<GameOverUI>(0, "GameOverUI");
+	m_gameOverUI = NewGO<UIGameOver>(0, "UIGameOver");
 	return true;
 }
 

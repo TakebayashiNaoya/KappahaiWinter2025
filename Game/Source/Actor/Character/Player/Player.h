@@ -31,23 +31,7 @@ public:
 		enAnimationClip_Num,
 	};
 
-	/// <summary>
-	/// 踏みつけ用のコライダーのポインタを取得します。
-	/// </summary>
-	/// <returns> 踏みつけ用のコライダーのポインタ。</returns>
-	CollisionObject* GetStompCollider()
-	{
-		return m_stompCollider;
-	}
 
-	/// <summary>
-	/// プレイヤーの座標を取得します。
-	/// </summary>
-	/// <returns>プレイヤーの現在の座標値（float型）。</returns>
-	const Vector3& GetPosition()const
-	{
-		return m_position;
-	}
 
 	/// <summary>
 	/// 毎フレームのXZ軸回転角度を取得します。
@@ -58,41 +42,16 @@ public:
 		return m_xzAdditionalRot;
 	}
 
-	/// <summary>
-	/// 攻撃されているかどうかを取得します。
-	/// </summary>
-	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
-	const bool GetIsAttacked() const
-	{
-		return m_isAttacked;
-	}
 
 	/// <summary>
 	/// 無敵中かどうかを取得します。
 	/// </summary>
 	/// <returns> 無敵中ならtrue、そうでなければfalseを返す。</returns>
-	const bool GetIsInvincible() const
+	const bool IsInvincible() const
 	{
 		return m_isInvincible;
 	}
 
-	/// <summary>
-	/// ライフを取得します。
-	/// </summary>
-	/// <returns> ライフ。</returns>
-	const int GetLife() const
-	{
-		return m_life;
-	}
-
-	/// <summary>
-	/// 攻撃されているどうかのフラグを設定します。
-	/// </summary>
-	/// <param name="isAttacked"> 攻撃されている場合はtrue、されていない場合はfalseを入れる。</param>
-	void SetIsAttacked(const bool isAttacked)
-	{
-		m_isAttacked = isAttacked;
-	}
 
 	/// <summary>
 	/// 無敵中かどうかを設定します。
@@ -123,21 +82,6 @@ public:
 	void MoveUpdate(const float speed);
 
 	/// <summary>
-	/// 踏みつけ判定用コライダーを作成します。
-	/// </summary>
-	void CreateStompCollider();
-
-	/// <summary>
-	/// 踏みつけ判定用コライダーの座標と回転を更新します。
-	/// </summary>
-	void UpdateStompCollider();
-
-	/// <summary>
-	/// 踏みつけ判定用コライダーをdelete、nullptrします。
-	/// </summary>
-	void DeleteStompCollider();
-
-	/// <summary>
 	/// ノックバック方向を計算します。
 	/// </summary>
 	/// <param name="enemyPos"> 攻撃してきた敵の座標。</param>
@@ -153,22 +97,16 @@ public:
 	/// </summary>
 	void StompJump();
 
-	/// <summary>
-	/// ライフを1減らします。
-	/// </summary>
-	void TakeDamage();
 
 private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
 
-	CollisionObject* m_stompCollider = nullptr;		// 踏みつけ用のゴーストオブジェクト。
 
 	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
 
 	/// ダメージ関連。
-	bool	m_isAttacked = false;					// ダメージを受けたかどうか。
 	Vector3 m_knockBackDirection = Vector3::Zero;	// ノックバック方向。
 	float	m_knockBackTimer = 0.0f;				// ノックバックタイマー。
 	bool	m_isBlinking = false;					// 点滅中かどうか。

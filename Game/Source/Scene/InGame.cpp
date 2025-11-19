@@ -3,10 +3,10 @@
 #include "Source/Actor/Stage/BackGround.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
-#include "Source/Actor/Character/Enemy/TransformEnemy/TransformEnemy.h"
+#include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
+#include "Source/Actor/Character/Enemy/BossEnemy/BossEnemy.h"
 #include "Source/Camera/GameCamera.h"
-#include "Source/Scene/GameOver.h"
-#include "Source/UI/InGameUI.h"
+#include "Source/UI/UIInGame.h"
 #include "Source/Battle/BattleManager.h"
 #include "Source/Collision/CollisionManager.h"
 
@@ -20,14 +20,15 @@ InGame::InGame()
 InGame::~InGame()
 {
 	DeleteGO(m_battleManager);
-	DeleteGO(m_collisionManager);
 	DeleteGO(m_skyCube);
 	DeleteGO(m_backGround);
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_basicEnemy);
-	DeleteGO(m_transformEnemy);
+	DeleteGO(m_deformEnemy);
+	DeleteGO(m_bossEnemy);
 	DeleteGO(m_player);
 	DeleteGO(m_inGameUI);
+	DeleteGO(m_collisionManager);
 }
 
 
@@ -39,9 +40,10 @@ bool InGame::Start()
 	m_backGround = NewGO<FirstPlanet>(0, "BackGround");
 	m_player = NewGO<Player>(0, "Player");
 	m_basicEnemy = NewGO<BasicEnemy>(0, "BasicEnemy");
-	m_transformEnemy = NewGO<TransformEnemy>(0, "TransformEnemy");
+	m_deformEnemy = NewGO<DeformEnemy>(0, "DeformEnemy");
+	m_bossEnemy = NewGO<BossEnemy>(0, "BossEnemy");
 	m_gameCamera = NewGO<GameCamera>(0, "GameCamera");
-	m_inGameUI = NewGO<InGameUI>(0, "InGameUI");
+	m_inGameUI = NewGO<UIInGame>(0, "UIInGame");
 	return true;
 }
 
@@ -54,7 +56,7 @@ void InGame::Update()
 	//	m_gameCamera->SetPlayerTarget(nullptr);
 	//}
 	// プレイヤーが死亡したらゲームオーバーへ移行。
-	if (m_player->GetIsDead()) {
+	if (m_player->IsDying()) {
 		SceneManager::GetInstance()->ChangeScene(SceneID::GameOver);
 	}
 }

@@ -1,12 +1,14 @@
 #pragma once
 
+class Character;
 
 enum EnCollisionType
 {
 	enCollisionType_None = 0,
 	enCollisionType_Player,
 	enCollisionType_BasicEnemy,
-	enCollisionType_TransformEnemy,
+	enCollisionType_DeformEnemy,
+	enCollisionType_BossEnemy,
 	//
 	enCollisionType_Num,
 };
@@ -75,19 +77,29 @@ private:
 
 
 	/// <summary>
-	///　「プレイヤー」と「基本エネミー」の衝突処理を行います。
+	/// 「プレイヤー」と「基本エネミー」の衝突処理を行います。
 	/// </summary>
 	bool UpdateHitPlayerBasicEnemy(CollisionPair& pair);
 
 	/// <summary>
-	///　「プレイヤー」と「変形エネミー」の衝突処理を行います。
+	/// 「プレイヤー」と「変形エネミー」の衝突処理を行います。
 	/// </summary>
-	bool UpdateHitPlayerTransformEnemy(CollisionPair& pair);
+	bool UpdateHitPlayerDeformEnemy(CollisionPair& pair);
 
 	/// <summary>
-	///　「基本エネミー」と「変形エネミー」の衝突処理を行います。
+	/// 「プレイヤー」と「ボスエネミー」の衝突処理を行います。
 	/// </summary>
-	bool UpdateHitBasicEnemyTransformEnemy(CollisionPair& pair);
+	bool UpdateHitPlayerBossEnemy(CollisionPair& pair);
+
+	/// <summary>
+	/// 「基本エネミー」と「変形エネミー」の衝突処理を行います。
+	/// </summary>
+	bool UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair);
+
+	/// <summary>
+	/// 「変形エネミー」と「ボスエネミー」の衝突処理を行います。
+	/// </summary>
+	bool UpdateHitDeformEnemyBossEnemy(CollisionPair& pair);
 
 
 private:
@@ -114,7 +126,53 @@ private:
 	// ここに関数を追加していく。
 
 
+public:
+	/// <summary>
+	/// 箱型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
+	/// </summary>
+	/// <param name="ins"> コライダーを作成するキャラクターのポインタ。</param>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> 箱のサイズ（幅・高さ・奥行き）。</param>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const Vector3 size, const bool isTrigger);
+	/// <summary>
+	/// 球型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
+	/// </summary>
+	/// <param name="ins"> コライダーを作成するキャラクターのポインタ。</param>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> 球の半径。</param>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const bool isTrigger);
+	/// <summary>
+	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
+	/// </summary>
+	/// <param name="ins"> コライダーを作成するキャラクターのポインタ。</param>
+	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
+	/// <param name="size"> カプセルのサイズ。（半径・高さ）。</param>
+	/// <returns> コライダーのポインタ。</returns>
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const float height, const bool isTrigger);
+	/// <summary>
+	/// コライダーの座標と回転を更新します。
+	/// NOTE:モデルの基準が足元、コライダーの基準が中心のため、up方向に位置補正を行う必要があります。
+	/// MEMO:コライダーの実体自体を生成・削除するわけではないので、*（値渡し）でOK。
+	/// </summary>
+	/// <param name="ins"> コライダーを更新するキャラクターのポインタ。</param>
+	/// <param name="collider"> 更新するコライダーのポインタ。</param>
+	/// <param name="offset"> up方向の位置補正の値。</param>
+	void UpdateCollider(const Character* ins, CollisionObject* collider, const float offset = 0.0f);
+	/// <summary>
+	/// コリジョンヒットマネージャーの登録解除を行い、コライダーをdelete、nullptrします。
+	/// </summary>
+	/// <param name="collision"> 削除するコライダーのポインタの参照。</param>
+	static CollisionObject* DeleteCollider(CollisionObject* collision);
 
+
+	/// <summary>
+	/// コライダーに属性IDを設定します。（RayTestで無視させるために使用）
+	/// </summary>
+	/// <param name="collider"> 属性IDを設定するコライダーのポインタ。</param>
+	/// <param name="isTrigger"> trueならトリガー、falseなら通常のコライダー。</param>
+	void SetIsTrigger(CollisionObject* collider, bool isTrigger);
 
 	/**
 	 * シングルトン関連
@@ -134,6 +192,10 @@ public:
 	static CollisionHitManager* GetInstance()
 	{
 		return m_instance;
+	}
+	static bool IsAvailable()
+	{
+		return m_instance != nullptr;
 	}
 	static void Delete()
 	{
@@ -157,9 +219,5 @@ public:
 	bool Start() override;
 	void Update() override;
 	void Render(RenderContext& renderContext) override {}	// Renderはない
-
-
-private:
-	CollisionHitManager* m_collisionHitManager = nullptr;
 };
 

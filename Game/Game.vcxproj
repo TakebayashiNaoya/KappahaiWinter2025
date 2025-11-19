@@ -228,9 +228,11 @@
     <ClCompile Include="Source\Actor\Character\Character.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.cpp" />
+    <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.cpp" />
+    <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemyStateMachine.cpp" />
+    <ClCompile Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemy.cpp" />
+    <ClCompile Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemyStateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\Enemy\Enemy.cpp" />
-    <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.cpp" />
-    <ClCompile Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Source\Actor\Character\Player\PlayerStateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\StateMachine.cpp" />
@@ -244,10 +246,13 @@
     <ClCompile Include="Source\Scene\InGame.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\Title.cpp" />
-    <ClCompile Include="Source\UI\GameClearUI.cpp" />
-    <ClCompile Include="Source\UI\GameOverUI.cpp" />
-    <ClCompile Include="Source\UI\InGameUI.cpp" />
-    <ClCompile Include="Source\UI\TitleUI.cpp" />
+    <ClCompile Include="Source\UI\UIBossHp.cpp" />
+    <ClCompile Include="Source\UI\UIDamageFlash.cpp" />
+    <ClCompile Include="Source\UI\UIGameClear.cpp" />
+    <ClCompile Include="Source\UI\UIGameOver.cpp" />
+    <ClCompile Include="Source\UI\UIInGame.cpp" />
+    <ClCompile Include="Source\UI\UIPlayerHp.cpp" />
+    <ClCompile Include="Source\UI\UITitle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -260,9 +265,11 @@
     <ClInclude Include="Source\Actor\Character\Character.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemy.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\BasicEnemy\BasicEnemyStateMachine.h" />
+    <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.h" />
+    <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemyStateMachine.h" />
+    <ClInclude Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemy.h" />
+    <ClInclude Include="Source\Actor\Character\Enemy\DeformEnemy\DeformEnemyStateMachine.h" />
     <ClInclude Include="Source\Actor\Character\Enemy\Enemy.h" />
-    <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemy.h" />
-    <ClInclude Include="Source\Actor\Character\Enemy\TransformEnemy\TransformEnemyStateMachine.h" />
     <ClInclude Include="Source\Actor\Character\Player\Player.h" />
     <ClInclude Include="Source\Actor\Character\Player\PlayerStateMachine.h" />
     <ClInclude Include="Source\Actor\Character\StateMachine.h" />
@@ -276,10 +283,13 @@
     <ClInclude Include="Source\Scene\InGame.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\Title.h" />
-    <ClInclude Include="Source\UI\GameClearUI.h" />
-    <ClInclude Include="Source\UI\GameOverUI.h" />
-    <ClInclude Include="Source\UI\InGameUI.h" />
-    <ClInclude Include="Source\UI\TitleUI.h" />
+    <ClInclude Include="Source\UI\UIBossHp.h" />
+    <ClInclude Include="Source\UI\UIDamageFlash.h" />
+    <ClInclude Include="Source\UI\UIGameClear.h" />
+    <ClInclude Include="Source\UI\UIGameOver.h" />
+    <ClInclude Include="Source\UI\UIInGame.h" />
+    <ClInclude Include="Source\UI\UIPlayerHp.h" />
+    <ClInclude Include="Source\UI\UITitle.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
   </ItemGroup>

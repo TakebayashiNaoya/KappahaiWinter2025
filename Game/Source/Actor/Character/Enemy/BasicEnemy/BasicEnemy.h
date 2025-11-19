@@ -3,7 +3,6 @@
 /// </summary>
 #pragma once
 #include "Source/Actor/Character/Enemy/Enemy.h"
-#include "Source/Actor/Character/Types.h"
 
 namespace app {
 	namespace basicEnemy {
@@ -15,7 +14,6 @@ class BasicEnemy : public Enemy
 {
 public:
 	BasicEnemy();
-	~BasicEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
@@ -42,7 +40,7 @@ public:
 	/// クールダウン状態かどうかを取得します。
 	/// </summary>
 	/// <returns> クールダウン状態であれば true。</returns>
-	const bool GetIsCoolDown() const
+	const bool IsOnCoolDown() const
 	{
 		return m_isCoolDown;
 	}
@@ -66,24 +64,12 @@ public:
 	/// </summary>
 	void CoolDownCount();
 
-	/// <summary>
-	/// エネミーを消滅させます。
-	/// 1.コライダーを削除。
-	/// 2.モデルのYスケールを半分にして、潰されているように表現する。
-	/// 3.一定時間経過後、DeleteGO(this)。
-	/// </summary>
-	void DeleteEnemy()override final;
 
 private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
 
-	/// <summary>
-	/// プレイヤーを追いかける方向を計算して返します。
-	/// </summary>
-	/// <returns> 追跡方向。</returns>
-	const Vector3 ComputeMoveDirection()const override final;
 
 	// 基本エネミーのステートマシン。
 	std::unique_ptr<app::basicEnemy::BasicEnemyStateMachine> m_stateMachine;
