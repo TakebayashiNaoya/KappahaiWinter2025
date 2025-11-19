@@ -111,6 +111,8 @@ bool BossEnemy::Start()
 
 	ResetRotation();
 
+	m_life = 1;
+
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
@@ -152,6 +154,11 @@ void BossEnemy::Update()
 
 	m_modelRender.SetPosition(m_position);
 	m_modelRender.Update();
+
+	if (m_life <= 0) {
+		SetIsDying(true);
+	}
+
 }
 
 void BossEnemy::Render(RenderContext& rc)

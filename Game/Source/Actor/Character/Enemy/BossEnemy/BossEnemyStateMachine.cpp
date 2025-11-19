@@ -46,12 +46,6 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
-			// 死亡していたら死亡状態へ移行。
-			if (GetOwner<BossEnemy>()->IsDead()) {
-				requestStateId = enBossEnemyState_Dead;
-				return true;
-			}
-
 			// 被弾していたら被弾状態へ移行。
 			if (GetOwner<BossEnemy>()->IsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
@@ -106,12 +100,6 @@ namespace app
 
 		bool CooldownState::RequestState(int& requestStateId)
 		{
-			// 死亡していたら死亡状態へ移行。
-			if (GetOwner<BossEnemy>()->IsDead()) {
-				requestStateId = enBossEnemyState_Dead;
-				return true;
-			}
-
 			// 被弾していたら被弾状態へ移行。
 			if (GetOwner<BossEnemy>()->IsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
@@ -154,12 +142,6 @@ namespace app
 
 		bool WalkState::RequestState(int& requestStateId)
 		{
-			// 死亡していたら死亡状態へ移行。
-			if (GetOwner<BossEnemy>()->IsDead()) {
-				requestStateId = enBasicEnemyState_Die;
-				return true;
-			}
-
 			// 被弾していたら被弾状態へ移行。
 			if (GetOwner<BossEnemy>()->IsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
@@ -207,12 +189,6 @@ namespace app
 
 		bool RunState::RequestState(int& requestStateId)
 		{
-			// 死亡していたら死亡状態へ移行。
-			if (GetOwner<BossEnemy>()->IsDead()) {
-				requestStateId = enBasicEnemyState_Die;
-				return true;
-			}
-
 			// 被弾していたら被弾状態へ移行。
 			if (GetOwner<BossEnemy>()->IsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
@@ -253,12 +229,6 @@ namespace app
 
 		bool AttackState::RequestState(int& requestStateId)
 		{
-			// 死亡していたら死亡状態へ移行。
-			if (GetOwner<BossEnemy>()->IsDead()) {
-				requestStateId = enBossEnemyState_Dead;
-				return true;
-			}
-
 			// 被弾していたら被弾状態へ移行。
 			if (GetOwner<BossEnemy>()->IsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
@@ -282,6 +252,15 @@ namespace app
 
 		void DamageState::Enter()
 		{
+			// ライフを1減らす。
+			GetOwner<BossEnemy>()->TakeDamage();
+
+			// ライフが0以下なら死亡フラグを立てる。
+			if (GetOwner<BossEnemy>()->GetLife() <= 0) {
+				GetOwner<BossEnemy>()->SetIsDying(true);
+				return;
+			}
+
 			// ダメージアニメーション再生
 			GetOwner<BossEnemy>()->PlayAnimation(BossEnemy::enAnimationClip_Damage);
 		}
@@ -302,7 +281,7 @@ namespace app
 		bool DamageState::RequestState(int& requestStateId)
 		{
 			// 死亡していたら死亡状態へ移行。
-			if (GetOwner<BossEnemy>()->IsDead()) {
+			if (GetOwner<BossEnemy>()->IsDying()) {
 				requestStateId = enBossEnemyState_Dead;
 				return true;
 			}
@@ -324,7 +303,7 @@ namespace app
 
 		void DeadState::Enter()
 		{
-			DeleteGO(GetOwner<BossEnemy>());
+			GetOwner<BossEnemy>()->PlayAnimation(BossEnemy::enAnimationClip_Dead);
 		}
 
 
@@ -340,12 +319,7 @@ namespace app
 
 		bool DeadState::RequestState(int& requestStateId)
 		{
-			return true;
+			return false;
 		}
-
-
-
-
-
 	}
 }
