@@ -1,10 +1,13 @@
 #pragma once
 
-class InGameUI :public IGameObject
+class UIPlayerHp;
+class UIDamageFlash;
+
+class UIInGame :public IGameObject
 {
 public:
-	InGameUI();
-	~InGameUI();
+	UIInGame();
+	~UIInGame();
 
 	void SetLife(int life)
 	{
@@ -18,5 +21,8 @@ private:
 
 	int m_lifeCounts = 0;	//ライフの数。
 	FontRender m_lifeFR;	//ライフの数を表示するフォントレンダー。
+
+	UIPlayerHp* m_playerHpUI = nullptr;
+	UIDamageFlash* m_damageFlashUI = nullptr;
 };
 

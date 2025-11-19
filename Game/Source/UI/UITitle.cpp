@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "TitleUI.h"
+#include "UITitle.h"
 
-TitleUI::TitleUI()
+UITitle::UITitle()
 {
 	m_backGroundImage.Init("Assets/sprite/Title.dds", 1920.0f, 1080.0f);
 }
 
-TitleUI::~TitleUI()
+UITitle::~UITitle()
 {
 }
 
-bool TitleUI::Start()
+bool UITitle::Start()
 {
 	return true;
 }
 
-void TitleUI::Update()
+void UITitle::Update()
 {
 }
 
-void TitleUI::Render(RenderContext& rc)
+void UITitle::Render(RenderContext& rc)
 {
 	//if (m_isDrawStop) {
 	//	return;

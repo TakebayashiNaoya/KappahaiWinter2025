@@ -1,25 +1,25 @@
 #include "stdafx.h"
-#include "GameOverUI.h"
+#include "UIGameOver.h"
 
-GameOverUI::GameOverUI()
+UIGameOver::UIGameOver()
 {
 	m_gameOverImage.Init("Assets/sprite/GameOver.dds", 1920.0f, 1080.0f);
 }
 
-GameOverUI::~GameOverUI()
+UIGameOver::~UIGameOver()
 {
 }
 
-bool GameOverUI::Start()
+bool UIGameOver::Start()
 {
 	return true;
 }
 
-void GameOverUI::Update()
+void UIGameOver::Update()
 {
 }
 
-void GameOverUI::Render(RenderContext& rc)
+void UIGameOver::Render(RenderContext& rc)
 {
 	//if (m_isDrawStop) {
 	//	return;

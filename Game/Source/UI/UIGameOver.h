@@ -1,9 +1,9 @@
 #pragma once
-class GameOverUI :public IGameObject
+class UIGameOver :public IGameObject
 {
 public:
-	GameOverUI();
-	~GameOverUI();
+	UIGameOver();
+	~UIGameOver();
 
 
 public:

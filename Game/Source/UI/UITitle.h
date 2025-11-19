@@ -1,9 +1,9 @@
 #pragma once
-class TitleUI :public IGameObject
+class UITitle :public IGameObject
 {
 public:
-	TitleUI();
-	~TitleUI();
+	UITitle();
+	~UITitle();
 
 
 public:
