@@ -74,7 +74,7 @@ void BattleManager::Update()
 	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, PLAYER_SEARCH_RADIUS);
 
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("TransformEnemy");
+	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
 	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, PLAYER_SEARCH_RADIUS);
 
 	// ボスエネミーにプレイヤーの座標を伝える。

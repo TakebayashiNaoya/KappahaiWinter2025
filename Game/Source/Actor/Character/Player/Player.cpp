@@ -187,7 +187,7 @@ bool Player::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
-	// ボディのゴーストオブジェクトを作成。
+	// やられ判定のコライダーを作成。
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_Player,
