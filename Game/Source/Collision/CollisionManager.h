@@ -7,7 +7,7 @@ enum EnCollisionType
 	enCollisionType_None = 0,
 	enCollisionType_Player,
 	enCollisionType_BasicEnemy,
-	enCollisionType_TransformEnemy,
+	enCollisionType_DeformEnemy,
 	enCollisionType_BossEnemy,
 	//
 	enCollisionType_Num,
@@ -95,6 +95,11 @@ private:
 	/// 「基本エネミー」と「変形エネミー」の衝突処理を行います。
 	/// </summary>
 	bool UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair);
+
+	/// <summary>
+	/// 「変形エネミー」と「ボスエネミー」の衝突処理を行います。
+	/// </summary>
+	bool UpdateHitDeformEnemyBossEnemy(CollisionPair& pair);
 
 
 private:
