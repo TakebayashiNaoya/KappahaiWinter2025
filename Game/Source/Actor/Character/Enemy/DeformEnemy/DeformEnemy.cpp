@@ -17,11 +17,13 @@ namespace
 	const std::string MODEL_PATH = "Spider/spider";
 	constexpr float MODEL_SCALE = 30.0f;
 
-	constexpr float BODY_COLLIDER_RADIUS = 40.0f;					// ゴーストオブジェクトの半径。
+	constexpr float HIT_COLLIDER_RADIUS = 40.0f;						// 当たりコライダーのサイズ。
+	constexpr float HURT_COLLIDER_RADIUS = 80.0f;						// やられコライダーのサイズ。
+
 	constexpr float COLLIDER_OFFSET = 30.0f;					// ゴーストオブジェクトのオフセット値。
 
 	constexpr float RUN_SPEED = 3.0f;								// 走る速度
-	constexpr float SLIDE_SPEED = 16.0f;							// 滑走速度
+	constexpr float SLIDE_SPEED = 15.0f;							// 滑走速度
 
 	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
 	const Vector3 SPAWN_POSITION = Vector3(100.0f, 0.0f, 2000.0f);	// スポーン座標。
@@ -87,11 +89,19 @@ bool DeformEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enDeformEnemyState_Idle);
 
+	// 攻撃判定のコライダーを作成。
+	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_DeformEnemy,
+		HIT_COLLIDER_RADIUS,
+		true
+	);
+
 	// ゴーストオブジェクトを作成。
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
-		enCollisionType_TransformEnemy,
-		BODY_COLLIDER_RADIUS,
+		enCollisionType_DeformEnemy,
+		HURT_COLLIDER_RADIUS,
 		true
 	);
 
@@ -107,6 +117,7 @@ void DeformEnemy::Update()
 
 	m_stateMachine->Update();
 
+	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hitCollider, COLLIDER_OFFSET);
 	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, COLLIDER_OFFSET);
 
 	m_modelRender.SetPosition(m_position);

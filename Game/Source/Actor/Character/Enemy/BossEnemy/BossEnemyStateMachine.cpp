@@ -52,6 +52,12 @@ namespace app
 				return true;
 			}
 
+			// 被弾していたら被弾状態へ移行。
+			if (GetOwner<BossEnemy>()->IsAttacked()) {
+				requestStateId = enBossEnemyState_Damage;
+				return true;
+			}
+
 			// プレイヤーが一定距離内に入ったら攻撃状態へ移行
 			if (GetOwner<BossEnemy>()->GetDistanceToPlayer() < RUN_RANGE) {
 				requestStateId = enBossEnemyState_Walk;
@@ -106,6 +112,12 @@ namespace app
 				return true;
 			}
 
+			// 被弾していたら被弾状態へ移行。
+			if (GetOwner<BossEnemy>()->IsAttacked()) {
+				requestStateId = enBossEnemyState_Damage;
+				return true;
+			}
+
 			// クールダウン中は状態遷移しない。
 			if (GetOwner<BossEnemy>()->IsOnCooldown()) {
 				return false;
@@ -145,6 +157,12 @@ namespace app
 			// 死亡していたら死亡状態へ移行。
 			if (GetOwner<BossEnemy>()->IsDead()) {
 				requestStateId = enBasicEnemyState_Die;
+				return true;
+			}
+
+			// 被弾していたら被弾状態へ移行。
+			if (GetOwner<BossEnemy>()->IsAttacked()) {
+				requestStateId = enBossEnemyState_Damage;
 				return true;
 			}
 
@@ -189,11 +207,19 @@ namespace app
 
 		bool RunState::RequestState(int& requestStateId)
 		{
+			// 死亡していたら死亡状態へ移行。
 			if (GetOwner<BossEnemy>()->IsDead()) {
 				requestStateId = enBasicEnemyState_Die;
 				return true;
 			}
 
+			// 被弾していたら被弾状態へ移行。
+			if (GetOwner<BossEnemy>()->IsAttacked()) {
+				requestStateId = enBossEnemyState_Damage;
+				return true;
+			}
+
+			// プレイヤーが一定距離内に入ったら攻撃状態へ移行
 			if (GetOwner<BossEnemy>()->GetDistanceToPlayer() < ATTACK_RANGE) {
 				requestStateId = enBossEnemyState_Attack;
 				return true;
@@ -227,17 +253,23 @@ namespace app
 
 		bool AttackState::RequestState(int& requestStateId)
 		{
+			// 死亡していたら死亡状態へ移行。
 			if (GetOwner<BossEnemy>()->IsDead()) {
 				requestStateId = enBossEnemyState_Dead;
 				return true;
 			}
 
-			if (GetOwner<BossEnemy>()->IsPlayingAnimation()) {
-				return false;
+			// 被弾していたら被弾状態へ移行。
+			if (GetOwner<BossEnemy>()->IsAttacked()) {
+				requestStateId = enBossEnemyState_Damage;
+				return true;
 			}
 
-			requestStateId = enBossEnemyState_Cooldown;
-			return true;
+			// 攻撃アニメーションが終了したらクールダウン状態へ移行。
+			if (GetOwner<BossEnemy>()->IsPlayingAnimation() == false) {
+				requestStateId = enBossEnemyState_Cooldown;
+				return true;
+			}
 
 			return false;
 		}
@@ -257,25 +289,31 @@ namespace app
 
 		void DamageState::Update()
 		{
-			GetOwner<BossEnemy>()->ModelRotation();
 		}
 
 
 		void DamageState::Exit()
 		{
+			// 攻撃されたフラグをリセット。
+			GetOwner<BossEnemy>()->SetIsAttacked(false);
 		}
 
 
 		bool DamageState::RequestState(int& requestStateId)
 		{
+			// 死亡していたら死亡状態へ移行。
 			if (GetOwner<BossEnemy>()->IsDead()) {
 				requestStateId = enBossEnemyState_Dead;
 				return true;
 			}
-			// ダメージアニメーションが終了したら待機状態へ移行
-			// ここでは仮に常にアニメーションが終了したとみなす
-			requestStateId = enBossEnemyState_Idle;
-			return true;
+
+			// ダメージアニメーションが終了したら待機状態へ移行。
+			if (GetOwner<BossEnemy>()->IsPlayingAnimation() == false) {
+				requestStateId = enBossEnemyState_Idle;
+				return true;
+			}
+
+			return false;
 		}
 
 
