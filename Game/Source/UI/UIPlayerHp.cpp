@@ -3,9 +3,9 @@
 
 namespace
 {
-	const Vector3 DISPLAY_POSITION = Vector3(750.0f, 350.0f, 0.0f);
-	const float SPRITE_SIZE_W = 400.0f;
-	const float SPRITE_SIZE_H = 400.0f;
+	const Vector3 DISPLAY_POSITION = Vector3(800.0f, 400.0f, 0.0f);
+	const float SPRITE_SIZE_W = 300.0f;
+	const float SPRITE_SIZE_H = 300.0f;
 }
 
 UIPlayerHp::UIPlayerHp()
