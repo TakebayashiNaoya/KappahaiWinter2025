@@ -35,11 +35,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// @todo for test
 	//g_renderingEngine->DisableTonemap();
 
+	//g_renderingEngine->DisableRaytracing();
+
 	//Gameクラスのオブジェクトを作成。
 	auto* game = NewGO<Game>(0, "Game");
 
 	//当たり判定を可視化する。
-
 	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//////////////////////////////////////
