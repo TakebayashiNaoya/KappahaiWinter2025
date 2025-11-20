@@ -1,11 +1,11 @@
 #pragma once
 #include "Source/Actor/Character/Types.h"
 
-class UIPlayerHp : public IGameObject
+class UIPlayerLife : public IGameObject
 {
 public:
-	UIPlayerHp();
-	~UIPlayerHp();
+	UIPlayerLife();
+	~UIPlayerLife();
 
 	void SetPlayerHp(int hp)
 	{

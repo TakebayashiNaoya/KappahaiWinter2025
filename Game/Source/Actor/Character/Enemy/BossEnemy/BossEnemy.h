@@ -13,8 +13,6 @@ namespace app {
 class BossEnemy : public Enemy
 {
 public:
-	BossEnemy();
-
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
 	/// StateMachineでアニメを切り替えるために使用します。
@@ -29,6 +27,17 @@ public:
 		enAnimationClip_Dead,	// 死亡アニメーション。
 		enAnimationClip_Num,
 	};
+
+
+public:
+	/// <summary>
+	/// 最大ライフを取得します。
+	/// </summary>
+	/// <returns> 最大ライフ。</returns>
+	int GetMaxLife() const
+	{
+		return m_maxLife;
+	}
 
 	/// <summary>
 	/// プレイヤーに向かって走ります。
@@ -61,20 +70,25 @@ public:
 	/// </summary>
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
 
+
+public:
+	BossEnemy();
+
+
 private:
-	bool Start() override final;
-	void Update() override final;
-	void Render(RenderContext& rc) override final;
-
-
 	Vector3 m_lastPlayerPos = Vector3::Zero;	// 最後にプレイヤーを見た位置。
 	float m_cooldownTimer = 0.0f;				// クールダウンタイマー。
-
-	//CollisionObject* m_attackCollider = nullptr;	// 攻撃コライダー。
+	int m_maxLife = 0;							// 最大体力。
 
 	// ボスエネミーのステートマシン。
 	std::unique_ptr<app::bossEnemy::BossEnemyStateMachine> m_stateMachine;
 
 	// クラススコープで宣言し、cppで定義。
 	static const Character::AnimationOption BOSS_ENEMY_ANIMATION_OPTIONS[];
+
+
+private:
+	bool Start() override final;
+	void Update() override final;
+	void Render(RenderContext& rc) override final;
 };

@@ -1,7 +1,8 @@
 #pragma once
 
-class UIPlayerHp;
+class UIPlayerLife;
 class UIDamageFlash;
+class UIBossLife;
 
 class UIInGame :public IGameObject
 {
@@ -22,7 +23,8 @@ private:
 	int m_lifeCounts = 0;	//ライフの数。
 	FontRender m_lifeFR;	//ライフの数を表示するフォントレンダー。
 
-	UIPlayerHp* m_playerHpUI = nullptr;
+	UIPlayerLife* m_playerHpUI = nullptr;
 	UIDamageFlash* m_damageFlashUI = nullptr;
+	UIBossLife* m_bossHpUI = nullptr;
 };
 

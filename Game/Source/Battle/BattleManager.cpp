@@ -5,8 +5,9 @@
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
 #include "Source/Actor/Character/Enemy/BossEnemy/BossEnemy.h"
-#include "Source/UI/UIPlayerHp.h"
+#include "Source/UI/UIPlayerLife.h"
 #include "Source/UI/UIDamageFlash.h"
+#include "Source/UI/UIBossLife.h"
 
 
 namespace
@@ -56,17 +57,20 @@ void BattleManager::Update()
 		return;
 	}
 
+
 	// キャラの数は少なく、FindGOs内で最適化されているため、毎フレーム取得しても問題ないと判断。
 	Player* player = FindGO<Player>("Player");
 	if (player == nullptr) {
 		return;
 	}
 
+
 	// プレイヤーのライフをUIに反映。
-	UIPlayerHp* playerHpUI = FindGO<UIPlayerHp>("UIPlayerHp");
+	UIPlayerLife* playerHpUI = FindGO<UIPlayerLife>("UIPlayerLife");
 	if (playerHpUI) {
 		playerHpUI->SetPlayerHp(player->GetLife());
 	}
+
 
 	// ダメージフラッシュUIにプレイヤーのダメージ状態を反映。
 	UIDamageFlash* damageFlashUI = FindGO<UIDamageFlash>("UIDamageFlash");
@@ -74,26 +78,29 @@ void BattleManager::Update()
 		damageFlashUI->SetPlayerHp(player->GetLife());
 	}
 
-	//// インゲームUIにライフを反映。
-	//UIInGame* inGameUI = FindGO<UIInGame>("UIInGame");
-	//if (inGameUI) {
-	//	if (player) {
-	//		inGameUI->SetLife(player->GetLife());
-	//	}
-	//}
 
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
 	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
 	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, PLAYER_SEARCH_RADIUS);
 
+
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
 	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
 	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, PLAYER_SEARCH_RADIUS);
 
+
 	// ボスエネミーにプレイヤーの座標を伝える。
 	BossEnemy* bossEnemy = FindGO<BossEnemy>("BossEnemy");
-	if (bossEnemy) {
+	if (bossEnemy && player) {
 		bossEnemy->SetIsFoundPlayer(true, player->GetPosition());
+	}
+
+
+	// ボスのライフをUIに反映。
+	UIBossLife* bossHpUI = FindGO<UIBossLife>("UIBossLife");
+	if (bossHpUI && bossEnemy) {
+		bossHpUI->SetMaxLife(bossEnemy->GetMaxLife());
+		bossHpUI->SetCurrentLife(bossEnemy->GetLife());
 	}
 }
 

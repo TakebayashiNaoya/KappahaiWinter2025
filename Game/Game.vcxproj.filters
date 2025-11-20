@@ -120,9 +120,6 @@
     <ClCompile Include="Source\UI\UITitle.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\UIPlayerHp.cpp">
-      <Filter>Source\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\UI\UIInGame.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
@@ -135,7 +132,10 @@
     <ClCompile Include="Source\UI\UIDamageFlash.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\UI\UIBossHp.cpp">
+    <ClCompile Include="Source\UI\UIPlayerLife.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIBossLife.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -211,9 +211,6 @@
     <ClInclude Include="Source\UI\UITitle.h">
       <Filter>Source\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\UIPlayerHp.h">
-      <Filter>Source\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Source\UI\UIInGame.h">
       <Filter>Source\UI</Filter>
     </ClInclude>
@@ -226,7 +223,10 @@
     <ClInclude Include="Source\UI\UIDamageFlash.h">
       <Filter>Source\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\UI\UIBossHp.h">
+    <ClInclude Include="Source\UI\UIPlayerLife.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIBossLife.h">
       <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>

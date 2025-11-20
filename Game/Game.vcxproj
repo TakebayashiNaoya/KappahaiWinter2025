@@ -246,12 +246,12 @@
     <ClCompile Include="Source\Scene\InGame.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\Title.cpp" />
-    <ClCompile Include="Source\UI\UIBossHp.cpp" />
+    <ClCompile Include="Source\UI\UIBossLife.cpp" />
     <ClCompile Include="Source\UI\UIDamageFlash.cpp" />
     <ClCompile Include="Source\UI\UIGameClear.cpp" />
     <ClCompile Include="Source\UI\UIGameOver.cpp" />
     <ClCompile Include="Source\UI\UIInGame.cpp" />
-    <ClCompile Include="Source\UI\UIPlayerHp.cpp" />
+    <ClCompile Include="Source\UI\UIPlayerLife.cpp" />
     <ClCompile Include="Source\UI\UITitle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -283,12 +283,12 @@
     <ClInclude Include="Source\Scene\InGame.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\Title.h" />
-    <ClInclude Include="Source\UI\UIBossHp.h" />
+    <ClInclude Include="Source\UI\UIBossLife.h" />
     <ClInclude Include="Source\UI\UIDamageFlash.h" />
     <ClInclude Include="Source\UI\UIGameClear.h" />
     <ClInclude Include="Source\UI\UIGameOver.h" />
     <ClInclude Include="Source\UI\UIInGame.h" />
-    <ClInclude Include="Source\UI\UIPlayerHp.h" />
+    <ClInclude Include="Source\UI\UIPlayerLife.h" />
     <ClInclude Include="Source\UI\UITitle.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

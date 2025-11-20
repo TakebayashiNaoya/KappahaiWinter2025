@@ -19,8 +19,9 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
+	constexpr int MAX_LIFE = 10;										// 最大体力。
 
+	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
 	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
 	constexpr float HURT_COLLIDER_RADIUS = 300.0f;						// やられコライダーのサイズ。
 
@@ -96,7 +97,7 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	else if (wcscmp(eventName, L"attack_end") == 0)
 	{
 		//攻撃用コライダーを削除。
-		CollisionHitManager::GetInstance()->DeleteCollider(m_attackCollider);
+		m_attackCollider = CollisionHitManager::GetInstance()->DeleteCollider(m_attackCollider);
 	}
 }
 
@@ -111,7 +112,8 @@ bool BossEnemy::Start()
 
 	ResetRotation();
 
-	m_life = 1;
+	m_maxLife = MAX_LIFE;
+	InitLife(m_maxLife);
 
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
