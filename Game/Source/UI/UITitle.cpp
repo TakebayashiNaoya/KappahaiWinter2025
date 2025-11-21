@@ -21,8 +21,5 @@ void UITitle::Update()
 
 void UITitle::Render(RenderContext& rc)
 {
-	//if (m_isDrawStop) {
-	//	return;
-	//}
 	m_backGroundImage.Draw(rc);
 }

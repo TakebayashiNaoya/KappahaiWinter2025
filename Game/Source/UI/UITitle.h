@@ -6,13 +6,6 @@ public:
 	~UITitle();
 
 
-public:
-	//void SetIsDraw(const bool isDraw)
-	//{
-	//	m_isDrawStop = isDraw;
-	//}
-
-
 private:
 	bool Start() override final;
 	void Update() override final;
@@ -21,6 +14,5 @@ private:
 
 private:
 	SpriteRender m_backGroundImage;
-	//bool m_isDrawStop = false;
 };
 
