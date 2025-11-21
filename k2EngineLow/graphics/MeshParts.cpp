@@ -60,7 +60,7 @@ namespace nsK2EngineLow {
 				computedAnimationVertexBuffer
 			);
 			meshNo++;
-		});
+			});
 		//共通定数バッファの作成。
 		m_commonConstantBuffer.Init(sizeof(SConstantBuffer), nullptr);
 		//ユーザー拡張用の定数バッファを作成。
@@ -157,7 +157,7 @@ namespace nsK2EngineLow {
 		}
 		*/
 		m_computedAnimationVertexBuffer = computedAnimationVertexBuffer;
-		
+
 		auto SetSkinFlag = [&](int index) {
 			if (tkmMesh.vertexBuffer[index].skinWeights.x > 0.0f) {
 				//スキンがある。
@@ -167,7 +167,7 @@ namespace nsK2EngineLow {
 				//スキンなし。
 				mesh->skinFlags.push_back(0);
 			}
-		};
+			};
 		//2. インデックスバッファを作成。
 		if (!tkmMesh.indexBuffer16Array.empty()) {
 			//インデックスのサイズが2byte
@@ -200,11 +200,12 @@ namespace nsK2EngineLow {
 		//3. マテリアルを作成。
 		auto& materialBank = GetMaterialBank();
 		mesh->m_materials.reserve(tkmMesh.materials.size());
+		static constexpr int MAX_PATH_TEMP = 512;
 		for (auto& tkmMat : tkmMesh.materials) {
-			char materiayKey[MAX_PATH];
+			char materiayKey[MAX_PATH_TEMP];
 			sprintf_s(
 				materiayKey,
-				MAX_PATH,
+				MAX_PATH_TEMP,
 				"%s, %s, %s, %s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %s, %s, %s",
 				fxFilePath,
 				vsEntryPointFunc,
@@ -311,19 +312,19 @@ namespace nsK2EngineLow {
 		int descriptorHeapNo = 0;
 		int meshNo = 0;
 		for (auto& mesh : m_meshs) {
-			if (m_computedAnimationVertexBuffer){
+			if (m_computedAnimationVertexBuffer) {
 				// 頂点バッファの事前計算処理が指定されているので、計算済み頂点バッファを取得する。
 				rc.SetVertexBuffer(m_computedAnimationVertexBuffer->GetAnimatedVertexBuffer(meshNo));
 			}
 			else {
 				rc.SetVertexBuffer(mesh->m_vertexBuffer);
 			}
-			
+
 			//マテリアルごとにドロー。
 			for (int matNo = 0; matNo < mesh->m_materials.size(); matNo++) {
 				//このマテリアルが貼られているメッシュの描画開始。
 				mesh->m_materials[matNo]->BeginRender(
-					rc, 
+					rc,
 					mesh->skinFlags[matNo]
 				);
 				//2. ディスクリプタヒープを設定。

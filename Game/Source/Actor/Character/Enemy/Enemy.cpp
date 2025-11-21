@@ -6,6 +6,7 @@ Enemy::~Enemy()
 {
 	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
 	m_hitCollider = CollisionHitManager::DeleteCollider(m_hitCollider);
+	m_attackCollider = CollisionHitManager::DeleteCollider(m_attackCollider);
 }
 
 void Enemy::SetAttackDirection(const Vector3& direction)

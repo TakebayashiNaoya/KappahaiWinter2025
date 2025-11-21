@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "UIInGame.h"
-#include "UIPlayerHp.h"
+#include "UIPlayerLife.h"
 #include "UIDamageFlash.h"
+#include "UIBossLife.h"
+#include "UIControls.h"
 
 namespace
 {
@@ -15,14 +17,18 @@ UIInGame::UIInGame()
 
 UIInGame::~UIInGame()
 {
-	DeleteGO(m_playerHpUI);
-	DeleteGO(m_damageFlashUI);
+	DeleteGO(m_uiPlayerLife);
+	DeleteGO(m_uiDamageFlash);
+	DeleteGO(m_uiBossLife);
+	DeleteGO(m_uiControls);
 }
 
 bool UIInGame::Start()
 {
-	m_playerHpUI = NewGO<UIPlayerHp>(0, "UIPlayerHp");
-	m_damageFlashUI = NewGO<UIDamageFlash>(0, "UIDamageFlash");
+	m_uiPlayerLife = NewGO<UIPlayerLife>(0, "UIPlayerLife");
+	m_uiDamageFlash = NewGO<UIDamageFlash>(0, "UIDamageFlash");
+	m_uiBossLife = NewGO<UIBossLife>(0, "UIBossLife");
+	m_uiControls = NewGO<UIControls>(0, "UIControls");
 
 
 	//m_lifeFR.SetPosition(FONT_POSITION);	//”z’uˆÊ’u
