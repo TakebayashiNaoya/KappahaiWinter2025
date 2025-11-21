@@ -2,7 +2,6 @@
 /// プレイヤーを管理するクラス。
 /// </summary>
 #pragma once
-#include "Source/Actor/Character/Types.h"
 #include "Source/Actor/Character/Character.h"
 
 namespace app {
