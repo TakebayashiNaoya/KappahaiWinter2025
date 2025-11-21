@@ -235,6 +235,7 @@
     <ClCompile Include="Source\Actor\Character\Enemy\Enemy.cpp" />
     <ClCompile Include="Source\Actor\Character\Player\Player.cpp" />
     <ClCompile Include="Source\Actor\Character\Player\PlayerStateMachine.cpp" />
+    <ClCompile Include="Source\Actor\Character\Player\TitlePlayer.cpp" />
     <ClCompile Include="Source\Actor\Character\StateMachine.cpp" />
     <ClCompile Include="Source\Actor\Character\Types.cpp" />
     <ClCompile Include="Source\Actor\Stage\BackGround.cpp" />
@@ -273,6 +274,7 @@
     <ClInclude Include="Source\Actor\Character\Enemy\Enemy.h" />
     <ClInclude Include="Source\Actor\Character\Player\Player.h" />
     <ClInclude Include="Source\Actor\Character\Player\PlayerStateMachine.h" />
+    <ClInclude Include="Source\Actor\Character\Player\TitlePlayer.h" />
     <ClInclude Include="Source\Actor\Character\StateMachine.h" />
     <ClInclude Include="Source\Actor\Character\Types.h" />
     <ClInclude Include="Source\Actor\Stage\BackGround.h" />
