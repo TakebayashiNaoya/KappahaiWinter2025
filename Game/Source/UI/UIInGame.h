@@ -3,6 +3,7 @@
 class UIPlayerLife;
 class UIDamageFlash;
 class UIBossLife;
+class UIControls;
 
 class UIInGame :public IGameObject
 {
@@ -23,8 +24,9 @@ private:
 	int m_lifeCounts = 0;	//ライフの数。
 	FontRender m_lifeFR;	//ライフの数を表示するフォントレンダー。
 
-	UIPlayerLife* m_playerHpUI = nullptr;
-	UIDamageFlash* m_damageFlashUI = nullptr;
-	UIBossLife* m_bossHpUI = nullptr;
+	UIPlayerLife* m_uiPlayerLife = nullptr;
+	UIDamageFlash* m_uiDamageFlash = nullptr;
+	UIBossLife* m_uiBossLife = nullptr;
+	UIControls* m_uiControls = nullptr;
 };
 

@@ -138,6 +138,9 @@
     <ClCompile Include="Source\UI\UIBossLife.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\UIControls.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -227,6 +230,9 @@
       <Filter>Source\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\UI\UIBossLife.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIControls.h">
       <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
