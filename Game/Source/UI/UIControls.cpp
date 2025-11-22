@@ -32,10 +32,10 @@ bool UIControls::Start()
 	m_dashImage.Init("Assets/sprite/RabbitDash.dds", DASH_IMAGE_SIZE.x, DASH_IMAGE_SIZE.y);
 	m_dashImage.SetPosition(DASH_IMAGE_POS);
 	m_dashImage.Update();
-	m_buttonA.Init("Assets/sprite/ButtonA.dds", BUTTON_A_SIZE.x, BUTTON_A_SIZE.y);
+	m_buttonA.Init("Assets/sprite/ButtonA_2.dds", BUTTON_A_SIZE.x, BUTTON_A_SIZE.y);
 	m_buttonA.SetPosition(BUTTON_A_POS);
 	m_buttonA.Update();
-	m_buttonB.Init("Assets/sprite/ButtonB.dds", BUTTON_B_SIZE.x, BUTTON_B_SIZE.y);
+	m_buttonB.Init("Assets/sprite/ButtonB_2.dds", BUTTON_B_SIZE.x, BUTTON_B_SIZE.y);
 	m_buttonB.SetPosition(BUTTON_B_POS);
 	m_buttonB.Update();
 

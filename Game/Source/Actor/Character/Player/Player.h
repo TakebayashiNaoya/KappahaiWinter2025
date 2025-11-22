@@ -2,7 +2,6 @@
 /// プレイヤーを管理するクラス。
 /// </summary>
 #pragma once
-#include "Source/Actor/Character/Types.h"
 #include "Source/Actor/Character/Character.h"
 
 namespace app {
@@ -98,13 +97,23 @@ public:
 	void StompJump();
 
 
-private:
-	bool Start()override final;
-	void Update()override final;
-	void Render(RenderContext& rc)override final;
+protected:
+	/// <summary>
+	/// 移動方向を返します。
+	/// </summary>
+	/// <returns> 移動方向。</returns>
+	const Vector3 ComputeMoveDirection()const override;
 
 
+protected:
 	Quaternion	m_xzAdditionalRot;					// 毎フレームのXZ軸回転角度（カメラの回転に使用）。
+
+
+private:
+	bool Start()override;
+	void Update()override;
+	void Render(RenderContext& rc)override;
+
 
 	/// ダメージ関連。
 	Vector3 m_knockBackDirection = Vector3::Zero;	// ノックバック方向。
@@ -118,12 +127,6 @@ private:
 
 	// クラススコープで宣言し、cppで定義。
 	static const Character::AnimationOption PLAYER_ANIMATION_OPTIONS[];
-
-	/// <summary>
-	/// 移動方向を返します。
-	/// </summary>
-	/// <returns> 移動方向。</returns>
-	const Vector3 ComputeMoveDirection()const override final;
 
 	/// <summary>
 	/// 一定時間が経過したら無敵状態を解除します。

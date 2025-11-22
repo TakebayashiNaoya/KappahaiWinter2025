@@ -1,7 +1,7 @@
 #pragma once
 #include "Source/Scene/SceneManager.h"
 
-class BackGround;
+class FirstStage;
 class Player;
 class BasicEnemy;
 class DeformEnemy;
@@ -24,7 +24,7 @@ private:
 
 
 private:
-	BackGround* m_backGround = nullptr;
+	FirstStage* m_firstStage = nullptr;
 	Player* m_player = nullptr;
 	BasicEnemy* m_basicEnemy = nullptr;
 	DeformEnemy* m_deformEnemy = nullptr;

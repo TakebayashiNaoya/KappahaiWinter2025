@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "InGame.h"
-#include "Source/Actor/Stage/BackGround.h"
+#include "Source/Actor/Stage/FirstStage.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
@@ -21,7 +21,7 @@ InGame::~InGame()
 {
 	DeleteGO(m_battleManager);
 	DeleteGO(m_skyCube);
-	DeleteGO(m_backGround);
+	DeleteGO(m_firstStage);
 	DeleteGO(m_gameCamera);
 	DeleteGO(m_basicEnemy);
 	DeleteGO(m_deformEnemy);
@@ -37,7 +37,7 @@ bool InGame::Start()
 	m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
 	m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
 	InitSky();
-	m_backGround = NewGO<FirstPlanet>(0, "BackGround");
+	m_firstStage = NewGO<FirstStage>(0, "FirstStage");
 	m_player = NewGO<Player>(0, "Player");
 	m_basicEnemy = NewGO<BasicEnemy>(0, "BasicEnemy");
 	m_deformEnemy = NewGO<DeformEnemy>(0, "DeformEnemy");
@@ -52,7 +52,7 @@ void InGame::Update()
 {
 	//@NOTE: デバッグ用、Bボタンで即死。
 	//if (g_pad[0]->IsTrigger(enButtonB)) {
-	//	m_player->SetIsDead(true);
+	//	m_titlePlayer->SetIsDead(true);
 	//	m_gameCamera->SetPlayerTarget(nullptr);
 	//}
 	// プレイヤーが死亡したらゲームオーバーへ移行。

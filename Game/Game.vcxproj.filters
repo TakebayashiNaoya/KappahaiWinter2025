@@ -66,9 +66,6 @@
     <ClCompile Include="Source\Actor\Character\Types.cpp">
       <Filter>Source\Actor\Character</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Actor\Stage\BackGround.cpp">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Camera\GameCamera.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
@@ -141,6 +138,21 @@
     <ClCompile Include="Source\UI\UIControls.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Actor\Character\Player\TitlePlayer.cpp">
+      <Filter>Source\Actor\Character\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera\TitleCamera.cpp">
+      <Filter>Source\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Stage\TitleStage.cpp">
+      <Filter>Source\Actor\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Stage\StageBase.cpp">
+      <Filter>Source\Actor\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Stage\FirstStage.cpp">
+      <Filter>Source\Actor\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -159,9 +171,6 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Character\Types.h">
       <Filter>Source\Actor\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Actor\Stage\BackGround.h">
-      <Filter>Source\Actor\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\Camera\GameCamera.h">
       <Filter>Source\Camera</Filter>
@@ -234,6 +243,21 @@
     </ClInclude>
     <ClInclude Include="Source\UI\UIControls.h">
       <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Character\Player\TitlePlayer.h">
+      <Filter>Source\Actor\Character\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera\TitleCamera.h">
+      <Filter>Source\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Stage\TitleStage.h">
+      <Filter>Source\Actor\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Stage\StageBase.h">
+      <Filter>Source\Actor\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Stage\FirstStage.h">
+      <Filter>Source\Actor\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
