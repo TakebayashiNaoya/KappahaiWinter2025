@@ -3,7 +3,9 @@
 
 UITitle::UITitle()
 {
-	m_backGroundImage.Init("Assets/sprite/Title.dds", 1920.0f, 1080.0f);
+	m_backGroundImage.Init("Assets/sprite/TitleLogo.dds", 1000.0f, 600.0f);
+	m_backGroundImage.SetPosition(Vector3(-400.0f, 100.0f, 0.0f));
+	m_backGroundImage.Update();
 }
 
 UITitle::~UITitle()
