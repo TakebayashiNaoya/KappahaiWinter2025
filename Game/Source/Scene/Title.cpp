@@ -6,6 +6,7 @@
 #include "Source/Camera/TitleCamera.h"
 #include "Source/Actor/Stage/TitleStage.h"
 #include "Source/UI/UITitle.h"
+#include "LoadingScreen.h"
 
 
 Title::Title()
@@ -32,7 +33,7 @@ Title::~Title()
 bool Title::Start()
 {
 	//m_titleUI = NewGO<UITitle>(0, "UITitle");
-
+	LoadingScreen::ChangeState(LoadingScreen::enState_Open);
 
 	return true;
 }
@@ -42,7 +43,11 @@ void Title::Update()
 {
 	// Aボタンが押されたらインゲームへ移行。
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		//m_titleUI->SetIsDraw(true);
+		LoadingScreen::StartLoading();
+	}
+
+	// Loadingになったらシーン切り替えをリクエスト。
+	if (LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
 		SceneManager::GetInstance()->ChangeScene(SceneID::InGame);
 	}
 }

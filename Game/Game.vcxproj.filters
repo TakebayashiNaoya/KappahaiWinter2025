@@ -153,6 +153,7 @@
     <ClCompile Include="Source\Actor\Stage\FirstStage.cpp">
       <Filter>Source\Actor\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="LoadingScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -259,5 +260,6 @@
     <ClInclude Include="Source\Actor\Stage\FirstStage.h">
       <Filter>Source\Actor\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="LoadingScreen.h" />
   </ItemGroup>
 </Project>

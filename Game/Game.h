@@ -3,6 +3,7 @@
 
 
 class SceneManagerObject;
+class LoadingScreenObject;
 
 
 class Game : public IGameObject
@@ -20,4 +21,5 @@ private:
 
 private:
 	SceneManagerObject* m_sceneManager = nullptr;
+	LoadingScreenObject* m_loadingScreen = nullptr;
 };
