@@ -22,6 +22,8 @@ private:
 	bool Start() override final;
 	void Update() override final;
 
+	void InitObjects();
+
 
 private:
 	FirstStage* m_firstStage = nullptr;
@@ -43,5 +45,6 @@ private:
 
 	SkyCube* m_skyCube = nullptr;		//スカイキューブ。
 	int m_skyCubeType = enSkyCubeType_Night;
+	int m_loadingState = 0;
 };
 

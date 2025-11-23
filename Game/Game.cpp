@@ -1,17 +1,20 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "Source/Scene/SceneManager.h"
+#include "LoadingScreen.h"
 
 
 Game::Game()
 {
 	m_sceneManager = NewGO<SceneManagerObject>(0, "SceneManagerObject");
+	m_loadingScreen = NewGO<LoadingScreenObject>(0, "LoadingScreenObject");
 }
 
 
 Game::~Game()
 {
 	DeleteGO(m_sceneManager);
+	DeleteGO(m_loadingScreen);
 }
 
 

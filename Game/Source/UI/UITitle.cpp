@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UITitle.h"
+#include "LoadingScreen.h"
 
 UITitle::UITitle()
 {
@@ -19,9 +20,15 @@ bool UITitle::Start()
 
 void UITitle::Update()
 {
+	if (LoadingScreen::GetState() == LoadingScreen::enState_Close)
+	{
+		DeleteGO(this);
+	}
 }
 
 void UITitle::Render(RenderContext& rc)
 {
-	m_backGroundImage.Draw(rc);
+	if (LoadingScreen::GetState() == LoadingScreen::enState_Opened) {
+		m_backGroundImage.Draw(rc);
+	}
 }
