@@ -32,8 +32,7 @@ Title::~Title()
 
 bool Title::Start()
 {
-	//m_titleUI = NewGO<UITitle>(0, "UITitle");
-	LoadingScreen::ChangeState(LoadingScreen::enState_Open);
+	LoadingScreen::FinishLoading();
 
 	return true;
 }
@@ -43,7 +42,14 @@ void Title::Update()
 {
 	// Aボタンが押されたらインゲームへ移行。
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		LoadingScreen::StartLoading();
+		// ロードオープン中にボタンを押したら、ロード完了へ。
+		if (LoadingScreen::GetState() == LoadingScreen::enState_Open) {
+			LoadingScreen::ChangeState(LoadingScreen::enState_Opened);
+		}
+		// ロード完了時にボタンを押したら、ロード開始へ。
+		else if (LoadingScreen::GetState() == LoadingScreen::enState_Opened) {
+			LoadingScreen::StartLoading();
+		}
 	}
 
 	// Loadingになったらシーン切り替えをリクエスト。
