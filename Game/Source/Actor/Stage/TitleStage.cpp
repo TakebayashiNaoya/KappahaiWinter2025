@@ -4,7 +4,7 @@
 
 TitleStage::TitleStage()
 {
-	m_filePath = "TitleStage";
+	m_filePath = "TitlePlanet/TitlePlanet";
 	m_position = Vector3(0.0f, 0.0f, 0.0f);
 	InitModel(m_filePath, m_position);
 }
