@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Title.h"
-#include "InGame.h"
+#include "FirstStage.h"
 #include "Source/UI/UITitle.h"
 #include "Source/Actor/Character/Player/TitlePlayer.h"
 #include "Source/Camera/TitleCamera.h"
-#include "Source/Actor/Stage/TitleStage.h"
+#include "Source/Actor/Planet/TitlePlanet.h"
 #include "Source/UI/UITitle.h"
 #include "LoadingScreen.h"
 
@@ -13,7 +13,7 @@ Title::Title()
 {
 	m_titlePlayer = NewGO<TitlePlayer>(0, "TitlePlayer");
 	m_titleCamera = NewGO<TitleCamera>(0, "TitleCamera");
-	m_titleStage = NewGO<TitleStage>(0, "TitleStage");
+	m_titleStage = NewGO<TitlePlanet>(0, "TitlePlanet");
 	m_uiTitle = NewGO<UITitle>(0, "UITitle");
 	InitSky();
 }
@@ -54,7 +54,7 @@ void Title::Update()
 
 	// Loadingになったらシーン切り替えをリクエスト。
 	if (LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
-		SceneManager::GetInstance()->ChangeScene(SceneID::InGame);
+		SceneManager::GetInstance()->ChangeScene(SceneID::FirstStage);
 	}
 }
 

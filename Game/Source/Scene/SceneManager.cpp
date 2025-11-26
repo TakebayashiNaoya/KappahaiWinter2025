@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SceneManager.h"
 #include "Title.h"
-#include "InGame.h"
+#include "FirstStage.h"
 #include "GameClear.h"
 #include "GameOver.h"
 
@@ -17,8 +17,8 @@ namespace
 		{
 		case SceneID::Title:
 			return new Title();
-		case SceneID::InGame:
-			return new InGame();
+		case SceneID::FirstStage:
+			return new FirstStage();
 		case SceneID::GameClear:
 			return new GameClear();
 		case SceneID::GameOver:

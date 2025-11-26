@@ -16,9 +16,6 @@
     <Filter Include="Source\Actor\Character">
       <UniqueIdentifier>{fc3a4f6a-5831-4768-8361-1ebf3bda2dc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Actor\Stage">
-      <UniqueIdentifier>{0e8cea44-a6cd-415b-8d6a-5ecebe31a746}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Actor\Character\Player">
       <UniqueIdentifier>{e0abec5f-f53c-4c02-a474-21ad517c480c}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,15 @@
     </Filter>
     <Filter Include="Source\Actor\Character\Enemy\DeformEnemy">
       <UniqueIdentifier>{4901d8ae-2e0f-4a18-878d-07faa1a1ec1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Object">
+      <UniqueIdentifier>{f49fff38-ec80-492b-a69b-b901ec1a01eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Object\Rocket">
+      <UniqueIdentifier>{322ab673-033e-426c-8f2d-79f7ec37b1c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Planet">
+      <UniqueIdentifier>{0e8cea44-a6cd-415b-8d6a-5ecebe31a746}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,9 +105,6 @@
     <ClCompile Include="Source\Scene\Title.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\InGame.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.cpp">
       <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
     </ClCompile>
@@ -144,16 +147,28 @@
     <ClCompile Include="Source\Camera\TitleCamera.cpp">
       <Filter>Source\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Actor\Stage\TitleStage.cpp">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Actor\Stage\StageBase.cpp">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Actor\Stage\FirstStage.cpp">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="LoadingScreen.cpp" />
+    <ClCompile Include="Source\Actor\Object\Rocket\Rocket.cpp">
+      <Filter>Source\Actor\Object\Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Actor.cpp">
+      <Filter>Source\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Planet\PlanetBase.cpp">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Planet\TitlePlanet.cpp">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Planet\FirstPlanet.cpp">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\FirstStage.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\BossStage.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -206,9 +221,6 @@
     <ClInclude Include="Source\Scene\Title.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\InGame.h">
-      <Filter>Source\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Actor\Character\Enemy\BossEnemy\BossEnemy.h">
       <Filter>Source\Actor\Character\Enemy\BossEnemy</Filter>
     </ClInclude>
@@ -251,15 +263,27 @@
     <ClInclude Include="Source\Camera\TitleCamera.h">
       <Filter>Source\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Actor\Stage\TitleStage.h">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Actor\Stage\StageBase.h">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Actor\Stage\FirstStage.h">
-      <Filter>Source\Actor\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="LoadingScreen.h" />
+    <ClInclude Include="Source\Actor\Object\Rocket\Rocket.h">
+      <Filter>Source\Actor\Object\Rocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Actor.h">
+      <Filter>Source\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Planet\FirstPlanet.h">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Planet\PlanetBase.h">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Planet\TitlePlanet.h">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\FirstStage.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\BossStage.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

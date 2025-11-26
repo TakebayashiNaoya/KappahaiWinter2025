@@ -19,7 +19,7 @@ public:
 enum class SceneID : uint8_t
 {
 	Title = 0,
-	InGame,
+	FirstStage,
 	GameClear,
 	GameOver,
 	None = 0xff	// 0xで16進数。ffは10進数で255。
