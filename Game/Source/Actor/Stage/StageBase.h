@@ -1,8 +1,12 @@
+
+
 /// <summary>
 /// ステージ（惑星）の基底クラス。
 /// </summary>
 #pragma once
-class StageBase : public IGameObject
+#include "Source/Actor/Actor.h" 
+
+class StageBase : public Actor
 {
 public:
 	StageBase();
@@ -19,9 +23,6 @@ protected:
 	/// </summary>
 	void InitModel(const std::string& filePath, const Vector3& position);
 
-	ModelRender m_modelRender;					// モデルレンダー。
 	std::string m_filePath;						// モデルのファイル名。
-	Vector3 m_position = Vector3::Zero;			// モデルの座標。
-	Quaternion m_rotation;						// 惑星の回転。
 	PhysicsStaticObject physicsStaticObject;	// モデルの当たり判定。
 };

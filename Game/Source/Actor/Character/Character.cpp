@@ -179,7 +179,10 @@ void Character::InitModel(const size_t count, const AnimationOption* option, con
 	m_modelRender.Init(fullModelPath.c_str(), m_animationClips, count, enModelUpAxisY);
 
 	// ÉÇÉfÉãÇÃägëÂó¶Çê›íËÅB
-	m_modelRender.SetScale(scale, scale, scale);
+	m_scale = Vector3(scale, scale, scale);
+	m_modelRender.SetPosition(m_position);
+	m_modelRender.SetScale(m_scale);
+	m_modelRender.SetRotation(m_rotation);
 }
 
 /// <summary>

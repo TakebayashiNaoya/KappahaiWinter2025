@@ -2,10 +2,11 @@
 /// キャラクターの基底クラス。
 /// </summary>
 #pragma once
+#include "Source/Actor/Actor.h" 
 
 enum EnCollisionType;
 
-class Character :public IGameObject
+class Character :public Actor
 {
 public:
 	/// <summary>
@@ -195,17 +196,14 @@ public:
 
 protected:
 	AnimationClip* m_animationClips = nullptr;						// アニメーションクリップ。
-	ModelRender	m_modelRender;										// モデルレンダー。
 
 	CollisionObject* m_hitCollider = nullptr;						// 攻撃判定。
 	CollisionObject* m_hurtCollider = nullptr;						// やられ判定。
 	CollisionObject* m_attackCollider = nullptr;					// 一時的な攻撃判定。
 
-	Vector3		m_position = Vector3::Zero;							// ポジション。
-	Quaternion  m_rotation = Quaternion::Identity;					// 回転。
 	int			m_life = 0;											// ライフ。
 	bool		m_isAttacked = false;								// ダメージを受けたかどうか。
-	bool 		m_isDying = false;										// 死亡状態かどうか。
+	bool 		m_isDying = false;									// 死亡状態かどうか。
 
 	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
