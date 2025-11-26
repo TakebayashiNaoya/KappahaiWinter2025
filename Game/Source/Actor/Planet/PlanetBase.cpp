@@ -1,32 +1,32 @@
 #include "stdafx.h"
-#include "StageBase.h"
+#include "PlanetBase.h"
 
-StageBase::StageBase()
+PlanetBase::PlanetBase()
 {
 }
 
 
-StageBase::~StageBase()
+PlanetBase::~PlanetBase()
 {
 }
 
 
-bool StageBase::Start()
+bool PlanetBase::Start()
 {
 	return true;
 }
 
 
-void StageBase::Update()
+void PlanetBase::Update()
 {
 }
 
 
-void StageBase::Render(RenderContext& rc)
+void PlanetBase::Render(RenderContext& rc)
 {
 }
 
-void StageBase::InitModel(const std::string& filePath, const Vector3& position)
+void PlanetBase::InitModel(const std::string& filePath, const Vector3& position)
 {
 	std::string fullFilePath = "Assets/modelData/stage/" + filePath + ".tkm";
 	m_modelRender.Init(fullFilePath.c_str());

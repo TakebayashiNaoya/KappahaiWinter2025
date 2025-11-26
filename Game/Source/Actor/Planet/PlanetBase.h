@@ -6,11 +6,11 @@
 #pragma once
 #include "Source/Actor/Actor.h" 
 
-class StageBase : public Actor
+class PlanetBase : public Actor
 {
 public:
-	StageBase();
-	~StageBase();
+	PlanetBase();
+	~PlanetBase();
 
 
 protected:

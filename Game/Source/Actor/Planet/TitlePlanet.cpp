@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "TitleStage.h"
+#include "TitlePlanet.h"
 
 
-TitleStage::TitleStage()
+TitlePlanet::TitlePlanet()
 {
 	m_filePath = "TitlePlanet/TitlePlanet";
 	m_position = Vector3(0.0f, 0.0f, 0.0f);
@@ -10,18 +10,18 @@ TitleStage::TitleStage()
 }
 
 
-TitleStage::~TitleStage()
+TitlePlanet::~TitlePlanet()
 {
 }
 
 
-bool TitleStage::Start()
+bool TitlePlanet::Start()
 {
 	return true;
 }
 
 
-void TitleStage::Update()
+void TitlePlanet::Update()
 {
 	m_rotation.AddRotationX(-0.005f);
 	m_modelRender.SetRotation(m_rotation);
@@ -29,7 +29,7 @@ void TitleStage::Update()
 }
 
 
-void TitleStage::Render(RenderContext& rc)
+void TitlePlanet::Render(RenderContext& rc)
 {
 	m_modelRender.Draw(rc);
 }

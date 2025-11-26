@@ -1,10 +1,10 @@
 #pragma once
-#include "StageBase.h"
-class TitleStage : public StageBase
+#include "PlanetBase.h"
+class TitlePlanet : public PlanetBase
 {
 public:
-	TitleStage();
-	~TitleStage();
+	TitlePlanet();
+	~TitlePlanet();
 
 
 private:

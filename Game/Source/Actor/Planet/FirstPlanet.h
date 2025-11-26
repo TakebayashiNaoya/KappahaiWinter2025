@@ -1,14 +1,13 @@
 #pragma once
-#include "StageBase.h"
-class FirstStage : public StageBase
+#include "PlanetBase.h"
+class FirstPlanet : public PlanetBase
 {
 public:
-	FirstStage();
-	~FirstStage();
+	FirstPlanet();
+	~FirstPlanet();
 
 private:
 	bool Start() override final;
 	void Update() override final;
 	void Render(RenderContext& rc) override final;
 };
-
