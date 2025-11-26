@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UIControls.h"
+#include "LoadingScreen.h"
 
 
 namespace
@@ -48,6 +49,10 @@ void UIControls::Update()
 
 void UIControls::Render(RenderContext& rc)
 {
+	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
 	m_jumpImage.Draw(rc);
 	m_dashImage.Draw(rc);
 	m_buttonA.Draw(rc);

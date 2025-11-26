@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UIBossLife.h"
+#include "LoadingScreen.h"
 
 namespace
 {
@@ -85,6 +86,10 @@ void UIBossLife::Update()
 
 void UIBossLife::Render(RenderContext& rc)
 {
+	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
 	m_bossNameText.Draw(rc);
 	m_bossHpBarBack.Draw(rc);
 	m_bossHpBarFront.Draw(rc);
