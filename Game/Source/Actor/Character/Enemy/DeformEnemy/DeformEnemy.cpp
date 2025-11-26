@@ -24,9 +24,6 @@ namespace
 
 	constexpr float RUN_SPEED = 3.0f;								// 走る速度
 	constexpr float SLIDE_SPEED = 15.0f;							// 滑走速度
-
-	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(100.0f, 0.0f, 2000.0f);	// スポーン座標。
 }
 
 DeformEnemy::DeformEnemy()
@@ -83,9 +80,6 @@ bool DeformEnemy::Start()
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
-	// 星に埋もれないように初期位置を調整。
-	m_position = SPAWN_POSITION;
-
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enDeformEnemyState_Idle);
 
@@ -104,6 +98,8 @@ bool DeformEnemy::Start()
 		HURT_COLLIDER_RADIUS,
 		true
 	);
+
+	m_modelRender.Update();
 
 	return true;
 }

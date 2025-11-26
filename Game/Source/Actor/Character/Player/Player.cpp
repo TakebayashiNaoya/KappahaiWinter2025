@@ -32,9 +32,6 @@ namespace
 	constexpr float KNOCK_BACK_DAMPING = 10;						// ノックバック減衰率。
 	constexpr float INVINCIBLE_TIME = 5.0f;							// 無敵時間。
 
-	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 2000.0f, 0.0f);	// スポーン座標。
-
 	constexpr int LIFE = 3;											// 初期ライフ数。
 }
 
@@ -182,7 +179,7 @@ bool Player::Start()
 	InitLife(LIFE);
 
 	// 星に埋もれないように初期位置を調整。
-	m_position = SPAWN_POSITION;
+	//m_position = SPAWN_POSITION;
 
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
