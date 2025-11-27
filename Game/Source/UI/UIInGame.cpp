@@ -14,7 +14,6 @@ UIInGame::~UIInGame()
 {
 	DeleteGO(m_uiPlayerLife);
 	DeleteGO(m_uiDamageFlash);
-	DeleteGO(m_uiBossLife);
 	DeleteGO(m_uiControls);
 }
 
@@ -22,7 +21,6 @@ bool UIInGame::Start()
 {
 	m_uiPlayerLife = NewGO<UIPlayerLife>(0, "UIPlayerLife");
 	m_uiDamageFlash = NewGO<UIDamageFlash>(0, "UIDamageFlash");
-	m_uiBossLife = NewGO<UIBossLife>(0, "UIBossLife");
 	m_uiControls = NewGO<UIControls>(0, "UIControls");
 
 	return true;
