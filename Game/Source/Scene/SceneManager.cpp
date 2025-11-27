@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Title.h"
 #include "FirstStage.h"
+#include "BossStage.h"
 #include "GameClear.h"
 #include "GameOver.h"
 
@@ -19,6 +20,8 @@ namespace
 			return new Title();
 		case SceneID::FirstStage:
 			return new FirstStage();
+		case SceneID::BossStage:
+			return new BossStage();
 		case SceneID::GameClear:
 			return new GameClear();
 		case SceneID::GameOver:

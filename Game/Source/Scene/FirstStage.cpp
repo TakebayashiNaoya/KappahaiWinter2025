@@ -27,6 +27,7 @@ FirstStage::~FirstStage()
 	DeleteGO(m_player);
 	DeleteGO(m_inGameUI);
 	DeleteGO(m_collisionManager);
+	DeleteGO(m_rocket);
 
 	for (auto basicEnemy : m_basicEnemies) {
 		if (basicEnemy) {
@@ -76,7 +77,7 @@ void FirstStage::Update()
 			LoadingScreen::StartLoading();
 		}
 		if (m_rocket->IsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
-			SceneManager::GetInstance()->ChangeScene(SceneID::GameClear);
+			SceneManager::GetInstance()->ChangeScene(SceneID::BossStage);
 		}
 	}
 }

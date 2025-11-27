@@ -25,6 +25,8 @@ bool Game::Start()
 	//pointLight->SetColor(Vector3(1.0f, 0.1f, 100.0f));
 	//pointLight->SetRange(100.0f);
 	//pointLight->SetAffectPowParam(1.0f);
+	//// ƒJƒƒ‰‚©‚çŒ©‚½ˆ—‚É‚È‚é‚Ì‚Å
+	//// Update‚Í–ˆƒtƒŒ[ƒ€ŒÄ‚Î‚È‚¢‚Æ‚¢‚¯‚È‚¢
 	//pointLight->Update();
 
 	//pointLight = g_sceneLight->NewPointLight();

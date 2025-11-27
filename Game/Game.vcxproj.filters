@@ -52,6 +52,9 @@
     <Filter Include="Source\Actor\Planet">
       <UniqueIdentifier>{0e8cea44-a6cd-415b-8d6a-5ecebe31a746}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actor\Object\Spawner">
+      <UniqueIdentifier>{104711d3-45bd-40d2-af07-47a1396fe81c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -169,6 +172,12 @@
     <ClCompile Include="Source\Scene\BossStage.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Actor\Planet\BossPlanet.cpp">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Actor\Object\Spawner\Spawner.cpp">
+      <Filter>Source\Actor\Object\Spawner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -284,6 +293,12 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\BossStage.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Planet\BossPlanet.h">
+      <Filter>Source\Actor\Planet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Object\Spawner\Spawner.h">
+      <Filter>Source\Actor\Object\Spawner</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
