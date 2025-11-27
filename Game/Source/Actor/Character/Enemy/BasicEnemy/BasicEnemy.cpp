@@ -21,9 +21,6 @@ namespace
 	constexpr float COLLIDER_OFFSET = 50.0f;						// ゴーストオブジェクトのオフセット値。
 
 	constexpr float RUN_SPEED = 8.0f;								// 走る速度
-
-	// 初期値が設定できず、プレイヤーがうつ伏せになってしまう問題を回避するため、Y座標を2000.1fに設定。
-	const Vector3 SPAWN_POSITION = Vector3(0.0f, 0.0f, 2000.0f);	// スポーン座標。
 }
 
 BasicEnemy::BasicEnemy()
@@ -64,9 +61,6 @@ bool BasicEnemy::Start()
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
-	// 星に埋もれないように初期位置を調整。
-	m_position = SPAWN_POSITION;
-
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
@@ -85,8 +79,7 @@ bool BasicEnemy::Start()
 		HURT_COLLIDER_RADIUS,
 		true
 	);
-
-
+	m_modelRender.Update();
 	return true;
 }
 
@@ -98,7 +91,6 @@ void BasicEnemy::Update()
 	UpdateUpDirection();
 
 	m_stateMachine->Update();
-
 
 	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hitCollider, COLLIDER_OFFSET);
 	CollisionHitManager::GetInstance()->UpdateCollider(this, m_hurtCollider, COLLIDER_OFFSET);

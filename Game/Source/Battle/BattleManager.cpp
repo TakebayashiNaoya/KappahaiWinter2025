@@ -8,11 +8,13 @@
 #include "Source/UI/UIPlayerLife.h"
 #include "Source/UI/UIDamageFlash.h"
 #include "Source/UI/UIBossLife.h"
+#include "Source/Actor/Object/Rocket/Rocket.h"
 
 
 namespace
 {
-	constexpr float PLAYER_SEARCH_RADIUS = 500.0f;	// プレイヤー検出半径
+	constexpr float ENEMY_SEARCH_RADIUS = 500.0f;	// プレイヤー検出半径
+	constexpr float ROCKET_SEARCH_RADIUS = 800.0f;	// ロケットのプレイヤー検出半径
 
 	/// <summary>
 	/// プレイヤーがエネミーに近づいたら、エネミーにプレイヤーの座標を伝え、発見フラグを立てる。
@@ -79,14 +81,23 @@ void BattleManager::Update()
 	}
 
 
+	Rocket* rocket = FindGO<Rocket>("Rocket");
+	if (rocket) {
+		Vector3 lengthVec = rocket->GetPosition() - player->GetPosition();
+		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
+			rocket->SetIsGooled(true);
+		}
+	}
+
+
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
 	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
-	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, PLAYER_SEARCH_RADIUS);
+	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, ENEMY_SEARCH_RADIUS);
 
 
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
 	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
-	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, PLAYER_SEARCH_RADIUS);
+	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, ENEMY_SEARCH_RADIUS);
 
 
 	// ボスエネミーにプレイヤーの座標を伝える。

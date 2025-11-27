@@ -5,7 +5,7 @@
 class UITitle;
 class TitlePlayer;
 class TitleCamera;
-class TitleStage;
+class TitlePlanet;
 class UITitle;
 
 
@@ -25,7 +25,7 @@ private:
 	UITitle* m_titleUI = nullptr;
 	TitlePlayer* m_titlePlayer = nullptr;
 	TitleCamera* m_titleCamera = nullptr;
-	TitleStage* m_titleStage = nullptr;
+	TitlePlanet* m_titleStage = nullptr;
 	UITitle* m_uiTitle = nullptr;
 
 

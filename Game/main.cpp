@@ -41,7 +41,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto* game = NewGO<Game>(0, "Game");
 
 	//当たり判定を可視化する。
-	PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
+	//PhysicsWorld::GetInstance()->EnableDrawDebugWireFrame();
 
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！

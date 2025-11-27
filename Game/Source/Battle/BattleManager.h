@@ -8,9 +8,9 @@ private:
 	BattleManager() {};
 	~BattleManager() {};
 
+
 public:
 	void Update();
-
 
 
 private:

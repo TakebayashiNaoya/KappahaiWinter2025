@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UIPlayerLife.h"
+#include "LoadingScreen.h"
 
 namespace
 {
@@ -39,6 +40,10 @@ void UIPlayerLife::Update()
 
 void UIPlayerLife::Render(RenderContext& rc)
 {
+	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
 	m_displayHpSprite = &m_hpSprites[m_playerHp];
 	m_displayHpSprite->Draw(rc);
 }

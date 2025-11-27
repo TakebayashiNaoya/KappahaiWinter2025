@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UIDamageFlash.h"
+#include "LoadingScreen.h"
 
 namespace
 {
@@ -20,6 +21,10 @@ void UIDamageFlash::Update()
 
 void UIDamageFlash::Render(RenderContext& rc)
 {
+	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
 	// プレイヤーの体力が危険か注意のときだけ描画。
 	if (m_playerHp == enPlayerCondition_Danger || m_playerHp == enPlayerCondition_Caution)
 	{

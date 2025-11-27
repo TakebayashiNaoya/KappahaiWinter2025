@@ -140,6 +140,22 @@ void LoadingScreen::Update()
 
 	case enState_Opened:
 	{
+		// ’†‰›‰æ‘œ
+		m_displayImages[enImageParts_Center].SetScale({ IMAGE_CENTER_WIDTH, IMAGE_CENTER_HEIGHT, 1.0f });
+		// üˆÍ‰æ‘œ
+		// Top (ª•ûŒü‚ÖˆÚ“®)
+		m_displayImages[enImageParts_Top].SetPosition({ 0.0f, HALF_FULL_HD_HEIGHT * IMAGE_RATIO , 0.0f });
+		// Bottom («•ûŒü‚ÖˆÚ“®)
+		m_displayImages[enImageParts_Bottom].SetPosition({ 0.0f, HALF_FULL_HD_HEIGHT * IMAGE_RATIO * -1.0f, 0.0f });
+		// Left (©•ûŒü‚ÖˆÚ“®)
+		m_displayImages[enImageParts_Left].SetPosition({ HALF_FULL_HD_WIDTH * IMAGE_RATIO * -1.0f, 0.0f, 0.0f });
+		// Right (¨•ûŒü‚ÖˆÚ“®)
+		m_displayImages[enImageParts_Right].SetPosition({ HALF_FULL_HD_WIDTH * IMAGE_RATIO , 0.0f, 0.0f });
+
+		// ‰æ‘œ‚ğXVB
+		for (int i = 0; i < enImageParts_Num; ++i) {
+			m_displayImages[i].Update();
+		}
 		break;
 	}
 
