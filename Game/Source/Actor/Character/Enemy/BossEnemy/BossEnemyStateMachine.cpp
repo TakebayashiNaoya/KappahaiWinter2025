@@ -309,6 +309,10 @@ namespace app
 
 		void DeadState::Update()
 		{
+			// 死亡アニメーションが終了したら死亡フラグを立てる。
+			if (GetOwner<BossEnemy>()->IsPlayingAnimation() == false) {
+				GetOwner<BossEnemy>()->SetIsDead(true);
+			}
 		}
 
 

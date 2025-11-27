@@ -133,6 +133,15 @@ public:
 		m_isDying = isDead;
 	}
 
+	const bool IsDead() const
+	{
+		return m_isDead;
+	}
+	void SetIsDead(const bool isDead)
+	{
+		m_isDead = isDead;
+	}
+
 
 	/// <summary>
 	/// 落下タイマーをリセットします。
@@ -204,6 +213,7 @@ protected:
 	int			m_life = 0;											// ライフ。
 	bool		m_isAttacked = false;								// ダメージを受けたかどうか。
 	bool 		m_isDying = false;									// 死亡状態かどうか。
+	bool		m_isDead = false;									// 完全に死亡したかどうか。
 
 	//---ジャンプ・重力関連---//
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
