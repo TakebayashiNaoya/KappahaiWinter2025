@@ -144,6 +144,14 @@ bool BossEnemy::Start()
 
 void BossEnemy::Update()
 {
+	// ポーズ中または戦闘終了時は更新しない。
+	if (m_isPause) {
+		return;
+	}
+	if (m_isBattleFinish) {
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 
 	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。

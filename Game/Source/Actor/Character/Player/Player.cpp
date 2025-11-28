@@ -197,6 +197,14 @@ bool Player::Start()
 
 void Player::Update()
 {
+	// ポーズ中または戦闘終了時は更新しない。
+	if (m_isPause) {
+		return;
+	}
+	if (m_isBattleFinish) {
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 	m_xzAdditionalRot = Quaternion::Identity;
 
