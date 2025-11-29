@@ -40,6 +40,10 @@ void GameCamera::Update()
 	Vector3 playerPos = m_player->GetPosition();
 	Vector3 up = m_player->GetUpDirection();
 
+	if (up.LengthSq() < 0.0001f) {
+		up.Set(Vector3::Up);
+	}
+
 	// スティックによるカメラ回転
 	float x = g_pad[0]->GetRStickXF();
 	float y = g_pad[0]->GetRStickYF();
