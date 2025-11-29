@@ -1,15 +1,26 @@
 #pragma once
 class UIGameOver :public IGameObject
 {
+private:
+	enum enState
+	{
+		enState_HideImageFadeIn,
+		enState_EntryImage,
+		enState_WaitBeforeSlip,
+		enState_SlipImage,
+		enState_WaitAfterSlip,
+		enState_GameOverImageFadeOut,
+		enState_End,
+	};
+
+
 public:
 	UIGameOver();
 	~UIGameOver();
 
-
-public:
-	void SetIsDraw(const bool isDraw)
+	const bool IsEnd() const
 	{
-		m_isDrawStop = isDraw;
+		return m_isEnd;
 	}
 
 
@@ -21,6 +32,15 @@ private:
 
 private:
 	SpriteRender m_gameOverImage;
-	bool m_isDrawStop = false;
+	SpriteRender m_hideImage;
+	Quaternion m_rotation = Quaternion::Identity;
+	Vector3 m_position = Vector3::Zero;
+	float m_hideImageAlpha = 0.0f;
+	float m_gameOverImageAlpha = 0.0f;
+	float m_entryTimer = 0.0f;
+	float m_waitTimer = 0.0f;
+	float m_slipTimer = 0.0f;
+	int m_state = 0;
+	bool m_isEnd = false;
 };
 
