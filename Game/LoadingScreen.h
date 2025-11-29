@@ -29,6 +29,12 @@ public:
 	{
 		if (m_instance != nullptr) {
 			m_instance->m_state = state;
+			m_instance->m_timer = 0.0f;
+
+			// ローディング画面レイアウトに強制変更。
+			if (state == enState_Loading) {
+				m_instance->ForceToLoadingLayout();
+			}
 		}
 	}
 
@@ -56,6 +62,8 @@ private:
 private:
 	LoadingScreen();
 	~LoadingScreen();
+
+	void ForceToLoadingLayout();
 
 
 public:
