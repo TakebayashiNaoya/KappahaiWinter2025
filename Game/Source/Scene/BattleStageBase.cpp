@@ -9,11 +9,11 @@
 #include "Source/Battle/BattleManager.h"
 #include "Source/Collision/CollisionManager.h"
 #include "LoadingScreen.h"
-#include "Source/Actor/Actor.h"
 #include "nature/SkyCube.h"
 
 BattleStageBase::BattleStageBase()
 {
+	BattleManager::SetIsBattleFinish(false);
 	RegisterLoadingTasks();
 }
 
@@ -71,13 +71,13 @@ void BattleStageBase::Update()
 	case enBattlePhase_WaitFinishAnimation:
 		if (m_result == enResult_PlayerLose) {
 			if (m_player && m_player->IsDead()) {
-				Actor::SetIsBattleFinish(true);
+				BattleManager::SetIsBattleFinish(true);
 				m_battlePhase = enBattlePhase_GameOver;
 			}
 		}
 		else if (m_result == enResult_PlayerWin) {
 			if (m_bossEnemy && m_bossEnemy->IsDead()) {
-				Actor::SetIsBattleFinish(true);
+				BattleManager::SetIsBattleFinish(true);
 				m_battlePhase = enBattlePhase_GameClear;
 			}
 		}
@@ -101,19 +101,25 @@ void BattleStageBase::Update()
 
 		// 5.ゲームオーバー、またはゲームクリアUIの終了を待ってタイトルへ戻る。
 	case enBattlePhase_WaitEnd:
-		if (m_uiResult && m_uiResult->IsEnd()) {
+		if (m_uiResult->IsEnd()) {
+			// ロード画面へ移行。
 			if (LoadingScreen::GetState() != LoadingScreen::enState_Loading) {
 				LoadingScreen::ChangeState(LoadingScreen::enState_Loading);
+			}
 
+			if (LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
 				// 黒画像が残ってしまっているので破棄する。
 				if (m_uiResult) {
 					DeleteGO(m_uiResult);
 					m_uiResult = nullptr;
 				}
-
-				SceneManager::GetInstance()->ChangeScene(SceneID::Title);
+				m_battlePhase = enBattlePhase_End;
 			}
 		}
+		break;
+
+	case enBattlePhase_End:
+		SceneManager::GetInstance()->ChangeScene(SceneID::Title);
 		break;
 	}
 }

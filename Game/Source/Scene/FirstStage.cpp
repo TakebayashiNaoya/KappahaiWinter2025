@@ -39,7 +39,6 @@ FirstStage::~FirstStage()
 
 bool FirstStage::Start()
 {
-	Actor::SetIsBattleFinish(false);
 	return true;
 }
 

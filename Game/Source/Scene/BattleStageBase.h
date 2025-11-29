@@ -56,6 +56,7 @@ private:
 		enBattlePhase_GameOver,
 		enBattlePhase_GameClear,
 		enBattlePhase_WaitEnd,
+		enBattlePhase_End
 	};
 	enBattlePhase m_battlePhase = enBattlePhase_Battle;
 
