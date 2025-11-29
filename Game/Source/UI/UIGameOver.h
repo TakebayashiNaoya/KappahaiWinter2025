@@ -1,5 +1,7 @@
 #pragma once
-class UIGameOver :public IGameObject
+#include "UIResultBase.h"
+
+class UIGameOver :public UIResultBase
 {
 private:
 	enum enState
@@ -17,11 +19,6 @@ private:
 public:
 	UIGameOver();
 	~UIGameOver();
-
-	const bool IsEnd() const
-	{
-		return m_isEnd;
-	}
 
 
 private:
@@ -41,6 +38,5 @@ private:
 	float m_waitTimer = 0.0f;
 	float m_slipTimer = 0.0f;
 	int m_state = 0;
-	bool m_isEnd = false;
 };
 

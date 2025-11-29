@@ -8,8 +8,7 @@ class GameCamera;
 class UIInGame;
 class BattleManagerObject;
 class CollisionManagerObject;
-class UIGameClear;
-class UIGameOver;
+class UIResultBase;
 
 
 // バトルがあるステージ共通の親クラス
@@ -102,8 +101,7 @@ private:
 	CollisionManagerObject* m_collisionManager = nullptr;	// コリジョンマネージャー。
 	UIInGame* m_inGameUI = nullptr;							// インゲームUI。
 	GameCamera* m_gameCamera = nullptr;						// ゲームカメラ。
-	UIGameOver* m_uiGameOver = nullptr;						// ゲームオーバーUI。
-	UIGameClear* m_uiGameClear = nullptr;					// ゲームクリアUI。
+	UIResultBase* m_uiResult = nullptr;						// リザルトUI。
 
 
 	/// <summary>

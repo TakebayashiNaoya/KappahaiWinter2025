@@ -175,6 +175,9 @@
     <ClCompile Include="Source\Scene\BattleStageBase.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\UIResultBase.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -293,6 +296,9 @@
     </ClInclude>
     <ClInclude Include="Source\Scene\BattleStageBase.h">
       <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIResultBase.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

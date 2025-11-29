@@ -86,14 +86,14 @@ void BattleStageBase::Update()
 
 		// 4.ゲームオーバー、またはゲームクリアUIを表示する。
 	case enBattlePhase_GameOver:
-		if (m_uiGameOver == nullptr) {
-			m_uiGameOver = NewGO<UIGameOver>(0, "UIGameOver");
+		if (m_uiResult == nullptr) {
+			m_uiResult = NewGO<UIGameOver>(0, "UIGameOver");
 		}
 		m_battlePhase = enBattlePhase_WaitEnd;
 		break;
 	case enBattlePhase_GameClear:
-		if (m_uiGameClear == nullptr) {
-			m_uiGameClear = NewGO<UIGameClear>(0, "UIGameClear");
+		if (m_uiResult == nullptr) {
+			m_uiResult = NewGO<UIGameClear>(0, "UIGameClear");
 		}
 		m_battlePhase = enBattlePhase_WaitEnd;
 		break;
@@ -101,35 +101,17 @@ void BattleStageBase::Update()
 
 		// 5.ゲームオーバー、またはゲームクリアUIの終了を待ってタイトルへ戻る。
 	case enBattlePhase_WaitEnd:
-		bool isGameOverEnd = (m_uiGameOver && m_uiGameOver->IsEnd());
-		bool isGameClearEnd = (m_uiGameClear && m_uiGameClear->IsEnd());
-
-		if (isGameOverEnd || isGameClearEnd) {
+		if (m_uiResult && m_uiResult->IsEnd()) {
 			if (LoadingScreen::GetState() != LoadingScreen::enState_Loading) {
 				LoadingScreen::ChangeState(LoadingScreen::enState_Loading);
 
 				// 黒画像が残ってしまっているので破棄する。
-				if (m_uiGameOver) {
-					DeleteGO(m_uiGameOver);
-					m_uiGameOver = nullptr;
+				if (m_uiResult) {
+					DeleteGO(m_uiResult);
+					m_uiResult = nullptr;
 				}
-				if (m_uiGameClear) {
-					DeleteGO(m_uiGameClear);
-					m_uiGameClear = nullptr;
-				}
-
 
 				SceneManager::GetInstance()->ChangeScene(SceneID::Title);
-			}
-
-			// 2. もしロード画面が「完全に閉じてLoading中」の状態になったら、
-			//    シーン切り替えをリクエストする。
-			//    ※LoadingScreenの実装によりますが、通常はChangeStateした次のフレーム以降に
-			//      enState_Loading状態が反映されます。
-
-			// もしLoadingScreenに「IsClosed()」のような判定があればそれがベストですが、
-			// なければ「現在がenState_Loading」であることを確認してから切り替えます。
-			if (LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
 			}
 		}
 		break;

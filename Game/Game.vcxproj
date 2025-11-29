@@ -262,6 +262,7 @@
     <ClCompile Include="Source\UI\UIGameOver.cpp" />
     <ClCompile Include="Source\UI\UIInGame.cpp" />
     <ClCompile Include="Source\UI\UIPlayerLife.cpp" />
+    <ClCompile Include="Source\UI\UIResultBase.cpp" />
     <ClCompile Include="Source\UI\UITitle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -309,6 +310,7 @@
     <ClInclude Include="Source\UI\UIGameOver.h" />
     <ClInclude Include="Source\UI\UIInGame.h" />
     <ClInclude Include="Source\UI\UIPlayerLife.h" />
+    <ClInclude Include="Source\UI\UIResultBase.h" />
     <ClInclude Include="Source\UI\UITitle.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />
