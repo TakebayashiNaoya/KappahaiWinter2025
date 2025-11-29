@@ -20,13 +20,7 @@ FirstStage::FirstStage()
 
 FirstStage::~FirstStage()
 {
-	DeleteGO(m_battleManager);
-	DeleteGO(m_skyCube);
 	DeleteGO(m_firstStage);
-	DeleteGO(m_gameCamera);
-	DeleteGO(m_player);
-	DeleteGO(m_inGameUI);
-	DeleteGO(m_collisionManager);
 	DeleteGO(m_rocket);
 
 	for (auto basicEnemy : m_basicEnemies) {
@@ -49,29 +43,8 @@ bool FirstStage::Start()
 	return true;
 }
 
-
-void FirstStage::Update()
+void FirstStage::OnUpdate()
 {
-	InitObjects();
-
-
-
-	//@NOTE: デバッグ用、Bボタンで即死。
-	//if (g_pad[0]->IsTrigger(enButtonB)) {
-	//	m_titlePlayer->SetIsDead(true);
-	//	m_gameCamera->SetPlayerTarget(nullptr);
-	//}
-
-
-
-	// プレイヤーが死亡したらゲームオーバーへ移行。
-	if (m_player) {
-		if (m_player->IsDying()) {
-			SceneManager::GetInstance()->ChangeScene(SceneID::GameOver);
-		}
-	}
-
-
 	if (m_rocket)
 	{
 		if (m_rocket->IsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Opened) {
@@ -81,55 +54,6 @@ void FirstStage::Update()
 			SceneManager::GetInstance()->ChangeScene(SceneID::BossStage);
 		}
 	}
-}
-
-void FirstStage::InitObjects()
-{
-	if (m_loadingState < 7) {
-		switch (m_loadingState) {
-		case 0:
-			m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
-			m_loadingState = 1;
-			return;
-		case 1:
-			m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
-			m_loadingState = 2;
-			return;
-		case 2:
-			InitSky();
-			m_loadingState = 3;
-			return;
-		case 3:
-			InitLevel();
-			m_loadingState = 4;
-			return;
-		case 4:
-			m_inGameUI = NewGO<UIInGame>(0, "UIInGame");
-			m_loadingState = 5;
-			return;
-		case 5:
-			m_gameCamera = NewGO<GameCamera>(0, "GameCamera");
-			m_loadingState = 6;
-			return;
-		case 6:
-			LoadingScreen::FinishLoading();
-			m_loadingState = 7;
-			break;
-		}
-	}
-}
-
-
-void FirstStage::InitSky()
-{
-	// 現在の空を破棄。
-	DeleteGO(m_skyCube);
-
-	m_skyCube = NewGO<SkyCube>(0, "skycube");
-	m_skyCube->SetType((EnSkyCubeType)m_skyCubeType);
-
-	// 環境光の計算のためのIBLテクスチャをセットする。
-	g_renderingEngine->SetAmbientByIBLTexture(m_skyCube->GetTextureFilePath(), 0.1f);
 }
 
 
