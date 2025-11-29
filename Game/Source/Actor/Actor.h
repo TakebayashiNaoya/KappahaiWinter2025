@@ -64,49 +64,11 @@ public:
 	}
 
 
-	/// <summary>
-	/// ポーズフラグを取得。
-	/// </summary>
-	/// <returns> ポーズフラグ。</returns>
-	const bool GetIsPause()const
-	{
-		return m_isPause;
-	}
-	/// <summary>
-	/// ポーズフラグを設定。
-	/// </summary>
-	/// <returns> ポーズフラグ。</returns>
-	static void SetIsPause(bool isPause)
-	{
-		m_isPause = isPause;
-	}
-	/// <summary>
-	/// 戦闘終了フラグを取得。
-	/// </summary>
-	/// <returns> 戦闘終了フラグ。</returns>
-	const bool GetIsBattleFinish()const
-	{
-		return m_isBattleFinish;
-	}
-	/// <summary>
-	/// 戦闘終了フラグを設定。
-	/// </summary>
-	/// <param name="isBattleFinish"> 戦闘終了フラグ。</param>
-	static void SetIsBattleFinish(bool isBattleFinish)
-	{
-		m_isBattleFinish = isBattleFinish;
-	}
-
-
-
 protected:
 	Vector3 m_position = Vector3::Zero;				// 座標。
 	Quaternion m_rotation = Quaternion::Identity;	// 回転。
 	Vector3 m_scale = Vector3::One;					// 拡大率。
 	ModelRender m_modelRender;						// モデルレンダラー。
-
-	static bool m_isBattleFinish;					// 戦闘終了のフラグ。
-	static bool m_isPause;							// ポーズのフラグ。
 
 
 public:

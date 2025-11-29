@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UIDamageFlash.h"
 #include "LoadingScreen.h"
+#include "Source/Battle/BattleManager.h"
 
 namespace
 {
@@ -22,6 +23,10 @@ void UIDamageFlash::Update()
 void UIDamageFlash::Render(RenderContext& rc)
 {
 	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
+	if (BattleManager::IsBattleFinish()) {
 		return;
 	}
 

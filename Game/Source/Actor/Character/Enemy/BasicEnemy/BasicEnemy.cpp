@@ -2,6 +2,7 @@
 #include "BasicEnemy.h"
 #include "BasicEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
+#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -64,21 +65,25 @@ bool BasicEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
-	// 攻撃判定のコライダーを作成。
-	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_BasicEnemy,
-		HIT_COLLIDER_RADIUS,
-		true
-	);
+	if (CollisionHitManager::GetInstance())
+	{
+		// 攻撃判定のコライダーを作成。
+		m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_BasicEnemy,
+			HIT_COLLIDER_RADIUS,
+			true
+		);
 
-	// やられ判定のコライダーを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_BasicEnemy,
-		HURT_COLLIDER_RADIUS,
-		true
-	);
+		// やられ判定のコライダーを作成。
+		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_BasicEnemy,
+			HURT_COLLIDER_RADIUS,
+			true
+		);
+	}
+
 	m_modelRender.Update();
 	return true;
 }
@@ -86,10 +91,7 @@ bool BasicEnemy::Start()
 void BasicEnemy::Update()
 {
 	// ポーズ中または戦闘終了時は更新しない。
-	if (m_isPause) {
-		return;
-	}
-	if (m_isBattleFinish) {
+	if (BattleManager::IsBattleFinish()) {
 		return;
 	}
 

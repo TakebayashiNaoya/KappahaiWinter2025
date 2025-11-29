@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UIBossLife.h"
 #include "LoadingScreen.h"
+#include "Source/Battle/BattleManager.h"
 
 namespace
 {
@@ -87,6 +88,10 @@ void UIBossLife::Update()
 void UIBossLife::Render(RenderContext& rc)
 {
 	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
+	if (BattleManager::IsBattleFinish()) {
 		return;
 	}
 

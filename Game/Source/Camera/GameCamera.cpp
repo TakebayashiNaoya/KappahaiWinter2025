@@ -2,6 +2,7 @@
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Scene/SceneManager.h"
+#include "Source/Battle/BattleManager.h"
 
 #if _DEBUG
 #define AddjustConst
@@ -30,6 +31,10 @@ void GameCamera::Update()
 {
 	// シーン切り替え中は更新しない。
 	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+		return;
+	}
+
+	if (BattleManager::IsBattleFinish()) {
 		return;
 	}
 
