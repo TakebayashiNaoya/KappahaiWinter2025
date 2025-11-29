@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "PlayerStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
+#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -184,19 +185,27 @@ bool Player::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
-	// やられ判定のコライダーを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_Player,
-		HURT_COLLIDER_RADIUS,
-		true
-	);
+	if (CollisionHitManager::GetInstance())
+	{
+		// やられ判定のコライダーを作成。
+		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_Player,
+			HURT_COLLIDER_RADIUS,
+			true
+		);
+	}
 
 	return true;
 }
 
 void Player::Update()
 {
+	// ポーズ中または戦闘終了時は更新しない。
+	if (BattleManager::IsBattleFinish()) {
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 	m_xzAdditionalRot = Quaternion::Identity;
 

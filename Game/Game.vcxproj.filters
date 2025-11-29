@@ -99,12 +99,6 @@
     <ClCompile Include="Source\Scene\SceneManager.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\GameClear.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Scene\GameOver.cpp">
-      <Filter>Source\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene\Title.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -178,6 +172,12 @@
     <ClCompile Include="Source\Actor\Object\Spawner\Spawner.cpp">
       <Filter>Source\Actor\Object\Spawner</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scene\BattleStageBase.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIResultBase.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -219,12 +219,6 @@
       <Filter>Source\Battle</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneManager.h">
-      <Filter>Source\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\GameClear.h">
-      <Filter>Source\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Scene\GameOver.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\Title.h">
@@ -299,6 +293,12 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Object\Spawner\Spawner.h">
       <Filter>Source\Actor\Object\Spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\BattleStageBase.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIResultBase.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

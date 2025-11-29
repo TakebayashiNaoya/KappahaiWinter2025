@@ -28,6 +28,9 @@ private:
 	TitlePlanet* m_titleStage = nullptr;
 	UITitle* m_uiTitle = nullptr;
 
+	float m_waitTimer = 0.0f;
+	bool m_isLoadingFinished = false;
+
 
 private:
 	/// <summary>

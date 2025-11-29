@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UIControls.h"
 #include "LoadingScreen.h"
+#include "Source/Battle/BattleManager.h"
 
 
 namespace
@@ -50,6 +51,10 @@ void UIControls::Update()
 void UIControls::Render(RenderContext& rc)
 {
 	if (LoadingScreen::GetState() != LoadingScreen::enState_Opened) {
+		return;
+	}
+
+	if (BattleManager::IsBattleFinish()) {
 		return;
 	}
 

@@ -2,6 +2,7 @@
 #include "DeformEnemy.h"
 #include "DeformEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
+#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -83,21 +84,23 @@ bool DeformEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enDeformEnemyState_Idle);
 
-	// 攻撃判定のコライダーを作成。
-	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_DeformEnemy,
-		HIT_COLLIDER_RADIUS,
-		true
-	);
-
-	// ゴーストオブジェクトを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_DeformEnemy,
-		HURT_COLLIDER_RADIUS,
-		true
-	);
+	if (CollisionHitManager::GetInstance())
+	{
+		// 攻撃判定のコライダーを作成。
+		m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_DeformEnemy,
+			HIT_COLLIDER_RADIUS,
+			true
+		);
+		// ゴーストオブジェクトを作成。
+		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_DeformEnemy,
+			HURT_COLLIDER_RADIUS,
+			true
+		);
+	}
 
 	m_modelRender.Update();
 
@@ -106,6 +109,11 @@ bool DeformEnemy::Start()
 
 void DeformEnemy::Update()
 {
+	// ポーズ中または戦闘終了時は更新しない。
+	if (BattleManager::IsBattleFinish()) {
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 
 	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。

@@ -47,9 +47,9 @@ namespace
 	}
 }
 
+
 BattleManager* BattleManager::m_instance = nullptr;
-
-
+bool BattleManager::m_isBattleFinish = false;
 
 
 void BattleManager::Update()

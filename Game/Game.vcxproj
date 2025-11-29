@@ -250,10 +250,9 @@
     <ClCompile Include="Source\Camera\GameCamera.cpp" />
     <ClCompile Include="Source\Camera\TitleCamera.cpp" />
     <ClCompile Include="Source\Collision\CollisionManager.cpp" />
+    <ClCompile Include="Source\Scene\BattleStageBase.cpp" />
     <ClCompile Include="Source\Scene\BossStage.cpp" />
     <ClCompile Include="Source\Scene\FirstStage.cpp" />
-    <ClCompile Include="Source\Scene\GameClear.cpp" />
-    <ClCompile Include="Source\Scene\GameOver.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
     <ClCompile Include="Source\Scene\Title.cpp" />
     <ClCompile Include="Source\UI\UIBossLife.cpp" />
@@ -263,6 +262,7 @@
     <ClCompile Include="Source\UI\UIGameOver.cpp" />
     <ClCompile Include="Source\UI\UIInGame.cpp" />
     <ClCompile Include="Source\UI\UIPlayerLife.cpp" />
+    <ClCompile Include="Source\UI\UIResultBase.cpp" />
     <ClCompile Include="Source\UI\UITitle.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -298,10 +298,9 @@
     <ClInclude Include="Source\Camera\GameCamera.h" />
     <ClInclude Include="Source\Camera\TitleCamera.h" />
     <ClInclude Include="Source\Collision\CollisionManager.h" />
+    <ClInclude Include="Source\Scene\BattleStageBase.h" />
     <ClInclude Include="Source\Scene\BossStage.h" />
     <ClInclude Include="Source\Scene\FirstStage.h" />
-    <ClInclude Include="Source\Scene\GameClear.h" />
-    <ClInclude Include="Source\Scene\GameOver.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\Title.h" />
     <ClInclude Include="Source\UI\UIBossLife.h" />
@@ -311,6 +310,7 @@
     <ClInclude Include="Source\UI\UIGameOver.h" />
     <ClInclude Include="Source\UI\UIInGame.h" />
     <ClInclude Include="Source\UI\UIPlayerLife.h" />
+    <ClInclude Include="Source\UI\UIResultBase.h" />
     <ClInclude Include="Source\UI\UITitle.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\system.h" />

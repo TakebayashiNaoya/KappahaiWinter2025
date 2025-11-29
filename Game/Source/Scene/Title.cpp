@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "Title.h"
-#include "FirstStage.h"
 #include "Source/UI/UITitle.h"
 #include "Source/Actor/Character/Player/TitlePlayer.h"
 #include "Source/Camera/TitleCamera.h"
 #include "Source/Actor/Planet/TitlePlanet.h"
-#include "Source/UI/UITitle.h"
 #include "LoadingScreen.h"
 
 
@@ -32,7 +30,9 @@ Title::~Title()
 
 bool Title::Start()
 {
-	LoadingScreen::FinishLoading();
+	//LoadingScreen::FinishLoading();
+	m_waitTimer = 0.0f;
+	m_isLoadingFinished = false;
 
 	return true;
 }
@@ -40,6 +40,19 @@ bool Title::Start()
 
 void Title::Update()
 {
+	// ロード画面を綺麗に見せるため、少し待機。
+	if (m_isLoadingFinished == false) {
+		m_waitTimer += g_gameTime->GetFrameDeltaTime();
+
+		if (m_waitTimer > 0.1f) {
+			LoadingScreen::FinishLoading();
+			m_isLoadingFinished = true;
+		}
+		return;
+	}
+
+
+
 	// Aボタンが押されたらインゲームへ移行。
 	if (g_pad[0]->IsTrigger(enButtonA)) {
 		// ロードオープン中にボタンを押したら、ロード完了へ。

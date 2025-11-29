@@ -50,6 +50,23 @@ LoadingScreen::~LoadingScreen()
 	}
 }
 
+void LoadingScreen::ForceToLoadingLayout()
+{
+	// 中央画像（完全に縮小して見えなくなる）
+	m_displayImages[enImageParts_Center].SetScale({ 0.0f, 0.0f, 1.0f });
+
+	// 周囲画像（すべて画面中央 0,0,0 に集まって画面を隠す）
+	m_displayImages[enImageParts_Top].SetPosition(Vector3::Zero);
+	m_displayImages[enImageParts_Bottom].SetPosition(Vector3::Zero);
+	m_displayImages[enImageParts_Left].SetPosition(Vector3::Zero);
+	m_displayImages[enImageParts_Right].SetPosition(Vector3::Zero);
+
+	// 画像を更新して反映
+	for (int i = 0; i < enImageParts_Num; ++i) {
+		m_displayImages[i].Update();
+	}
+}
+
 
 bool LoadingScreen::Start()
 {
@@ -97,6 +114,8 @@ void LoadingScreen::Update()
 
 	case enState_Loading:
 	{
+
+
 		break;
 	}
 

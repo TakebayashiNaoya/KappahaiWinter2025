@@ -33,6 +33,20 @@ public:
 			m_instance = nullptr;
 		}
 	}
+
+
+public:
+	static bool IsBattleFinish()
+	{
+		return m_isBattleFinish;
+	}
+	static void SetIsBattleFinish(bool isFinish)
+	{
+		m_isBattleFinish = isFinish;
+	}
+
+private:
+	static bool m_isBattleFinish;
 };
 
 

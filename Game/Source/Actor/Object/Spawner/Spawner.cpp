@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Spawner.h"
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
+#include "Source/Battle/BattleManager.h"
 
 namespace
 {
@@ -27,6 +28,10 @@ bool Spawner::Start()
 
 void Spawner::Update()
 {
+	if (BattleManager::IsBattleFinish()) {
+		return;
+	}
+
 	if (m_deformEnemy->IsDying())
 	{
 		m_respawnTimer += g_gameTime->GetFrameDeltaTime();

@@ -307,8 +307,8 @@ namespace app
 				return false;
 			}
 
-			if (GetOwner<Player>()->GetLife() == 0) {
-				requestStateId = enPlayerState_KneelDown;
+			if (GetOwner<Player>()->IsDying()) {
+				requestStateId = enPlayerState_Dead;
 				return true;
 			}
 
@@ -342,11 +342,15 @@ namespace app
 		void app::player::DieState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Dead);
+			GetOwner<Player>()->SetIsInvincible(false);
 		}
 
 
 		void app::player::DieState::Update()
 		{
+			if (GetOwner<Player>()->IsPlayingAnimation() == false) {
+				GetOwner<Player>()->SetIsDead(true);
+			}
 		}
 
 

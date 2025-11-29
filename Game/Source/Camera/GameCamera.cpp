@@ -2,6 +2,7 @@
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Scene/SceneManager.h"
+#include "Source/Battle/BattleManager.h"
 
 #if _DEBUG
 #define AddjustConst
@@ -33,12 +34,20 @@ void GameCamera::Update()
 		return;
 	}
 
+	if (BattleManager::IsBattleFinish()) {
+		return;
+	}
+
 	if (m_player == nullptr) {
 		return;
 	}
 
 	Vector3 playerPos = m_player->GetPosition();
 	Vector3 up = m_player->GetUpDirection();
+
+	if (up.LengthSq() < 0.0001f) {
+		up.Set(Vector3::Up);
+	}
 
 	// スティックによるカメラ回転
 	float x = g_pad[0]->GetRStickXF();

@@ -2,6 +2,7 @@
 #include "BossEnemy.h"
 #include "BossEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
+#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -19,7 +20,7 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr int MAX_LIFE = 10;										// 最大体力。
+	constexpr int MAX_LIFE = 1;										// 最大体力。
 
 	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
 	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
@@ -83,6 +84,10 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	//キーの名前が「attack_start」の時。
 	if (wcscmp(eventName, L"attack_start") == 0)
 	{
+		if (CollisionHitManager::GetInstance() == nullptr) {
+			return;
+		}
+
 		m_attackCollider = CollisionHitManager::GetInstance()->CreateCollider(
 			this,
 			enCollisionType_BossEnemy,
@@ -96,6 +101,10 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	//キーの名前が「attack_end」の時。
 	else if (wcscmp(eventName, L"attack_end") == 0)
 	{
+		if (CollisionHitManager::GetInstance() == nullptr) {
+			return;
+		}
+
 		//攻撃用コライダーを削除。
 		m_attackCollider = CollisionHitManager::GetInstance()->DeleteCollider(m_attackCollider);
 	}
@@ -118,21 +127,23 @@ bool BossEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
-	// 攻撃判定のコライダーを作成。
-	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_BossEnemy,
-		HIT_COLLIDER_RADIUS,
-		true
-	);
-
-	// やられ判定のコライダーを作成。
-	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-		this,
-		enCollisionType_BossEnemy,
-		HURT_COLLIDER_RADIUS,
-		true
-	);
+	if (CollisionHitManager::GetInstance())
+	{
+		// 攻撃判定のコライダーを作成。
+		m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_BossEnemy,
+			HIT_COLLIDER_RADIUS,
+			true
+		);
+		// やられ判定のコライダーを作成。
+		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+			this,
+			enCollisionType_BossEnemy,
+			HURT_COLLIDER_RADIUS,
+			true
+		);
+	}
 
 	//アニメーションイベント用の関数を設定する。
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
@@ -144,6 +155,11 @@ bool BossEnemy::Start()
 
 void BossEnemy::Update()
 {
+	// ポーズ中または戦闘終了時は更新しない。
+	if (BattleManager::IsBattleFinish()) {
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 
 	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。

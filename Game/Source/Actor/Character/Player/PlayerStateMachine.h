@@ -91,7 +91,7 @@ namespace app
 				AddState<RunState, Player>(enPlayerState_Run, owner);
 				AddState<JumpState, Player>(enPlayerState_Jump, owner);
 				AddState<KnockBackState, Player>(enPlayerState_KnockBack, owner);
-				AddState<DieState, Player>(enPlayerState_KneelDown, owner);
+				AddState<DieState, Player>(enPlayerState_Dead, owner);
 			}
 
 			void Update() override final;
