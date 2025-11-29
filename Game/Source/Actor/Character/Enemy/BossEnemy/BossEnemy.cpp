@@ -83,6 +83,10 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	//キーの名前が「attack_start」の時。
 	if (wcscmp(eventName, L"attack_start") == 0)
 	{
+		if (CollisionHitManager::GetInstance() == nullptr) {
+			return;
+		}
+
 		m_attackCollider = CollisionHitManager::GetInstance()->CreateCollider(
 			this,
 			enCollisionType_BossEnemy,
@@ -96,6 +100,10 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	//キーの名前が「attack_end」の時。
 	else if (wcscmp(eventName, L"attack_end") == 0)
 	{
+		if (CollisionHitManager::GetInstance() == nullptr) {
+			return;
+		}
+
 		//攻撃用コライダーを削除。
 		m_attackCollider = CollisionHitManager::GetInstance()->DeleteCollider(m_attackCollider);
 	}
