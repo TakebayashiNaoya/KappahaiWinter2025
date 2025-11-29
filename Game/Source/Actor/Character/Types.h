@@ -17,7 +17,7 @@ enum enPlayerState {
 	enPlayerState_Run,			// 走り。
 	enPlayerState_Jump,			// ジャンプ。
 	enPlayerState_KnockBack,	// ノックバック。
-	enPlayerState_KneelDown,	// 死亡。
+	enPlayerState_Dead,	// 死亡。
 	enPlayerState_Num,
 };
 
