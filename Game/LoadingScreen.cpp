@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "LoadingScreen.h"
 
+
 LoadingScreen* LoadingScreen::m_instance = nullptr;
 
 namespace
@@ -26,6 +27,51 @@ namespace
 	const float OPEN_DURATION = 1.5f;								// オープンの時間
 }
 
+
+void LoadingScreen::StartLoading()
+{
+	if (m_instance != nullptr) {
+		m_instance->m_state = enState_Close;
+
+		// ロード画面が閉まり始めるタイミングで、全BGMをフェードアウトさせる
+		// 即消したい場合は 0.0f を指定してください。
+		SoundManager::StopAllBGM(CROSE_DURATION);
+	}
+}
+
+void LoadingScreen::FinishLoading()
+{
+	if (m_instance != nullptr) {
+		m_instance->m_state = enState_Open;
+
+		// ロード明けのアニメーション時間に合わせてフェードイン開始。
+		SoundManager::FadeInAllBGM(OPEN_DURATION);
+	}
+}
+
+void LoadingScreen::ChangeState(EnState state)
+{
+	if (m_instance != nullptr) {
+		m_instance->m_state = state;
+		m_instance->m_timer = 0.0f;
+
+		// ローディング画面レイアウトに強制変更。
+		if (state == enState_Loading) {
+			m_instance->ForceToLoadingLayout();
+
+			// 念のため音を即停止(0.0f)させる
+			SoundManager::StopAllBGM(0.0f);
+		}
+	}
+}
+
+const LoadingScreen::EnState LoadingScreen::GetState()
+{
+	if (m_instance != nullptr) {
+		return static_cast<EnState>(m_instance->m_state);
+	}
+	return enState_None;
+}
 
 LoadingScreen::LoadingScreen()
 {

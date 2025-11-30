@@ -1,4 +1,5 @@
 #pragma once
+
 class LoadingScreen
 {
 public:
@@ -11,41 +12,12 @@ public:
 		enState_None
 	};
 
-	static void StartLoading()
-	{
-		if (m_instance != nullptr) {
-			m_instance->m_state = enState_Close;
-		}
-	}
-
-	static void FinishLoading()
-	{
-		if (m_instance != nullptr) {
-			m_instance->m_state = enState_Open;
-		}
-	}
-
-	static void ChangeState(EnState state)
-	{
-		if (m_instance != nullptr) {
-			m_instance->m_state = state;
-			m_instance->m_timer = 0.0f;
-
-			// ローディング画面レイアウトに強制変更。
-			if (state == enState_Loading) {
-				m_instance->ForceToLoadingLayout();
-			}
-		}
-	}
-
-	static const EnState GetState()
-	{
-		if (m_instance != nullptr) {
-			return static_cast<EnState>(m_instance->m_state);
-		}
-		return enState_None;
-	}
-
+	// ▼▼▼ 実装を .cpp へ移動するため、宣言のみに変更 ▼▼▼
+	static void StartLoading();
+	static void FinishLoading();
+	static void ChangeState(EnState state);
+	static const EnState GetState();
+	// ▲▲▲ 変更ここまで ▲▲▲
 
 private:
 	enum EnImageParts
@@ -58,19 +30,16 @@ private:
 		enImageParts_Num
 	};
 
-
 private:
 	LoadingScreen();
 	~LoadingScreen();
 
 	void ForceToLoadingLayout();
 
-
 public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
-
 
 private:
 	SpriteRender* m_displayImages = nullptr;
@@ -78,17 +47,14 @@ private:
 	EnState m_state = enState_None;
 	float m_timer = 0.0f;
 
-
 private:
 	void InitLayout();
-
 
 	/**
 	 * シングルトン関連
 	 */
 private:
 	static LoadingScreen* m_instance;
-
 
 public:
 	static LoadingScreen* CreateInstance()
@@ -114,7 +80,6 @@ public:
 		}
 	}
 };
-
 
 class LoadingScreenObject : public IGameObject
 {
