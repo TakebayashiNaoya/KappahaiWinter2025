@@ -96,6 +96,11 @@ public:
 	/// </summary>
 	void StompJump();
 
+	/// <summary>
+/// アニメーションイベントを処理します。
+/// </summary>
+	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName) override final;
+
 
 protected:
 	/// <summary>
@@ -132,4 +137,6 @@ private:
 	/// 一定時間が経過したら無敵状態を解除します。
 	/// </summary>
 	void InvincibleTimer();
+
+
 };

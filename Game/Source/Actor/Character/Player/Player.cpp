@@ -179,9 +179,6 @@ bool Player::Start()
 
 	InitLife(LIFE);
 
-	// 星に埋もれないように初期位置を調整。
-	//m_position = SPAWN_POSITION;
-
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
@@ -195,6 +192,10 @@ bool Player::Start()
 			true
 		);
 	}
+
+	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
+		OnAnimationEvent(clipName, eventName);
+		});
 
 	return true;
 }
@@ -280,5 +281,15 @@ void Player::InvincibleTimer()
 	if (m_invincibleTimer >= INVINCIBLE_TIME) {
 		m_isInvincible = false;
 		m_invincibleTimer = 0.0f;
+	}
+}
+
+void Player::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
+{
+	if (wcscmp(eventName, L"first_step") == 0) {
+		SoundManager::Play(enSoundList_PlayerStep1SE);
+	}
+	else if (wcscmp(eventName, L"second_step") == 0) {
+		SoundManager::Play(enSoundList_PlayerStep2SE, false, true, m_position);
 	}
 }
