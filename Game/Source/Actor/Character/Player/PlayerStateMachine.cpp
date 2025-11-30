@@ -227,6 +227,10 @@ namespace app
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
 
+
+			if (CollisionHitManager::GetInstance() == nullptr) {
+				return;
+			}
 			// 踏みつけ用コライダーの作成。
 			GetOwner<Player>()->SetAttackCollider(
 				CollisionHitManager::GetInstance()->CreateCollider(
@@ -248,6 +252,10 @@ namespace app
 
 		void app::player::JumpState::Exit()
 		{
+			if (CollisionHitManager::GetInstance() == nullptr) {
+				GetOwner<Player>()->SetAttackCollider(nullptr); // 念のためnullptrにしておく
+				return;
+			}
 			// 踏みつけ用コライダーの削除。
 			GetOwner<Player>()->SetAttackCollider(
 				CollisionHitManager::GetInstance()->DeleteCollider(
