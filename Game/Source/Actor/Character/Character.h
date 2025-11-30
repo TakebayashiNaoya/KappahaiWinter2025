@@ -330,4 +330,10 @@ protected:
 	/// 移動速度から移動後の座標を計算します。
 	/// </summary>
 	void ComputePosition();
+
+
+	/// <summary>
+	/// アニメーションイベントを処理します。
+	/// </summary>
+	virtual void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName) {};
 };
