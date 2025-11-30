@@ -6,6 +6,7 @@
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
 #include "Source/Actor/Object/Rocket/Rocket.h"
 #include "LoadingScreen.h"
+#include "Source/Battle/BattleManager.h"
 
 
 FirstStage::FirstStage()
@@ -44,6 +45,11 @@ bool FirstStage::Start()
 
 void FirstStage::OnUpdate()
 {
+	if (BattleManager::IsBattleFinish()) {
+		SoundManager::StopBGM(enSoundList_FirstStageBGM, 0.0f);
+		return;
+	}
+
 	if (m_rocket)
 	{
 		if (m_rocket->IsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Opened) {
