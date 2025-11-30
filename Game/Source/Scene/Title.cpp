@@ -19,7 +19,7 @@ Title::Title()
 
 Title::~Title()
 {
-	//DeleteGO(m_titleUI);
+	SoundManager::StopBGM(enSoundList_TitleBGM, 1.0f);
 	DeleteGO(m_titlePlayer);
 	DeleteGO(m_titleCamera);
 	DeleteGO(m_titleStage);
@@ -30,7 +30,6 @@ Title::~Title()
 
 bool Title::Start()
 {
-	//LoadingScreen::FinishLoading();
 	m_waitTimer = 0.0f;
 	m_isLoadingFinished = false;
 
@@ -47,6 +46,8 @@ void Title::Update()
 		if (m_waitTimer > 0.1f) {
 			LoadingScreen::FinishLoading();
 			m_isLoadingFinished = true;
+			SoundManager::Play(enSoundList_TitleBGM, true);
+			SoundManager::SetVolume(enSoundList_FirstStageBGM, 0.0f);
 		}
 		return;
 	}
@@ -55,6 +56,7 @@ void Title::Update()
 
 	// Aボタンが押されたらインゲームへ移行。
 	if (g_pad[0]->IsTrigger(enButtonA)) {
+		SoundManager::Play(enSoundList_SelectSE);
 		// ロードオープン中にボタンを押したら、ロード完了へ。
 		if (LoadingScreen::GetState() == LoadingScreen::enState_Open) {
 			LoadingScreen::ChangeState(LoadingScreen::enState_Opened);
