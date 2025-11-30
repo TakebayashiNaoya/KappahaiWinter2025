@@ -8,7 +8,7 @@
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
 const Character::AnimationOption BossEnemy::BOSS_ENEMY_ANIMATION_OPTIONS[] = {
    {"Bear/idle",	true},
-   {"Bear/walk",	true},
+   {"Bear/walk2",	true},
    {"Bear/run",		true},
    {"Bear/attack",	false},
    {"Bear/damage",	false},
@@ -107,6 +107,11 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 
 		//攻撃用コライダーを削除。
 		m_attackCollider = CollisionHitManager::GetInstance()->DeleteCollider(m_attackCollider);
+	}
+	//キーの名前が「step」の時。
+	else if (wcscmp(eventName, L"step") == 0)
+	{
+		SoundManager::GetInstance()->Play(enSoundList_BossStep);
 	}
 }
 
