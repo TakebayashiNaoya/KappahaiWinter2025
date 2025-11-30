@@ -293,4 +293,10 @@ void Player::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName)
 	else if (wcscmp(eventName, L"second_step") == 0) {
 		SoundManager::Play(enSoundList_PlayerStep2SE, false, true, m_position);
 	}
+	else if (wcscmp(eventName, L"die") == 0) {
+		SoundManager::Play(enSoundList_PlayerDie);
+	}
+	else if (wcscmp(eventName, L"dead") == 0) {
+		SoundManager::Play(enSoundList_PlayerDead);
+	}
 }

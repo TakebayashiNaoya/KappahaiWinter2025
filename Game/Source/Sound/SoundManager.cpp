@@ -47,6 +47,8 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	{ "RunStart",			2.0f },
 	{ "RunLoop",			2.0f },
 	{ "PlayerDamage",		1.0f },
+	{ "PlayerDie",			2.0f },
+	{ "PlayerDead",			1.0f },
 	{ "Stomp",				1.5f },
 	{ "SlidingStart",		1.0f },
 	{ "SlidingLoop",		0.8f },
