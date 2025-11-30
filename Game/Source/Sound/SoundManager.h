@@ -26,6 +26,9 @@ enum EnSoundList
 	enSoundList_BossStep,
 	enSoundList_BossHowl,
 	enSoundList_BossAttack,
+	enSoundList_BossDamage,
+	enSoundList_BossDeadVoice,
+	enSoundList_BossDead,
 	//
 	enSoundList_Num
 };

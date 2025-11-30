@@ -47,10 +47,13 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	{ "RunLoop",			2.0f },
 	{ "Stomp",				1.5f },
 	{ "SlidingStart",		1.0f },
-	{ "SlidingLoop",		0.8f }, // îöâπñhé~ÇÃÇΩÇﬂ1.0à»â∫êÑèß
+	{ "SlidingLoop",		0.8f },
 	{ "BossStep",			1.5f },
 	{ "BossHowl",			1.0f },
 	{ "BossAttack",			3.0f },
+	{ "BossDamage",			1.0f },
+	{ "BossDeadVoice",		2.0f },
+	{ "BossDead",			3.0f },
 };
 
 SoundManager::SoundManager()

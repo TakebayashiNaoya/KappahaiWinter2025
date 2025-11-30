@@ -20,7 +20,7 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr int MAX_LIFE = 1;										// 最大体力。
+	constexpr int MAX_LIFE = 2;										// 最大体力。
 
 	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
 	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
@@ -114,6 +114,9 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	else if (wcscmp(eventName, L"step") == 0)
 	{
 		SoundManager::GetInstance()->Play(enSoundList_BossStep);
+	}
+	else if (wcscmp(eventName, L"dead") == 0) {
+		SoundManager::Play(enSoundList_BossDead, false, true, m_position);
 	}
 }
 

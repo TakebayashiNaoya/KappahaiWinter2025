@@ -264,6 +264,8 @@ namespace app
 
 			// ダメージアニメーション再生
 			GetOwner<BossEnemy>()->PlayAnimation(BossEnemy::enAnimationClip_Damage);
+
+			SoundManager::Play(enSoundList_BossDamage, false, true, GetOwner<BossEnemy>()->GetPosition());
 		}
 
 
@@ -305,6 +307,7 @@ namespace app
 		void DeadState::Enter()
 		{
 			GetOwner<BossEnemy>()->PlayAnimation(BossEnemy::enAnimationClip_Dead);
+			SoundManager::Play(enSoundList_BossDeadVoice, false, true, GetOwner<BossEnemy>()->GetPosition());
 		}
 
 
