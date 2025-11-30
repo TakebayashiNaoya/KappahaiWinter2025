@@ -21,6 +21,7 @@ enum EnSoundList
 	enSoundList_PlayerStep2SE,
 	enSoundList_PlayerRunStart,
 	enSoundList_PlayerRunLoop,
+	enSoundList_PlayerDamage,
 	enSoundList_Stomp,
 	enSoundList_SlidingStart,
 	enSoundList_SlidingLoop,
