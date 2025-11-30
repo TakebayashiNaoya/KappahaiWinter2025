@@ -84,6 +84,8 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 	//キーの名前が「attack_start」の時。
 	if (wcscmp(eventName, L"attack_start") == 0)
 	{
+		SoundManager::Play(enSoundList_BossAttack, false, true, m_position);
+
 		if (CollisionHitManager::GetInstance() == nullptr) {
 			return;
 		}
