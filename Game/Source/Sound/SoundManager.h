@@ -17,6 +17,9 @@ enum EnSoundList
 	enSoundList_PlayerJumpSE,
 	enSoundList_PlayerStep1SE,
 	enSoundList_PlayerStep2SE,
+	enSoundList_PlayerRunStart,
+	enSoundList_PlayerRunLoop,
+
 	enSoundList_Num
 };
 

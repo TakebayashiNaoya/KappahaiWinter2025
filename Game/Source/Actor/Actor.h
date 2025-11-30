@@ -95,7 +95,7 @@ protected:
 
 public:
 	Actor() {};
-	virtual ~Actor() {};
+	virtual ~Actor();
 
 
 protected:
