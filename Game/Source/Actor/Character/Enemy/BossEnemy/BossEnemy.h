@@ -68,7 +68,7 @@ public:
 	/// <summary>
 	/// アニメーションイベントを処理します。
 	/// </summary>
-	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName);
+	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName) override final;
 
 
 public:

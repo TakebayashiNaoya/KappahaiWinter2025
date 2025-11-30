@@ -30,7 +30,7 @@ namespace
 
 UIGameClear::UIGameClear()
 {
-	m_gameClearImage.Init("Assets/sprite/GameClear.dds", 700.0f, 200.0f);
+	m_gameClearImage.Init("Assets/sprite/GameClear.dds", 1000.0f, 300.0f);
 	m_alpha = 0.0f;
 	m_gameClearImage.SetMulColor(Vector4(1.0f, 1.0f, 1.0f, m_alpha));
 }
@@ -85,6 +85,8 @@ bool UIGameClear::Start()
 	m_gameClearImage.SetRotation(m_rotation); // (NEW)
 	m_gameClearImage.SetPosition(m_position);
 	m_gameClearImage.Update();
+
+	SoundManager::Play(enSoundList_GameClear);
 
 	return true;
 }

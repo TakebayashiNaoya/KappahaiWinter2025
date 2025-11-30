@@ -134,6 +134,11 @@ namespace nsK2EngineLow {
 			m_velocity.Subtract(m_position, m_lastFramePosition);
 			//TODO 1.0f/60.0fのところをフレーム時間に変更する。
 			m_velocity.Div(g_gameTime->GetFrameDeltaTime());
+
+			// 変更
+			// ドップラー効果を無効化するために速度を0に設定
+			m_velocity = Vector3::Zero;
+
 			m_lastFramePosition = m_position;
 		}
 

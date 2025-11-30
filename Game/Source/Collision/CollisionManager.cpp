@@ -155,6 +155,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 	if (player->GetAttackCollider()->IsHit(basicEnemy->GetHurtCollider())) {
 		player->StompJump();
 		basicEnemy->SetIsDying(true);
+		SoundManager::Play(enSoundList_Stomp);
 		return true;
 	}
 
@@ -168,6 +169,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 		player->SetIsAttacked(true);
 		player->ComputeKnockBackDirection(basicEnemy->GetPosition());
 		basicEnemy->SetIsCoolDown(true);
+		SoundManager::Play(enSoundList_PlayerDamage);
 		return true;
 	}
 
@@ -197,6 +199,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsDeformed(true);
+			SoundManager::Play(enSoundList_Stomp);
 			return true;
 		}
 
@@ -209,6 +212,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (deformEnemy->GetHitCollider()->IsHit(player->GetHurtCollider())) {
 			player->SetIsAttacked(true);
 			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
+			SoundManager::Play(enSoundList_PlayerDamage);
 			return true;
 		}
 
@@ -222,13 +226,8 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (player->GetHurtCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			deformEnemy->SetIsSliding(true);
 			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
+			SoundManager::Play(enSoundList_SlidingStart);
 			return true;
-		}
-		// プレイヤーがエネミーを踏んだ場合。
-		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
-			player->StompJump();
-			deformEnemy->SetIsSliding(true);
-			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
 		}
 		return true;
 	}
@@ -240,6 +239,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsSliding(false);
+			SoundManager::Play(enSoundList_Stomp);
 			return true;
 		}
 
@@ -253,6 +253,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 			player->SetIsAttacked(true);
 			player->ComputeKnockBackDirection(deformEnemy->GetPosition());
 			deformEnemy->SetIsDying(true);
+			SoundManager::Play(enSoundList_PlayerDamage);
 			return true;
 		}
 		return true;
@@ -287,6 +288,7 @@ bool CollisionHitManager::UpdateHitPlayerBossEnemy(CollisionPair& pair)
 	if (bossEnemy->GetHitCollider()->IsHit(player->GetHurtCollider())) {
 		player->SetIsAttacked(true);
 		player->ComputeKnockBackDirection(bossEnemy->GetPosition());
+		SoundManager::Play(enSoundList_PlayerDamage);
 		return true;
 	}
 
@@ -294,6 +296,7 @@ bool CollisionHitManager::UpdateHitPlayerBossEnemy(CollisionPair& pair)
 	if (bossEnemy->GetAttackCollider()->IsHit(player->GetHurtCollider())) {
 		player->SetIsAttacked(true);
 		player->ComputeKnockBackDirection(bossEnemy->GetPosition());
+		SoundManager::Play(enSoundList_PlayerDamage);
 		return true;
 	}
 
@@ -323,6 +326,7 @@ bool CollisionHitManager::UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair)
 		if (deformEnemy->GetHitCollider()->IsHit(basicEnemy->GetHurtCollider())) {
 			basicEnemy->SetIsDying(true);
 			deformEnemy->SetIsDying(true);
+			SoundManager::Play(enSoundList_Stomp);
 			return true;
 		}
 		return true;
@@ -352,6 +356,7 @@ bool CollisionHitManager::UpdateHitDeformEnemyBossEnemy(CollisionPair& pair)
 		if (deformEnemy->GetHitCollider()->IsHit(bossEnemy->GetHurtCollider())) {
 			bossEnemy->SetIsAttacked(true);
 			deformEnemy->SetIsDying(true);
+			SoundManager::Play(enSoundList_Stomp);
 			return true;
 		}
 		return true;

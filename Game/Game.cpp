@@ -8,6 +8,7 @@ Game::Game()
 {
 	m_sceneManager = NewGO<SceneManagerObject>(0, "SceneManagerObject");
 	m_loadingScreen = NewGO<LoadingScreenObject>(0, "LoadingScreenObject");
+	NewGO<SoundManagerObject>(0, "SoundManagerObject");
 }
 
 

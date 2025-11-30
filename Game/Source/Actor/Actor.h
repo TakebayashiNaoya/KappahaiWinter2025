@@ -64,16 +64,38 @@ public:
 	}
 
 
+public:
+	// ... (既存のGet/Set関数) ...
+
+	/// <summary>
+	/// ループ音の再生を開始します。
+	/// </summary>
+	/// <param name="soundId">再生するサウンドのID (EnSoundList)</param>
+	void StartLoopSound(int soundId);
+
+	/// <summary>
+	/// ループ音を停止・破棄します。
+	/// </summary>
+	void StopLoopSound();
+
+	/// <summary>
+	/// ループ音の座標をActorの現在座標に更新します。
+	/// Update内で呼び出してください。
+	/// </summary>
+	void UpdateLoopSound();
+
+
 protected:
 	Vector3 m_position = Vector3::Zero;				// 座標。
 	Quaternion m_rotation = Quaternion::Identity;	// 回転。
 	Vector3 m_scale = Vector3::One;					// 拡大率。
 	ModelRender m_modelRender;						// モデルレンダラー。
+	SoundSource* m_loopSound = nullptr;				// サウンドソース。
 
 
 public:
 	Actor() {};
-	virtual ~Actor() {};
+	virtual ~Actor();
 
 
 protected:

@@ -82,6 +82,7 @@ namespace app
 
 			if (g_pad[0]->IsTrigger(enButtonA)) {
 				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
+				SoundManager::Play(enSoundList_PlayerJumpSE);
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -134,11 +135,13 @@ namespace app
 
 			if (g_pad[0]->IsPress(enButtonB)) {
 				requestStateId = enPlayerState_Run;
+				SoundManager::Play(enSoundList_PlayerRunStart);
 				return true;
 			}
 
 			if (g_pad[0]->IsTrigger(enButtonA)) {
 				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
+				SoundManager::Play(enSoundList_PlayerJumpSE);
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -160,6 +163,7 @@ namespace app
 		void app::player::RunState::Enter()
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
+			GetOwner<Player>()->StartLoopSound(enSoundList_PlayerRunLoop);
 		}
 
 
@@ -168,12 +172,16 @@ namespace app
 			GetOwner<Player>()->MoveUpdate(DASH_SPEED);
 			GetOwner<Player>()->CalcCameraRotation();
 			GetOwner<Player>()->ModelRotation();
+
+			GetOwner<Player>()->UpdateLoopSound();
+
 		}
 
 
 		void app::player::RunState::Exit()
 		{
 			GetOwner<Player>()->SetSpeedBeforeJump(DASH_SPEED);
+			GetOwner<Player>()->StopLoopSound();
 		}
 
 
@@ -196,6 +204,7 @@ namespace app
 
 			if (g_pad[0]->IsTrigger(enButtonA)) {
 				GetOwner<Player>()->ApplyJumpImpulse(JUMP_POWER);
+				SoundManager::Play(enSoundList_PlayerJumpSE);
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -218,6 +227,10 @@ namespace app
 		{
 			GetOwner<Player>()->PlayAnimation(Player::enAnimationClip_Run);
 
+
+			if (CollisionHitManager::GetInstance() == nullptr) {
+				return;
+			}
 			// 踏みつけ用コライダーの作成。
 			GetOwner<Player>()->SetAttackCollider(
 				CollisionHitManager::GetInstance()->CreateCollider(
@@ -239,6 +252,10 @@ namespace app
 
 		void app::player::JumpState::Exit()
 		{
+			if (CollisionHitManager::GetInstance() == nullptr) {
+				GetOwner<Player>()->SetAttackCollider(nullptr); // 念のためnullptrにしておく
+				return;
+			}
 			// 踏みつけ用コライダーの削除。
 			GetOwner<Player>()->SetAttackCollider(
 				CollisionHitManager::GetInstance()->DeleteCollider(
