@@ -69,6 +69,7 @@ protected:
 	Quaternion m_rotation = Quaternion::Identity;	// 回転。
 	Vector3 m_scale = Vector3::One;					// 拡大率。
 	ModelRender m_modelRender;						// モデルレンダラー。
+	SoundSource* m_loopSound = nullptr;				// サウンドソース。
 
 
 public:
