@@ -4,3 +4,7 @@
 #include "k2EnginePreCompile.h"
 using namespace nsK2EngineLow;
 using namespace nsK2Engine;
+
+
+// ’Ç‰Á
+#include "Source/Sound/SoundManager.h"
