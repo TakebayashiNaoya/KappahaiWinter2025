@@ -4,10 +4,6 @@
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Actor/Character/Enemy/BasicEnemy/BasicEnemy.h"
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
-#include "Source/Camera/GameCamera.h"
-#include "Source/UI/UIInGame.h"
-#include "Source/Battle/BattleManager.h"
-#include "Source/Collision/CollisionManager.h"
 #include "Source/Actor/Object/Rocket/Rocket.h"
 #include "LoadingScreen.h"
 
@@ -39,6 +35,10 @@ FirstStage::~FirstStage()
 
 bool FirstStage::Start()
 {
+	SoundManager::Play(enSoundList_FirstStageBGM, true);
+
+	// ロード明けで音量が上がるため、一旦音量を0にしておく。
+	SoundManager::SetVolume(enSoundList_FirstStageBGM, 0.0f);
 	return true;
 }
 
