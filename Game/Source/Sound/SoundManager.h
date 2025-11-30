@@ -20,6 +20,8 @@ enum EnSoundList
 	enSoundList_PlayerRunStart,
 	enSoundList_PlayerRunLoop,
 	enSoundList_Stomp,
+	enSoundList_SlidingStart,
+	enSoundList_SlidingLoop,
 	//
 	enSoundList_Num
 };

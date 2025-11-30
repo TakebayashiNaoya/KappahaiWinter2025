@@ -24,12 +24,14 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	{ "TitleBGM",			0.5f },
 	{ "FirstStageBGM",		0.5f },
 	{ "Push",				1.0f },
-	{ "PlayerJump",			0.5f },
+	{ "PlayerJump",			1.0f },
 	{ "PlayerFirstStep",	0.5f },
 	{ "PlayerSecondStep",	0.5f },
-	{ "RunStart",			1.5f },
-	{ "RunLoop",			1.5f },
+	{ "RunStart",			2.0f },
+	{ "RunLoop",			2.0f },
 	{ "Stomp",				1.5f },
+	{ "SlidingStart",		1.0f },
+	{ "SlidingLoop",		2.0f },
 };
 
 SoundManager::SoundManager()

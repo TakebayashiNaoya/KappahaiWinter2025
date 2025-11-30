@@ -224,14 +224,15 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (player->GetHurtCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			deformEnemy->SetIsSliding(true);
 			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
+			SoundManager::Play(enSoundList_SlidingStart);
 			return true;
 		}
-		// プレイヤーがエネミーを踏んだ場合。
-		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
-			player->StompJump();
-			deformEnemy->SetIsSliding(true);
-			deformEnemy->CalcInitialSlideDirection(player->GetPosition());
-		}
+		//// プレイヤーがエネミーを踏んだ場合。
+		//if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
+		//	player->StompJump();
+		//	deformEnemy->SetIsSliding(true);
+		//	deformEnemy->CalcInitialSlideDirection(player->GetPosition());
+		//}
 		return true;
 	}
 

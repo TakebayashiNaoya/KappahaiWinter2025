@@ -131,6 +131,7 @@ namespace app
 
 		void SlideState::Enter()
 		{
+			GetOwner<DeformEnemy>()->StartLoopSound(enSoundList_SlidingLoop);
 		}
 
 
@@ -138,11 +139,13 @@ namespace app
 		{
 			GetOwner<DeformEnemy>()->Sliding();
 			GetOwner<DeformEnemy>()->ModelRotation();
+			GetOwner<DeformEnemy>()->UpdateLoopSound();
 		}
 
 
 		void SlideState::Exit()
 		{
+			GetOwner<DeformEnemy>()->StopLoopSound();
 		}
 
 
