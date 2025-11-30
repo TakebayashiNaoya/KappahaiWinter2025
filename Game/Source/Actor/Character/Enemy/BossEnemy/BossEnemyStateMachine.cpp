@@ -213,6 +213,7 @@ namespace app
 		void AttackState::Enter()
 		{
 			GetOwner<BossEnemy>()->PlayAnimation(BossEnemy::enAnimationClip_Attack);
+			SoundManager::Play(enSoundList_BossHowl, false, true, GetOwner<BossEnemy>()->GetPosition());
 		}
 
 

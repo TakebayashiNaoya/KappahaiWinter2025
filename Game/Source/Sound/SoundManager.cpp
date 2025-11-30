@@ -49,6 +49,7 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	{ "SlidingStart",		1.0f },
 	{ "SlidingLoop",		0.8f }, // ”š‰¹–h~‚Ì‚½‚ß1.0ˆÈ‰º„§
 	{ "BossStep",			2.0f },
+	{ "BossHowl",			1.0f },
 };
 
 SoundManager::SoundManager()
