@@ -207,6 +207,11 @@ void Player::Update()
 		return;
 	}
 
+	if (BattleManager::IsBattleFinish()) {
+		StopLoopSound();
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 	m_xzAdditionalRot = Quaternion::Identity;
 

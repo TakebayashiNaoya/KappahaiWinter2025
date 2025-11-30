@@ -114,6 +114,11 @@ void DeformEnemy::Update()
 		return;
 	}
 
+	if (BattleManager::IsBattleFinish()) {
+		StopLoopSound();
+		return;
+	}
+
 	m_moveSpeed = Vector3::Zero;
 
 	//「惑星の中心→キャラ」のベクトルを計算し、正規化します。
