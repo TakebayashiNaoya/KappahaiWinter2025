@@ -19,7 +19,8 @@ enum EnSoundList
 	enSoundList_PlayerStep2SE,
 	enSoundList_PlayerRunStart,
 	enSoundList_PlayerRunLoop,
-
+	enSoundList_Stomp,
+	//
 	enSoundList_Num
 };
 

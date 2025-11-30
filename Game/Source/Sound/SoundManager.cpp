@@ -29,6 +29,7 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	{ "PlayerSecondStep",	0.5f },
 	{ "RunStart",			1.5f },
 	{ "RunLoop",			1.5f },
+	{ "Stomp",				1.5f },
 };
 
 SoundManager::SoundManager()

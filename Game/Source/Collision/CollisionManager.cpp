@@ -155,6 +155,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 	if (player->GetAttackCollider()->IsHit(basicEnemy->GetHurtCollider())) {
 		player->StompJump();
 		basicEnemy->SetIsDying(true);
+		SoundManager::Play(enSoundList_Stomp);
 		return true;
 	}
 
@@ -197,6 +198,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsDeformed(true);
+			SoundManager::Play(enSoundList_Stomp);
 			return true;
 		}
 
@@ -240,6 +242,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
 			player->StompJump();
 			deformEnemy->SetIsSliding(false);
+			SoundManager::Play(enSoundList_Stomp);
 			return true;
 		}
 
