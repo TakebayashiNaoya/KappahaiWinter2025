@@ -8,7 +8,7 @@
 // ‚½‚¾Astatic‚Ì•û‚ªƒƒ‚ƒŠŒø—¦‚Í—Ç‚¢‚Ì‚Å¡‰ñ‚Í‚±‚ÌŒ`B
 const Character::AnimationOption BossEnemy::BOSS_ENEMY_ANIMATION_OPTIONS[] = {
    {"Bear/idle",	true},
-   {"Bear/walk2",	true},
+   {"Bear/walk",	true},
    {"Bear/run",		true},
    {"Bear/attack",	false},
    {"Bear/damage",	false},
