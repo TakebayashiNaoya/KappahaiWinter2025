@@ -39,6 +39,7 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	// fileName				volume
 	{ "TitleBGM",			0.5f },
 	{ "FirstStageBGM",		0.5f },
+	{ "BossStageBGM",		0.5f },
 	{ "Push",				1.0f },
 	{ "PlayerJump",			1.0f },
 	{ "PlayerFirstStep",	0.5f },
@@ -54,6 +55,9 @@ const SoundManager::SoundDef SoundManager::m_soundDefs[enSoundList_Num] =
 	{ "BossDamage",			1.0f },
 	{ "BossDeadVoice",		2.0f },
 	{ "BossDead",			3.0f },
+	{ "GameClear",			1.0f },
+	{ "GameOver",			1.0f },
+	{ "GameOverSlip",		1.0f },
 };
 
 SoundManager::SoundManager()

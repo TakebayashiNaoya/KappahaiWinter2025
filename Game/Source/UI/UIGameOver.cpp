@@ -9,7 +9,7 @@ namespace
 	constexpr float ROTATION_COUNT = 4.0f;			// 回転する回数。
 	constexpr float PAI = 3.14159265f;				// 円周率。
 
-	constexpr float BEFORE_SLIP_WAIT_TIME = 0.5f;	// スリップ前の待機時間。
+	constexpr float BEFORE_SLIP_WAIT_TIME = 1.0f;	// スリップ前の待機時間。
 	constexpr float AFTER_SLIP_WAIT_TIME = 1.0f;	// スリップ後の待機時間。
 
 	constexpr float SLIP_ROTATION_TIME = 0.1f;	// 何秒かけて傾けるか
@@ -21,7 +21,7 @@ UIGameOver::UIGameOver()
 {
 	m_hideImage.Init("Assets/sprite/LoadingImage_Around.dds", 1920.0f, 1080.0f);
 	m_hideImage.SetMulColor(Vector4(0.0f, 0.0f, 0.0f, 0.0f));
-	m_gameOverImage.Init("Assets/sprite/GameOver.dds", 700.0f, 200.0f);
+	m_gameOverImage.Init("Assets/sprite/GameOver.dds", 1000.0f, 300.0f);
 	m_gameOverImageAlpha = 1.0f;
 }
 
@@ -47,6 +47,7 @@ void UIGameOver::Update()
 		m_hideImageAlpha += g_gameTime->GetFrameDeltaTime() / FADE_IN_TIME;
 		if (m_hideImageAlpha >= 1.0f) {
 			m_hideImageAlpha = 1.0f;
+			SoundManager::Play(enSoundList_GameOver);
 			m_state = enState_EntryImage;
 		}
 		m_hideImage.SetMulColor(Vector4(0.0f, 0.0f, 0.0f, m_hideImageAlpha));
@@ -85,6 +86,7 @@ void UIGameOver::Update()
 		m_waitTimer += g_gameTime->GetFrameDeltaTime();
 		if (m_waitTimer >= BEFORE_SLIP_WAIT_TIME) {
 			m_waitTimer = 0.0f;
+			SoundManager::Play(enSoundList_GameOverSlip);
 			m_state = enState_SlipImage;
 		}
 		break;

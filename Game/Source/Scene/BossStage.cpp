@@ -6,6 +6,7 @@
 #include "Source/Actor/Object/Spawner/Spawner.h"
 #include "Source/UI/UIBossLife.h"
 #include "Source/Actor/Actor.h"
+#include "Source/Battle/BattleManager.h"
 
 BossStage::BossStage()
 {
@@ -28,12 +29,20 @@ BossStage::~BossStage()
 
 bool BossStage::Start()
 {
+	SoundManager::Play(enSoundList_BossStageBGM, true);
+	// ロード明けで音量が上がるため、一旦音量を0にしておく。
+	SoundManager::SetVolume(enSoundList_BossStageBGM, 0.0f);
+
 	m_uiBossLife = NewGO<UIBossLife>(0, "UIBossLife");
 	return true;
 }
 
 void BossStage::OnUpdate()
 {
+	if (BattleManager::IsBattleFinish()) {
+		SoundManager::StopBGM(enSoundList_BossStageBGM, 0.0f);
+		return;
+	}
 }
 
 

@@ -14,7 +14,8 @@ enum EnSoundList
 {
 	enSoundList_TitleBGM,
 	enSoundList_FirstStageBGM,
-	enSoundList_SelectSE,
+	enSoundList_BossStageBGM,
+	enSoundList_PushSE,
 	enSoundList_PlayerJumpSE,
 	enSoundList_PlayerStep1SE,
 	enSoundList_PlayerStep2SE,
@@ -29,6 +30,9 @@ enum EnSoundList
 	enSoundList_BossDamage,
 	enSoundList_BossDeadVoice,
 	enSoundList_BossDead,
+	enSoundList_GameClear,
+	enSoundList_GameOver,
+	enSoundList_GameOverSlip,
 	//
 	enSoundList_Num
 };

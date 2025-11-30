@@ -13,7 +13,6 @@ Title::Title()
 	m_titleCamera = NewGO<TitleCamera>(0, "TitleCamera");
 	m_titleStage = NewGO<TitlePlanet>(0, "TitlePlanet");
 	m_uiTitle = NewGO<UITitle>(0, "UITitle");
-	InitSky();
 }
 
 
@@ -30,6 +29,7 @@ Title::~Title()
 
 bool Title::Start()
 {
+	InitSky();
 	m_waitTimer = 0.0f;
 	m_isLoadingFinished = false;
 
@@ -56,7 +56,7 @@ void Title::Update()
 
 	// Aボタンが押されたらインゲームへ移行。
 	if (g_pad[0]->IsTrigger(enButtonA)) {
-		SoundManager::Play(enSoundList_SelectSE);
+		SoundManager::Play(enSoundList_PushSE);
 		// ロードオープン中にボタンを押したら、ロード完了へ。
 		if (LoadingScreen::GetState() == LoadingScreen::enState_Open) {
 			LoadingScreen::ChangeState(LoadingScreen::enState_Opened);
