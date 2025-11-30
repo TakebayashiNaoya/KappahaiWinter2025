@@ -55,6 +55,9 @@
     <Filter Include="Source\Actor\Object\Spawner">
       <UniqueIdentifier>{104711d3-45bd-40d2-af07-47a1396fe81c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Sound">
+      <UniqueIdentifier>{b7623839-f957-449b-b341-e4c136088142}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -178,6 +181,9 @@
     <ClCompile Include="Source\UI\UIResultBase.cpp">
       <Filter>Source\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Sound\SoundManager.cpp">
+      <Filter>Source\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -299,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="Source\UI\UIResultBase.h">
       <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound\SoundManager.h">
+      <Filter>Source\Sound</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
