@@ -68,86 +68,36 @@ public:
 	/// </summary>
 public:
 	// プレイヤー用
-	void RegisterPlayer(Player* player)
-	{
-		m_player = player;
-	}
-	void UnregisterPlayer()
-	{
-		m_player = nullptr;
-	}
+	void RegisterPlayer(Player* player);
+	void UnregisterPlayer();
 
 	// ボス用
-	void RegisterBoss(BossEnemy* boss)
-	{
-		m_bossEnemy = boss;
-	}
-	void UnregisterBoss()
-	{
-		m_bossEnemy = nullptr;
-	}
+	void RegisterBoss(BossEnemy* boss);
+	void UnregisterBoss();
 
 	// 基本エネミー用
-	void RegisterBasicEnemy(BasicEnemy* enemy)
-	{
-		m_basicEnemies.push_back(enemy);
-	}
-	void UnregisterBasicEnemy(BasicEnemy* enemy)
-	{
-		auto it = std::remove(m_basicEnemies.begin(), m_basicEnemies.end(), enemy);
-		m_basicEnemies.erase(it, m_basicEnemies.end());
-	}
+	void RegisterBasicEnemy(BasicEnemy* enemy);
+	void UnregisterBasicEnemy(BasicEnemy* enemy);
 
 	// 変形エネミー用
-	void RegisterDeformEnemy(DeformEnemy* enemy)
-	{
-		m_deformEnemies.push_back(enemy);
-	}
-	void UnregisterDeformEnemy(DeformEnemy* enemy)
-	{
-		auto it = std::remove(m_deformEnemies.begin(), m_deformEnemies.end(), enemy);
-		m_deformEnemies.erase(it, m_deformEnemies.end());
-	}
+	void RegisterDeformEnemy(DeformEnemy* enemy);
+	void UnregisterDeformEnemy(DeformEnemy* enemy);
 
 	// ロケット用
-	void RegisterRocket(Rocket* rocket)
-	{
-		m_rocket = rocket;
-	}
-	void UnregisterRocket()
-	{
-		m_rocket = nullptr;
-	}
+	void RegisterRocket(Rocket* rocket);
+	void UnregisterRocket();
 
 	// プレイヤーライフUI用
-	void RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife)
-	{
-		m_uiPlayerLife = uiPlayerLife;
-	}
-	void UnregisterUIPlayerLife()
-	{
-		m_uiPlayerLife = nullptr;
-	}
+	void RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife);
+	void UnregisterUIPlayerLife();
 
 	// ダメージフラッシュUI用
-	void RegisterUIDamageFlash(UIDamageFlash* uiDamageFlash)
-	{
-		m_uiDamageFlash = uiDamageFlash;
-	}
-	void UnregisterUIDamageFlash()
-	{
-		m_uiDamageFlash = nullptr;
-	}
+	void RegisterUIDamageFlash(UIDamageFlash* uiDamageFlash);
+	void UnregisterUIDamageFlash();
 
 	// ボスライフUI用
-	void RegisterUIBossLife(UIBossLife* uiBossLife)
-	{
-		m_uiBossLife = uiBossLife;
-	}
-	void UnregisterUIBossLife()
-	{
-		m_uiBossLife = nullptr;
-	}
+	void RegisterUIBossLife(UIBossLife* uiBossLife);
+	void UnregisterUIBossLife();
 
 
 private:

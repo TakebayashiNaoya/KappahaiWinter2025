@@ -15,10 +15,18 @@ UIPlayerLife::UIPlayerLife()
 
 UIPlayerLife::~UIPlayerLife()
 {
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->UnregisterUIPlayerLife();
+	}
 }
 
 bool UIPlayerLife::Start()
 {
+	// バトルマネージャーに自分を登録。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->RegisterUIPlayerLife(this);
+	}
+
 	m_hpSprites[enPlayerCondition_Dead].Init("Assets/sprite/HP0.dds", SPRITE_SIZE_W, SPRITE_SIZE_H);
 	m_hpSprites[enPlayerCondition_Danger].Init("Assets/sprite/HP1.dds", SPRITE_SIZE_W, SPRITE_SIZE_H);
 	m_hpSprites[enPlayerCondition_Caution].Init("Assets/sprite/HP2.dds", SPRITE_SIZE_W, SPRITE_SIZE_H);

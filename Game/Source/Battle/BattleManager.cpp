@@ -60,27 +60,17 @@ void BattleManager::Update()
 	}
 
 
-	// キャラの数は少なく、FindGOs内で最適化されているため、毎フレーム取得しても問題ないと判断。
-	//Player* player = FindGO<Player>("Player");
-	if (m_player == nullptr) {
-		return;
-	}
-
-
 	// プレイヤーのライフをUIに反映。
-	//UIPlayerLife* playerHpUI = FindGO<UIPlayerLife>("UIPlayerLife");
 	if (m_uiPlayerLife && m_player) {
 		m_uiPlayerLife->SetPlayerHp(m_player->GetLife());
 	}
-
 
 	// ダメージフラッシュUIにプレイヤーのダメージ状態を反映。
 	if (m_uiDamageFlash && m_player) {
 		m_uiDamageFlash->SetPlayerHp(m_player->GetLife());
 	}
 
-
-	//Rocket* rocket = FindGO<Rocket>("Rocket");
+	// プレイヤーがロケットに近づいたら、ロケットをゴール状態にする。
 	if (m_rocket && m_player) {
 		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
 		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
@@ -88,23 +78,16 @@ void BattleManager::Update()
 		}
 	}
 
-
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	//std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
 	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
 
-
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	//std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
 	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
-
 	// ボスエネミーにプレイヤーの座標を伝える。
-	//BossEnemy* bossEnemy = FindGO<BossEnemy>("BossEnemy");
 	if (m_bossEnemy && m_player) {
 		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
 	}
-
 
 	// ボスのライフをUIに反映。
 	if (m_uiBossLife && m_bossEnemy) {
@@ -114,6 +97,87 @@ void BattleManager::Update()
 }
 
 
+void BattleManager::RegisterPlayer(Player* player)
+{
+	m_player = player;
+}
+
+void BattleManager::UnregisterPlayer()
+{
+	m_player = nullptr;
+}
+
+void BattleManager::RegisterBoss(BossEnemy* boss)
+{
+	m_bossEnemy = boss;
+}
+
+void BattleManager::UnregisterBoss()
+{
+	m_bossEnemy = nullptr;
+}
+
+void BattleManager::RegisterBasicEnemy(BasicEnemy* enemy)
+{
+	m_basicEnemies.push_back(enemy);
+}
+
+void BattleManager::UnregisterBasicEnemy(BasicEnemy* enemy)
+{
+	auto it = std::remove(m_basicEnemies.begin(), m_basicEnemies.end(), enemy);
+	m_basicEnemies.erase(it, m_basicEnemies.end());
+}
+
+void BattleManager::RegisterDeformEnemy(DeformEnemy* enemy)
+{
+	m_deformEnemies.push_back(enemy);
+}
+
+void BattleManager::UnregisterDeformEnemy(DeformEnemy* enemy)
+{
+	auto it = std::remove(m_deformEnemies.begin(), m_deformEnemies.end(), enemy);
+	m_deformEnemies.erase(it, m_deformEnemies.end());
+}
+
+void BattleManager::RegisterRocket(Rocket* rocket)
+{
+	m_rocket = rocket;
+}
+
+void BattleManager::UnregisterRocket()
+{
+	m_rocket = nullptr;
+}
+
+void BattleManager::RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife)
+{
+	m_uiPlayerLife = uiPlayerLife;
+}
+
+void BattleManager::UnregisterUIPlayerLife()
+{
+	m_uiPlayerLife = nullptr;
+}
+
+void BattleManager::RegisterUIDamageFlash(UIDamageFlash* uiDamageFlash)
+{
+	m_uiDamageFlash = uiDamageFlash;
+}
+
+void BattleManager::UnregisterUIDamageFlash()
+{
+	m_uiDamageFlash = nullptr;
+}
+
+void BattleManager::RegisterUIBossLife(UIBossLife* uiBossLife)
+{
+	m_uiBossLife = uiBossLife;
+}
+
+void BattleManager::UnregisterUIBossLife()
+{
+	m_uiBossLife = nullptr;
+}
 
 
 
