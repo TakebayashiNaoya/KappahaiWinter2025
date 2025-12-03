@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Spawner.h"
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
-#include "Source/Battle/BattleManager.h"
 
 namespace
 {

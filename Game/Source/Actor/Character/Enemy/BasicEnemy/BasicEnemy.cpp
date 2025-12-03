@@ -2,7 +2,6 @@
 #include "BasicEnemy.h"
 #include "BasicEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
-#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -27,6 +26,14 @@ namespace
 BasicEnemy::BasicEnemy()
 {
 	m_stateMachine = std::make_unique<app::basicEnemy::BasicEnemyStateMachine>(this);
+}
+
+BasicEnemy::~BasicEnemy()
+{
+	// BattleManagerから基本エネミー登録を解除。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->UnregisterBasicEnemy(this);
+	}
 }
 
 /// <summary>
@@ -59,6 +66,11 @@ void BasicEnemy::CoolDownCount()
 
 bool BasicEnemy::Start()
 {
+	// BattleManagerに基本エネミーを登録。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->RegisterBasicEnemy(this);
+	}
+
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

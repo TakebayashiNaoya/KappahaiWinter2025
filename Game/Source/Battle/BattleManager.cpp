@@ -61,57 +61,55 @@ void BattleManager::Update()
 
 
 	// キャラの数は少なく、FindGOs内で最適化されているため、毎フレーム取得しても問題ないと判断。
-	Player* player = FindGO<Player>("Player");
-	if (player == nullptr) {
+	//Player* player = FindGO<Player>("Player");
+	if (m_player == nullptr) {
 		return;
 	}
 
 
 	// プレイヤーのライフをUIに反映。
-	UIPlayerLife* playerHpUI = FindGO<UIPlayerLife>("UIPlayerLife");
-	if (playerHpUI) {
-		playerHpUI->SetPlayerHp(player->GetLife());
+	//UIPlayerLife* playerHpUI = FindGO<UIPlayerLife>("UIPlayerLife");
+	if (m_uiPlayerLife && m_player) {
+		m_uiPlayerLife->SetPlayerHp(m_player->GetLife());
 	}
 
 
 	// ダメージフラッシュUIにプレイヤーのダメージ状態を反映。
-	UIDamageFlash* damageFlashUI = FindGO<UIDamageFlash>("UIDamageFlash");
-	if (damageFlashUI) {
-		damageFlashUI->SetPlayerHp(player->GetLife());
+	if (m_uiDamageFlash && m_player) {
+		m_uiDamageFlash->SetPlayerHp(m_player->GetLife());
 	}
 
 
-	Rocket* rocket = FindGO<Rocket>("Rocket");
-	if (rocket) {
-		Vector3 lengthVec = rocket->GetPosition() - player->GetPosition();
+	//Rocket* rocket = FindGO<Rocket>("Rocket");
+	if (m_rocket && m_player) {
+		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
 		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
-			rocket->SetIsGooled(true);
+			m_rocket->SetIsGooled(true);
 		}
 	}
 
 
 	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
-	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, ENEMY_SEARCH_RADIUS);
+	//std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
+	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
 
 
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
-	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, ENEMY_SEARCH_RADIUS);
+	//std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
+	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
 
 	// ボスエネミーにプレイヤーの座標を伝える。
-	BossEnemy* bossEnemy = FindGO<BossEnemy>("BossEnemy");
-	if (bossEnemy && player) {
-		bossEnemy->SetIsFoundPlayer(true, player->GetPosition());
+	//BossEnemy* bossEnemy = FindGO<BossEnemy>("BossEnemy");
+	if (m_bossEnemy && m_player) {
+		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
 	}
 
 
 	// ボスのライフをUIに反映。
-	UIBossLife* bossHpUI = FindGO<UIBossLife>("UIBossLife");
-	if (bossHpUI && bossEnemy) {
-		bossHpUI->SetMaxLife(bossEnemy->GetMaxLife());
-		bossHpUI->SetCurrentLife(bossEnemy->GetLife());
+	if (m_uiBossLife && m_bossEnemy) {
+		m_uiBossLife->SetMaxLife(m_bossEnemy->GetMaxLife());
+		m_uiBossLife->SetCurrentLife(m_bossEnemy->GetLife());
 	}
 }
 

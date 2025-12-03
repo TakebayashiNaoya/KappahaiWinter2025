@@ -8,3 +8,4 @@ using namespace nsK2Engine;
 
 // ’Ç‰Á
 #include "Source/Sound/SoundManager.h"
+#include "Source/Battle/BattleManager.h"

@@ -2,7 +2,6 @@
 #include "BossEnemy.h"
 #include "BossEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
-#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -36,6 +35,14 @@ namespace
 BossEnemy::BossEnemy()
 {
 	m_stateMachine = std::make_unique<app::bossEnemy::BossEnemyStateMachine>(this);
+}
+
+BossEnemy::~BossEnemy()
+{
+	// BattleManagerからボスを登録解除。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->UnregisterBoss();
+	}
 }
 
 
@@ -123,6 +130,11 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 
 bool BossEnemy::Start()
 {
+	// BattleManagerにボスを登録。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->RegisterBoss(this);
+	}
+
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BOSS_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

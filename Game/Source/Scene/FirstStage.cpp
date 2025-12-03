@@ -6,7 +6,7 @@
 #include "Source/Actor/Character/Enemy/DeformEnemy/DeformEnemy.h"
 #include "Source/Actor/Object/Rocket/Rocket.h"
 #include "LoadingScreen.h"
-#include "Source/Battle/BattleManager.h"
+#include "Source/Actor/Object/Treasure/Treasure.h"
 
 
 FirstStage::FirstStage()
@@ -40,6 +40,8 @@ bool FirstStage::Start()
 
 	// ロード明けで音量が上がるため、一旦音量を0にしておく。
 	SoundManager::SetVolume(enSoundList_FirstStageBGM, 0.0f);
+
+	//NewGO<Treasure>(0, "Treasure");
 	return true;
 }
 
@@ -65,7 +67,7 @@ void FirstStage::OnUpdate()
 void FirstStage::InitLevel()
 {
 	m_levelRender.Init("Assets/modelData/stage/FirstPlanet/FirstPlanetLevel.tkl", [&](LevelObjectData& objData) {
-		if (objData.EqualObjectName(L"FirstPlanet")) {
+		if (objData.EqualObjectName(L"Planet")) {
 			m_firstStage = NewGO<FirstPlanet>(0, "FirstPlanet");
 			m_firstStage->SetTRS(objData.position, objData.rotation, objData.scale);
 			return true;
@@ -85,6 +87,12 @@ void FirstStage::InitLevel()
 			DeformEnemy* spider = NewGO <DeformEnemy>(0, "DeformEnemy");
 			spider->SetTRS(objData.position, objData.rotation, objData.scale);
 			m_deformEnemies.push_back(spider);
+			return true;
+		}
+		if (objData.EqualObjectName(L"treasure")) {
+			Treasure* treasure = NewGO <Treasure>(0, "Treasure");
+			treasure->SetTRS(objData.position, objData.rotation, objData.scale);
+			m_treasures.push_back(treasure);
 			return true;
 		}
 		if (objData.EqualObjectName(L"rocket")) {

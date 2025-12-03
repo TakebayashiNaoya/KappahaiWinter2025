@@ -2,7 +2,6 @@
 #include "DeformEnemy.h"
 #include "DeformEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
-#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -30,6 +29,14 @@ namespace
 DeformEnemy::DeformEnemy()
 {
 	m_stateMachine = std::make_unique<app::deformEnemy::DeformEnemyStateMachine>(this);
+}
+
+DeformEnemy::~DeformEnemy()
+{
+	// BattleManagerから敵を登録解除。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->UnregisterDeformEnemy(this);
+	}
 }
 
 
@@ -78,6 +85,11 @@ void DeformEnemy::Sliding()
 
 bool DeformEnemy::Start()
 {
+	// BattleManagerに敵を登録。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->RegisterDeformEnemy(this);
+	}
+
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

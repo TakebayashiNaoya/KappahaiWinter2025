@@ -14,6 +14,7 @@ class DeformEnemy : public Enemy
 {
 public:
 	DeformEnemy();
+	~DeformEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。

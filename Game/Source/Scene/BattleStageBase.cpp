@@ -6,7 +6,6 @@
 #include "Source/UI/UIGameClear.h"
 #include "Source/Camera/GameCamera.h"
 #include "Source/UI/UIInGame.h"
-#include "Source/Battle/BattleManager.h"
 #include "Source/Collision/CollisionManager.h"
 #include "LoadingScreen.h"
 #include "nature/SkyCube.h"

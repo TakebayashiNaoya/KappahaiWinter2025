@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "UIControls.h"
 #include "LoadingScreen.h"
-#include "Source/Battle/BattleManager.h"
 
 
 namespace

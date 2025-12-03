@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "UIDamageFlash.h"
 #include "LoadingScreen.h"
-#include "Source/Battle/BattleManager.h"
 
 namespace
 {
@@ -9,8 +8,25 @@ namespace
 	const float SPRITE_SIZE_H = 1080.0f;
 }
 
+UIDamageFlash::UIDamageFlash()
+{
+}
+
+UIDamageFlash::~UIDamageFlash()
+{
+	// BattleManagerからダメージフラッシュUI登録を解除。
+	if (auto BattleMgr = BattleManager::GetInstance()) {
+		BattleMgr->UnregisterUIDamageFlash();
+	}
+}
+
 bool UIDamageFlash::Start()
 {
+	// BattleManagerにダメージフラッシュUIを登録。
+	if (auto BattleMgr = BattleManager::GetInstance()) {
+		BattleMgr->RegisterUIDamageFlash(this);
+	}
+
 	m_flashSprites[enPlayerCondition_Danger].Init("Assets/sprite/DamageFlash1.dds", SPRITE_SIZE_W, SPRITE_SIZE_H);
 	m_flashSprites[enPlayerCondition_Caution].Init("Assets/sprite/DamageFlash2.dds", SPRITE_SIZE_W, SPRITE_SIZE_H);
 	return true;

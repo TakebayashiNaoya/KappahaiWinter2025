@@ -2,7 +2,6 @@
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Scene/SceneManager.h"
-#include "Source/Battle/BattleManager.h"
 
 #if _DEBUG
 #define AddjustConst

@@ -1,4 +1,5 @@
 #pragma once
+#include "Source/Actor/Actor.h"  // æ‚ÉActor‚ğ’m‚é
 
 class Rocket : public Actor
 {

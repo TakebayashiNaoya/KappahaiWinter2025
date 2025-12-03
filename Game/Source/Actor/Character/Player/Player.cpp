@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "PlayerStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
-#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -43,6 +42,11 @@ Player::Player()
 
 Player::~Player()
 {
+	// BattleManagerからプレイヤー登録を解除。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->UnregisterPlayer();
+	}
+
 	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
 	m_attackCollider = CollisionHitManager::DeleteCollider(m_attackCollider);
 }
@@ -174,6 +178,11 @@ void Player::StompJump()
 
 bool Player::Start()
 {
+	// BattleManagerにプレイヤーを登録。
+	if (auto bm = BattleManager::GetInstance()) {
+		bm->RegisterPlayer(this);
+	}
+
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

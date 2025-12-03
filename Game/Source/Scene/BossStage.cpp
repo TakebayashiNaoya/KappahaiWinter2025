@@ -6,7 +6,6 @@
 #include "Source/Actor/Object/Spawner/Spawner.h"
 #include "Source/UI/UIBossLife.h"
 #include "Source/Actor/Actor.h"
-#include "Source/Battle/BattleManager.h"
 
 BossStage::BossStage()
 {
