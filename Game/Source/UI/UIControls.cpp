@@ -53,7 +53,7 @@ void UIControls::Render(RenderContext& rc)
 		return;
 	}
 
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

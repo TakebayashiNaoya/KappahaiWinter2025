@@ -69,7 +69,7 @@ void BossEnemy::UpdateCooldown()
 	m_cooldownTimer -= g_gameTime->GetFrameDeltaTime();
 }
 
-const bool BossEnemy::IsOnCooldown()const
+const bool BossEnemy::GetIsOnCooldown()const
 {
 	return m_cooldownTimer > 0.0f;
 }
@@ -178,7 +178,7 @@ bool BossEnemy::Start()
 void BossEnemy::Update()
 {
 	// ポーズ中または戦闘終了時は更新しない。
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

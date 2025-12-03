@@ -69,13 +69,13 @@ void BattleStageBase::Update()
 		//   ボスの死亡アニメーションが終わったらゲームクリアへ。
 	case enBattlePhase_WaitFinishAnimation:
 		if (m_result == enResult_PlayerLose) {
-			if (m_player && m_player->IsDead()) {
+			if (m_player && m_player->GetIsDead()) {
 				BattleManager::SetIsBattleFinish(true);
 				m_battlePhase = enBattlePhase_GameOver;
 			}
 		}
 		else if (m_result == enResult_PlayerWin) {
-			if (m_bossEnemy && m_bossEnemy->IsDead()) {
+			if (m_bossEnemy && m_bossEnemy->GetIsDead()) {
 				BattleManager::SetIsBattleFinish(true);
 				m_battlePhase = enBattlePhase_GameClear;
 			}
@@ -100,7 +100,7 @@ void BattleStageBase::Update()
 
 		// 5.ゲームオーバー、またはゲームクリアUIの終了を待ってタイトルへ戻る。
 	case enBattlePhase_WaitEnd:
-		if (m_uiResult->IsEnd()) {
+		if (m_uiResult->GetIsEnd()) {
 			// ロード画面へ移行。
 			if (LoadingScreen::GetState() != LoadingScreen::enState_Loading) {
 				LoadingScreen::ChangeState(LoadingScreen::enState_Loading);

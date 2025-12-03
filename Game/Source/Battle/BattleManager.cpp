@@ -9,12 +9,14 @@
 #include "Source/UI/UIDamageFlash.h"
 #include "Source/UI/UIBossLife.h"
 #include "Source/Actor/Object/Rocket/Rocket.h"
+#include "Source/Actor/Object/Treasure/Treasure.h"
 
 
 namespace
 {
 	constexpr float ENEMY_SEARCH_RADIUS = 500.0f;	// プレイヤー検出半径
 	constexpr float ROCKET_SEARCH_RADIUS = 800.0f;	// ロケットのプレイヤー検出半径
+	constexpr float TREASURE_SEARCH_RADIUS = 200.0f;	// 宝箱のプレイヤー検出半径
 
 	/// <summary>
 	/// プレイヤーがエネミーに近づいたら、エネミーにプレイヤーの座標を伝え、発見フラグを立てる。
@@ -55,10 +57,21 @@ bool BattleManager::m_isBattleFinish = false;
 void BattleManager::Update()
 {
 	// シーン切り替えリクエストがある場合、バトル処理を全てスキップ。
-	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+	if (SceneManager::GetInstance()->GetIsSceneChangeRequested()) {
 		return;
 	}
 
+
+	// ボスエネミーにプレイヤーの座標を伝える。
+	if (m_bossEnemy && m_player) {
+		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
+	}
+
+	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
+	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
+
+	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
+	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
 	// プレイヤーのライフをUIに反映。
 	if (m_uiPlayerLife && m_player) {
@@ -70,6 +83,12 @@ void BattleManager::Update()
 		m_uiDamageFlash->SetPlayerHp(m_player->GetLife());
 	}
 
+	// ボスのライフをUIに反映。
+	if (m_uiBossLife && m_bossEnemy) {
+		m_uiBossLife->SetMaxLife(m_bossEnemy->GetMaxLife());
+		m_uiBossLife->SetCurrentLife(m_bossEnemy->GetLife());
+	}
+
 	// プレイヤーがロケットに近づいたら、ロケットをゴール状態にする。
 	if (m_rocket && m_player) {
 		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
@@ -78,24 +97,20 @@ void BattleManager::Update()
 		}
 	}
 
-	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
+	// プレイヤーが宝箱に近づいたら、宝箱を開ける。
+	if (m_player) {
+		for (auto* treasure : m_treasures) {
+			if (treasure == nullptr) {
+				continue;
+			}
+			Vector3 lengthVec = treasure->GetPosition() - m_player->GetPosition();
+			if (lengthVec.Length() < TREASURE_SEARCH_RADIUS) {
 
-	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
-	// ボスエネミーにプレイヤーの座標を伝える。
-	if (m_bossEnemy && m_player) {
-		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
-	}
-
-	// ボスのライフをUIに反映。
-	if (m_uiBossLife && m_bossEnemy) {
-		m_uiBossLife->SetMaxLife(m_bossEnemy->GetMaxLife());
-		m_uiBossLife->SetCurrentLife(m_bossEnemy->GetLife());
+			}
+		}
 	}
 }
-
 
 void BattleManager::RegisterPlayer(Player* player)
 {
@@ -139,16 +154,6 @@ void BattleManager::UnregisterDeformEnemy(DeformEnemy* enemy)
 	m_deformEnemies.erase(it, m_deformEnemies.end());
 }
 
-void BattleManager::RegisterRocket(Rocket* rocket)
-{
-	m_rocket = rocket;
-}
-
-void BattleManager::UnregisterRocket()
-{
-	m_rocket = nullptr;
-}
-
 void BattleManager::RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife)
 {
 	m_uiPlayerLife = uiPlayerLife;
@@ -177,6 +182,27 @@ void BattleManager::RegisterUIBossLife(UIBossLife* uiBossLife)
 void BattleManager::UnregisterUIBossLife()
 {
 	m_uiBossLife = nullptr;
+}
+
+void BattleManager::RegisterRocket(Rocket* rocket)
+{
+	m_rocket = rocket;
+}
+
+void BattleManager::UnregisterRocket()
+{
+	m_rocket = nullptr;
+}
+
+void BattleManager::RegisterTreasure(Treasure* treasure)
+{
+	m_treasures.push_back(treasure);
+}
+
+void BattleManager::UnregisterTreasure(Treasure* treasure)
+{
+	auto it = std::remove(m_treasures.begin(), m_treasures.end(), treasure);
+	m_treasures.erase(it, m_treasures.end());
 }
 
 

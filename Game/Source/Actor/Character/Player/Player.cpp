@@ -212,7 +212,7 @@ bool Player::Start()
 void Player::Update()
 {
 	// ポーズ中または戦闘終了時は更新しない。
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		StopLoopSound();
 		return;
 	}

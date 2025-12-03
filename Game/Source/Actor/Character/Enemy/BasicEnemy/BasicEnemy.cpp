@@ -103,7 +103,7 @@ bool BasicEnemy::Start()
 void BasicEnemy::Update()
 {
 	// ポーズ中または戦闘終了時は更新しない。
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

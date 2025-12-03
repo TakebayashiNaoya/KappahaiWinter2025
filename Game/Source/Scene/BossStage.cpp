@@ -38,7 +38,7 @@ bool BossStage::Start()
 
 void BossStage::OnUpdate()
 {
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		SoundManager::StopBGM(enSoundList_BossStageBGM, 0.0f);
 		return;
 	}

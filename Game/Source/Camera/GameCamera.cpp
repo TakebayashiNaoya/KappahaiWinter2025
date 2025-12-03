@@ -29,11 +29,11 @@ bool GameCamera::Start()
 void GameCamera::Update()
 {
 	// シーン切り替え中は更新しない。
-	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+	if (SceneManager::GetInstance()->GetIsSceneChangeRequested()) {
 		return;
 	}
 
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

@@ -9,7 +9,7 @@ public:
 
 
 public:
-	const bool IsGooled() const
+	const bool GetIsGooled() const
 	{
 		return m_isGooled;
 	}

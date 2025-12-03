@@ -27,7 +27,7 @@ bool Spawner::Start()
 
 void Spawner::Update()
 {
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

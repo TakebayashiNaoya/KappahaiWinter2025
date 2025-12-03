@@ -2,13 +2,14 @@
 
 
 class Player;
+class BossEnemy;
 class BasicEnemy;
 class DeformEnemy;
-class BossEnemy;
-class Rocket;
 class UIPlayerLife;
 class UIDamageFlash;
 class UIBossLife;
+class Rocket;
+class Treasure;
 
 
 // 当たり判定を管理するクラス
@@ -53,7 +54,7 @@ public:
 	/// バトル終了フラグの取得・設定
 	/// </summary>
 public:
-	static bool IsBattleFinish()
+	static bool GetIsBattleFinish()
 	{
 		return m_isBattleFinish;
 	}
@@ -83,10 +84,6 @@ public:
 	void RegisterDeformEnemy(DeformEnemy* enemy);
 	void UnregisterDeformEnemy(DeformEnemy* enemy);
 
-	// ロケット用
-	void RegisterRocket(Rocket* rocket);
-	void UnregisterRocket();
-
 	// プレイヤーライフUI用
 	void RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife);
 	void UnregisterUIPlayerLife();
@@ -99,6 +96,14 @@ public:
 	void RegisterUIBossLife(UIBossLife* uiBossLife);
 	void UnregisterUIBossLife();
 
+	// ロケット用
+	void RegisterRocket(Rocket* rocket);
+	void UnregisterRocket();
+
+	// 宝箱用
+	void RegisterTreasure(Treasure* treasure);
+	void UnregisterTreasure(Treasure* treasure);
+
 
 private:
 	static bool m_isBattleFinish;
@@ -108,10 +113,12 @@ private:
 	std::vector<BasicEnemy*> m_basicEnemies;
 	std::vector<DeformEnemy*> m_deformEnemies;
 
-	Rocket* m_rocket = nullptr;
 	UIPlayerLife* m_uiPlayerLife = nullptr;
 	UIDamageFlash* m_uiDamageFlash = nullptr;
 	UIBossLife* m_uiBossLife = nullptr;
+
+	Rocket* m_rocket = nullptr;
+	std::vector<Treasure*> m_treasures;
 };
 
 

@@ -47,17 +47,17 @@ bool FirstStage::Start()
 
 void FirstStage::OnUpdate()
 {
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		SoundManager::StopBGM(enSoundList_FirstStageBGM, 0.0f);
 		return;
 	}
 
 	if (m_rocket)
 	{
-		if (m_rocket->IsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Opened) {
+		if (m_rocket->GetIsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Opened) {
 			LoadingScreen::StartLoading();
 		}
-		if (m_rocket->IsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
+		if (m_rocket->GetIsGooled() && LoadingScreen::GetState() == LoadingScreen::enState_Loading) {
 			SceneManager::GetInstance()->ChangeScene(SceneID::BossStage);
 		}
 	}

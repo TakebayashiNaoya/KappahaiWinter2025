@@ -178,7 +178,7 @@ void SoundManager::Update()
 
 SoundSource* SoundManager::Play(EnSoundList soundId, bool isLoop, bool is3D, const Vector3& position)
 {
-	if (!IsAvailable()) return nullptr;
+	if (!GetIsAvailable()) return nullptr;
 	SoundManager* instance = GetInstance();
 
 	// ループ音（BGM等）の重複防止
@@ -234,7 +234,7 @@ SoundSource* SoundManager::Play(EnSoundList soundId, bool isLoop, bool is3D, con
 
 void SoundManager::UnregisterPseudo3D(nsK2EngineLow::SoundSource* source)
 {
-	if (!IsAvailable()) return;
+	if (!GetIsAvailable()) return;
 	SoundManager* instance = GetInstance();
 
 	auto it = instance->m_pseudo3DList.begin();
@@ -251,7 +251,7 @@ void SoundManager::UnregisterPseudo3D(nsK2EngineLow::SoundSource* source)
 
 void SoundManager::StopBGM(EnSoundList soundId, float fadeTime)
 {
-	if (!IsAvailable()) return;
+	if (!GetIsAvailable()) return;
 
 	SoundManager* instance = GetInstance();
 	auto it = instance->m_bgmMap.find(soundId);
@@ -278,7 +278,7 @@ void SoundManager::StopBGM(EnSoundList soundId, float fadeTime)
 
 void SoundManager::StopAllBGM(float fadeTime)
 {
-	if (!IsAvailable()) return;
+	if (!GetIsAvailable()) return;
 
 	SoundManager* instance = GetInstance();
 	auto it = instance->m_bgmMap.begin();
@@ -302,7 +302,7 @@ void SoundManager::StopAllBGM(float fadeTime)
 
 void SoundManager::SetVolume(EnSoundList soundId, float volume)
 {
-	if (!IsAvailable()) return;
+	if (!GetIsAvailable()) return;
 	SoundManager* instance = GetInstance();
 
 	if (instance->m_bgmMap.count(soundId) > 0) {
@@ -315,7 +315,7 @@ void SoundManager::SetVolume(EnSoundList soundId, float volume)
 
 void SoundManager::FadeInAllBGM(float fadeTime)
 {
-	if (!IsAvailable()) return;
+	if (!GetIsAvailable()) return;
 	SoundManager* instance = GetInstance();
 
 	if (fadeTime <= 0.0f) return;
@@ -349,7 +349,7 @@ SoundManagerObject::~SoundManagerObject()
 
 bool SoundManagerObject::Start()
 {
-	if (SoundManager::IsAvailable()) {
+	if (SoundManager::GetIsAvailable()) {
 		SoundManager::GetInstance()->Init();
 	}
 	return true;
@@ -357,7 +357,7 @@ bool SoundManagerObject::Start()
 
 void SoundManagerObject::Update()
 {
-	if (SoundManager::IsAvailable()) {
+	if (SoundManager::GetIsAvailable()) {
 		SoundManager::GetInstance()->Update();
 	}
 }

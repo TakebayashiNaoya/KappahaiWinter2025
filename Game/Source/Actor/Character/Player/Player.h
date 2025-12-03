@@ -46,7 +46,7 @@ public:
 	/// 無敵中かどうかを取得します。
 	/// </summary>
 	/// <returns> 無敵中ならtrue、そうでなければfalseを返す。</returns>
-	const bool IsInvincible() const
+	const bool GetIsInvincible() const
 	{
 		return m_isInvincible;
 	}
@@ -97,8 +97,8 @@ public:
 	void StompJump();
 
 	/// <summary>
-/// アニメーションイベントを処理します。
-/// </summary>
+	/// アニメーションイベントを処理します。
+	/// </summary>
 	void OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventName) override final;
 
 
@@ -137,6 +137,4 @@ private:
 	/// 一定時間が経過したら無敵状態を解除します。
 	/// </summary>
 	void InvincibleTimer();
-
-
 };

@@ -50,7 +50,7 @@ public:
 	/// シーン切り替えがリクエストされているかチェック。
 	/// </summary>
 	/// <returns> リクエストされていればtrue。</returns>
-	bool IsSceneChangeRequested() const
+	bool GetIsSceneChangeRequested() const
 	{
 		return m_requestID != SceneID::None;
 	}

@@ -14,7 +14,7 @@ namespace
 	// プレイヤーが無敵中か、プレイヤーの攻撃が先に当たっている場合、trueを返す。
 	const bool IsAttackBlocked(Player* player, const bool isStomp)
 	{
-		if (player->IsInvincible()) {
+		if (player->GetIsInvincible()) {
 			return true;
 		}
 		else if (isStomp) {
@@ -42,7 +42,7 @@ void CollisionHitManager::Update()
 {
 	// シーン切り替えがリクエストされている場合は、現在のフレームの衝突判定処理をスキップする。
 	// これにより、削除が始まったオブジェクトへの不正アクセスを防ぐ。
-	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+	if (SceneManager::GetInstance()->GetIsSceneChangeRequested()) {
 		m_collisionPairList.clear(); // 念のためリストはクリア
 		return;
 	}
@@ -160,7 +160,7 @@ bool CollisionHitManager::UpdateHitPlayerBasicEnemy(CollisionPair& pair)
 	}
 
 	// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-	if (player->IsInvincible()) {
+	if (player->GetIsInvincible()) {
 		return true;
 	}
 
@@ -193,7 +193,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 
 
 	// エネミーが変形していない場合。
-	if (!deformEnemy->IsDeformed())
+	if (!deformEnemy->GetIsDeformed())
 	{
 		// プレイヤーの攻撃。
 		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
@@ -204,7 +204,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		}
 
 		// プレイヤーが無敵中の場合、またはプレイヤーの攻撃が先に当たっている場合、エネミーの攻撃は無効にする。
-		if (player->IsInvincible()) {
+		if (player->GetIsInvincible()) {
 			return true;
 		}
 
@@ -220,7 +220,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 	}
 
 	// エネミーが変形していて、滑走していない場合。
-	else if (deformEnemy->IsDeformed() && !deformEnemy->IsSliding())
+	else if (deformEnemy->GetIsDeformed() && !deformEnemy->GetIsSliding())
 	{
 		// プレイヤーがエネミーに当たった場合。
 		if (player->GetHurtCollider()->IsHit(deformEnemy->GetHurtCollider())) {
@@ -233,7 +233,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 	}
 
 	// エネミーが変形していて、滑走している場合。
-	else if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
+	else if (deformEnemy->GetIsDeformed() && deformEnemy->GetIsSliding())
 	{
 		// 滑走中にプレイヤーが踏んだら、エネミーを止める。
 		if (player->GetAttackCollider()->IsHit(deformEnemy->GetHurtCollider())) {
@@ -244,7 +244,7 @@ bool CollisionHitManager::UpdateHitPlayerDeformEnemy(CollisionPair& pair)
 		}
 
 		// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-		if (player->IsInvincible()) {
+		if (player->GetIsInvincible()) {
 			return true;
 		}
 
@@ -279,7 +279,7 @@ bool CollisionHitManager::UpdateHitPlayerBossEnemy(CollisionPair& pair)
 
 
 	// プレイヤーが無敵中の場合、エネミーの攻撃は無効にする。
-	if (player->IsInvincible()) {
+	if (player->GetIsInvincible()) {
 		return true;
 	}
 
@@ -320,7 +320,7 @@ bool CollisionHitManager::UpdateHitBasicEnemyDeformEnemy(CollisionPair& pair)
 
 
 	// 変形エネミーが変形していて、滑走している場合。
-	if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
+	if (deformEnemy->GetIsDeformed() && deformEnemy->GetIsSliding())
 	{
 		// 変形エネミーの攻撃。
 		if (deformEnemy->GetHitCollider()->IsHit(basicEnemy->GetHurtCollider())) {
@@ -350,7 +350,7 @@ bool CollisionHitManager::UpdateHitDeformEnemyBossEnemy(CollisionPair& pair)
 	}
 
 	// 変形エネミーが変形していて、滑走している場合。
-	if (deformEnemy->IsDeformed() && deformEnemy->IsSliding())
+	if (deformEnemy->GetIsDeformed() && deformEnemy->GetIsSliding())
 	{
 		// 変形エネミーの攻撃。
 		if (deformEnemy->GetHitCollider()->IsHit(bossEnemy->GetHurtCollider())) {
@@ -462,7 +462,7 @@ CollisionObject* CollisionHitManager::DeleteCollider(CollisionObject* collider)
 	}
 
 	// コリジョンヒットマネージャーから登録解除。
-	if (IsAvailable()) {
+	if (GetIsAvailable()) {
 		GetInstance()->Unregister(collider);
 	}
 

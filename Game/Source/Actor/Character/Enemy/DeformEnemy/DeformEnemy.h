@@ -42,7 +42,7 @@ public:
 	/// 変形しているかどうかを取得します。
 	/// </summary>
 	/// <returns> 変形しているならtrueを返す。</returns>
-	const bool IsDeformed() const
+	const bool GetIsDeformed() const
 	{
 		return m_isDeformed;
 	}
@@ -51,7 +51,7 @@ public:
 	/// 滑走しているかどうかを取得します。
 	/// </summary>
 	/// <returns> 滑走しているならtrueを返す。</returns>
-	const bool& IsSliding() const
+	const bool& GetIsSliding() const
 	{
 		return m_isSliding;
 	}

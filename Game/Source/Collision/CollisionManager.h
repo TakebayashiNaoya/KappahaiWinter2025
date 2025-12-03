@@ -193,7 +193,7 @@ public:
 	{
 		return m_instance;
 	}
-	static bool IsAvailable()
+	static bool GetIsAvailable()
 	{
 		return m_instance != nullptr;
 	}

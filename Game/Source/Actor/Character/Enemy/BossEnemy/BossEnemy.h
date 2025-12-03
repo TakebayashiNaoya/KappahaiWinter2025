@@ -53,7 +53,7 @@ public:
 	/// 現在クールダウン中かどうかを判定します。
 	/// </summary>
 	/// <returns>クールダウン中であればtrue、そうでなければfalseを返します。</returns>
-	const bool IsOnCooldown()const;
+	const bool GetIsOnCooldown()const;
 	/// <summary>
 	/// クールダウンタイマーをリセットします。
 	/// </summary>
