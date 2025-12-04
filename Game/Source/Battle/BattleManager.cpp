@@ -47,6 +47,26 @@ namespace
 			}
 		}
 	}
+
+	/// <summary>
+	/// 死亡しているエネミーをDeleteGOし、リストからも削除するテンプレート関数
+	/// </summary>
+	template <class T>
+	void UpdateAndRemoveDeadEnemies(std::vector<T*>& enemies)
+	{
+		auto it = enemies.begin();
+		while (it != enemies.end()) {
+			auto* enemy = *it;
+			// エネミーが存在し、かつ死んでいる場合
+			if (enemy && enemy->IsDying()) {
+				DeleteGO(enemy);        // メモリ削除予約
+				it = enemies.erase(it); // リストから削除して、イテレータを進める
+			}
+			else {
+				++it; // 死んでいなければ次の要素へ
+			}
+		}
+	}
 }
 
 
@@ -62,23 +82,9 @@ void BattleManager::Update()
 		return;
 	}
 
-	for (auto* enemy : m_basicEnemies) {
-		if (enemy) {
-			if (enemy->IsDying()) {
-				DeleteGO(enemy);
-			}
-		}
-	}
-
-	for (auto* enemy : m_deformEnemies) {
-		if (enemy) {
-			if (enemy->IsDying()) {
-				DeleteGO(enemy);
-			}
-		}
-	}
-
-
+	// 死亡しているエネミーをDeleteGOし、リストからも削除。
+	UpdateAndRemoveDeadEnemies(m_basicEnemies);
+	UpdateAndRemoveDeadEnemies(m_deformEnemies);
 
 	// ボスエネミーにプレイヤーの座標を伝える。
 	if (m_bossEnemy && m_player) {
@@ -129,6 +135,28 @@ void BattleManager::Update()
 			}
 		}
 	}
+}
+
+void BattleManager::DestroyAllEnemies()
+{
+	// 基本エネミーの削除
+	for (auto* enemy : m_basicEnemies) {
+		if (enemy) {
+			DeleteGO(enemy);
+		}
+	}
+	m_basicEnemies.clear();
+
+	// 変形エネミーの削除
+	for (auto* enemy : m_deformEnemies) {
+		if (enemy) {
+			DeleteGO(enemy);
+		}
+	}
+	m_deformEnemies.clear();
+
+	// ※ボスなどはステージ個別の管理でよければそのままでもOKですが、
+	// ここでまとめて消す設計にしても構いません。
 }
 
 void BattleManager::Register(Player* player)

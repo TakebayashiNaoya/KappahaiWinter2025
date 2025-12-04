@@ -13,10 +13,6 @@ Spawner::Spawner()
 
 Spawner::~Spawner()
 {
-	if (m_deformEnemy) {
-		BattleManager::GetInstance()->Unregister(m_deformEnemy);
-		DeleteGO(m_deformEnemy);
-	}
 }
 
 bool Spawner::Start()
@@ -33,7 +29,16 @@ void Spawner::Update()
 		return;
 	}
 
-	if (m_deformEnemy->IsDying())
+	// エネミーが生きているかチェック
+	if (m_deformEnemy != nullptr)
+	{
+		// 死んでいたら、ポインタを手放す（削除はBattleManagerがやってくれる）
+		if (m_deformEnemy->IsDying()) {
+			m_deformEnemy = nullptr;
+		}
+	}
+	// エネミーがいない（死んだ後）なら、リスポーンタイマーを動かす
+	else
 	{
 		m_respawnTimer += g_gameTime->GetFrameDeltaTime();
 

@@ -19,8 +19,8 @@ BattleStageBase::BattleStageBase()
 
 BattleStageBase::~BattleStageBase()
 {
-	//DeleteGO(m_battleManager);
-	//DeleteGO(m_collisionManager);
+	BattleManager::GetInstance()->DestroyAllEnemies();
+
 	DeleteGO(m_skyCube);
 
 	DeleteGO(m_inGameUI);
@@ -29,12 +29,6 @@ BattleStageBase::~BattleStageBase()
 
 	BattleManager::GetInstance()->Unregister(m_player);
 	DeleteGO(m_player);
-
-	// ※PlayerやBossEnemyの破棄(DeleteGO)は
-	// これまで通り各ステージ(InitLevel)で作ったものを
-	// 各ステージのデストラクタで破棄するか、
-	// ここで破棄するか統一する必要があります。
-	// 今回は安全のため「作った場所（子クラス）」で破棄する想定のままにします。
 }
 
 bool BattleStageBase::Start()

@@ -18,17 +18,14 @@ FirstStage::FirstStage()
 FirstStage::~FirstStage()
 {
 	DeleteGO(m_firstStage);
+
+	BattleManager::GetInstance()->Unregister(m_rocket);
 	DeleteGO(m_rocket);
 
-	for (auto basicEnemy : m_basicEnemies) {
-		if (basicEnemy) {
-			DeleteGO(basicEnemy);
-		}
-	}
-
-	for (auto deformEnemy : m_deformEnemies) {
-		if (deformEnemy) {
-			DeleteGO(deformEnemy);
+	for (auto treasure : m_treasures) {
+		if (treasure) {
+			BattleManager::GetInstance()->Unregister(treasure);
+			DeleteGO(treasure);
 		}
 	}
 }
@@ -74,29 +71,32 @@ void FirstStage::InitLevel()
 		}
 		if (objData.EqualObjectName(L"player")) {
 			m_player = NewGO<Player>(0, "Player");
+			BattleManager::GetInstance()->Register(m_player);
 			m_player->SetTRS(objData.position, objData.rotation, objData.scale);
 			return true;
 		}
 		if (objData.EqualObjectName(L"wolf")) {
 			BasicEnemy* wolf = NewGO<BasicEnemy>(0, "BasicEnemy");
+			BattleManager::GetInstance()->Register(wolf);
 			wolf->SetTRS(objData.position, objData.rotation, objData.scale);
-			m_basicEnemies.push_back(wolf);
 			return true;
 		}
 		if (objData.EqualObjectName(L"spider")) {
 			DeformEnemy* spider = NewGO <DeformEnemy>(0, "DeformEnemy");
+			BattleManager::GetInstance()->Register(spider);
 			spider->SetTRS(objData.position, objData.rotation, objData.scale);
-			m_deformEnemies.push_back(spider);
 			return true;
 		}
 		if (objData.EqualObjectName(L"treasure")) {
 			Treasure* treasure = NewGO <Treasure>(0, "Treasure");
+			BattleManager::GetInstance()->Register(treasure);
 			treasure->SetTRS(objData.position, objData.rotation, objData.scale);
 			m_treasures.push_back(treasure);
 			return true;
 		}
 		if (objData.EqualObjectName(L"rocket")) {
 			m_rocket = NewGO <Rocket>(0, "Rocket");
+			BattleManager::GetInstance()->Register(m_rocket);
 			m_rocket->SetTRS(objData.position, objData.rotation, objData.scale);
 			return true;
 		}

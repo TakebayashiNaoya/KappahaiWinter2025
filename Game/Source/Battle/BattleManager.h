@@ -25,6 +25,8 @@ public:
 	void Update();
 
 
+
+
 private:
 	static BattleManager* m_instance;
 
@@ -76,6 +78,9 @@ public:
 	/// 登録・解除関数群
 	/// </summary>
 public:
+	// エネミー全削除用
+	void DestroyAllEnemies();
+
 	// プレイヤー用
 	void Register(Player* player);
 	void Unregister(Player* player);
