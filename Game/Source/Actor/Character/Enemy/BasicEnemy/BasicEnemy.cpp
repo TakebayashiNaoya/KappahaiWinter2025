@@ -30,8 +30,6 @@ BasicEnemy::BasicEnemy()
 
 BasicEnemy::~BasicEnemy()
 {
-	// BattleManagerから基本エネミー登録を解除。
-	BattleManager::GetInstance()->UnregisterBasicEnemy(this);
 }
 
 /// <summary>
@@ -64,9 +62,6 @@ void BasicEnemy::CoolDownCount()
 
 bool BasicEnemy::Start()
 {
-	// BattleManagerに基本エネミーを登録。
-	BattleManager::GetInstance()->RegisterBasicEnemy(this);
-
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

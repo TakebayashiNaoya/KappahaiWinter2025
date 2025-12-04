@@ -14,6 +14,7 @@ Spawner::Spawner()
 Spawner::~Spawner()
 {
 	if (m_deformEnemy) {
+		BattleManager::GetInstance()->Unregister(m_deformEnemy);
 		DeleteGO(m_deformEnemy);
 	}
 }
@@ -21,6 +22,7 @@ Spawner::~Spawner()
 bool Spawner::Start()
 {
 	m_deformEnemy = NewGO<DeformEnemy>(0, "DeformEnemy");
+	BattleManager::GetInstance()->Register(m_deformEnemy);
 	m_deformEnemy->SetTRS(m_position, m_rotation, m_scale);
 	return true;
 }
@@ -37,6 +39,7 @@ void Spawner::Update()
 
 		if (m_respawnTimer > RESPAWN_TIME) {
 			m_deformEnemy = NewGO<DeformEnemy>(0, "DeformEnemy");
+			BattleManager::GetInstance()->Register(m_deformEnemy);
 			m_deformEnemy->SetTRS(m_position, m_rotation, m_scale);
 			m_respawnTimer = 0.0f;
 		}

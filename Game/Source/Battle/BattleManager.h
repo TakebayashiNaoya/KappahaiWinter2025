@@ -51,7 +51,7 @@ public:
 
 
 	/// <summary>
-	/// バトル終了フラグの取得・設定
+	/// フラグの取得・設定
 	/// </summary>
 public:
 	static bool GetIsBattleFinish()
@@ -62,6 +62,14 @@ public:
 	{
 		m_isBattleFinish = isFinish;
 	}
+	static bool GetIsStopCollisionManager()
+	{
+		return m_isStopCollisionManager;
+	}
+	static void SetIsStopCollisionManager(bool isStop)
+	{
+		m_isStopCollisionManager = isStop;
+	}
 
 
 	/// <summary>
@@ -69,44 +77,57 @@ public:
 	/// </summary>
 public:
 	// プレイヤー用
-	void RegisterPlayer(Player* player);
-	void UnregisterPlayer();
+	void Register(Player* player);
+	void Unregister(Player* player);
 
 	// ボス用
-	void RegisterBoss(BossEnemy* boss);
-	void UnregisterBoss();
+	void Register(BossEnemy* boss);
+	void Unregister(BossEnemy* boss);
 
 	// 基本エネミー用
-	void RegisterBasicEnemy(BasicEnemy* enemy);
-	void UnregisterBasicEnemy(BasicEnemy* enemy);
+	void Register(BasicEnemy* enemy);
+	void Unregister(BasicEnemy* enemy);
 
 	// 変形エネミー用
-	void RegisterDeformEnemy(DeformEnemy* enemy);
-	void UnregisterDeformEnemy(DeformEnemy* enemy);
+	void Register(DeformEnemy* enemy);
+	void Unregister(DeformEnemy* enemy);
 
 	// プレイヤーライフUI用
-	void RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife);
-	void UnregisterUIPlayerLife();
+	void Register(UIPlayerLife* uiPlayerLife);
+	void Unregister(UIPlayerLife* uiPlayerLife);
 
 	// ダメージフラッシュUI用
-	void RegisterUIDamageFlash(UIDamageFlash* uiDamageFlash);
-	void UnregisterUIDamageFlash();
+	void Register(UIDamageFlash* uiDamageFlash);
+	void Unregister(UIDamageFlash* uiDamageFlash);
 
 	// ボスライフUI用
-	void RegisterUIBossLife(UIBossLife* uiBossLife);
-	void UnregisterUIBossLife();
+	void Register(UIBossLife* uiBossLife);
+	void Unregister(UIBossLife* uiBossLife);
 
 	// ロケット用
-	void RegisterRocket(Rocket* rocket);
-	void UnregisterRocket();
+	void Register(Rocket* rocket);
+	void Unregister(Rocket* rocket);
 
 	// 宝箱用
-	void RegisterTreasure(Treasure* treasure);
-	void UnregisterTreasure(Treasure* treasure);
+	void Register(Treasure* treasure);
+	void Unregister(Treasure* treasure);
+
+	// その他汎用用
+	template<typename T>
+	void Register(T* object)
+	{
+		K2_ASSERT(false, "しょりついかわすれ");
+	}
+	template<typename T>
+	void Unregister(T* object)
+	{
+		K2_ASSERT(false, "しょりついかわすれ");
+	}
 
 
 private:
 	static bool m_isBattleFinish;
+	static bool m_isStopCollisionManager;
 
 	Player* m_player = nullptr;
 	BossEnemy* m_bossEnemy = nullptr;
@@ -119,6 +140,8 @@ private:
 
 	Rocket* m_rocket = nullptr;
 	std::vector<Treasure*> m_treasures;
+
+	std::vector<IGameObject*> m_objects;
 };
 
 

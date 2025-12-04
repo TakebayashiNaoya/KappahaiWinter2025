@@ -13,6 +13,7 @@
 BattleStageBase::BattleStageBase()
 {
 	BattleManager::SetIsBattleFinish(false);
+	BattleManager::SetIsStopCollisionManager(false);
 	RegisterLoadingTasks();
 }
 
@@ -21,8 +22,12 @@ BattleStageBase::~BattleStageBase()
 	//DeleteGO(m_battleManager);
 	//DeleteGO(m_collisionManager);
 	DeleteGO(m_skyCube);
+
 	DeleteGO(m_inGameUI);
+
 	DeleteGO(m_gameCamera);
+
+	BattleManager::GetInstance()->Unregister(m_player);
 	DeleteGO(m_player);
 
 	// ※PlayerやBossEnemyの破棄(DeleteGO)は
@@ -60,7 +65,7 @@ void BattleStageBase::Update()
 
 		// 2.相打ちにならないようにコリジョンマネージャーを破棄する。
 	case enBattlePhase_BattleFinish:
-		DeleteGO(m_collisionManager);
+		BattleManager::SetIsStopCollisionManager(true);
 		m_battlePhase = enBattlePhase_WaitFinishAnimation;
 		break;
 

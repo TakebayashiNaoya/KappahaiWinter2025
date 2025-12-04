@@ -132,6 +132,10 @@ public:
 	{
 		m_isDying = isDead;
 	}
+	void IsDying(const bool isDying)
+	{
+		m_isDying = isDying;
+	}
 
 	const bool GetIsDead() const
 	{

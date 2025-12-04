@@ -47,6 +47,11 @@ void CollisionHitManager::Update()
 		return;
 	}
 
+	if (BattleManager::GetIsStopCollisionManager()) {
+		m_collisionPairList.clear(); // 念のためリストはクリア
+		return;
+	}
+
 	m_collisionPairList.clear();
 
 	// ヒットするオブジェクトのペアを作る

@@ -52,6 +52,7 @@ namespace
 
 BattleManager* BattleManager::m_instance = nullptr;
 bool BattleManager::m_isBattleFinish = false;
+bool BattleManager::m_isStopCollisionManager = false;
 
 
 void BattleManager::Update()
@@ -61,16 +62,32 @@ void BattleManager::Update()
 		return;
 	}
 
+	for (auto* enemy : m_basicEnemies) {
+		if (enemy) {
+			if (enemy->IsDying()) {
+				DeleteGO(enemy);
+			}
+		}
+	}
+
+	for (auto* enemy : m_deformEnemies) {
+		if (enemy) {
+			if (enemy->IsDying()) {
+				DeleteGO(enemy);
+			}
+		}
+	}
+
+
 
 	// ボスエネミーにプレイヤーの座標を伝える。
 	if (m_bossEnemy && m_player) {
 		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
 	}
 
-	if (m_player != nullptr) {
-		// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-		CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
-	}
+	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
+	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
+
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
 	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
@@ -114,94 +131,94 @@ void BattleManager::Update()
 	}
 }
 
-void BattleManager::RegisterPlayer(Player* player)
+void BattleManager::Register(Player* player)
 {
 	m_player = player;
 }
 
-void BattleManager::UnregisterPlayer()
+void BattleManager::Unregister(Player* player)
 {
 	m_player = nullptr;
 }
 
-void BattleManager::RegisterBoss(BossEnemy* boss)
+void BattleManager::Register(BossEnemy* boss)
 {
 	m_bossEnemy = boss;
 }
 
-void BattleManager::UnregisterBoss()
+void BattleManager::Unregister(BossEnemy* boss)
 {
 	m_bossEnemy = nullptr;
 }
 
-void BattleManager::RegisterBasicEnemy(BasicEnemy* enemy)
+void BattleManager::Register(BasicEnemy* enemy)
 {
 	m_basicEnemies.push_back(enemy);
 }
 
-void BattleManager::UnregisterBasicEnemy(BasicEnemy* enemy)
+void BattleManager::Unregister(BasicEnemy* enemy)
 {
 	auto it = std::remove(m_basicEnemies.begin(), m_basicEnemies.end(), enemy);
 	m_basicEnemies.erase(it, m_basicEnemies.end());
 }
 
-void BattleManager::RegisterDeformEnemy(DeformEnemy* enemy)
+void BattleManager::Register(DeformEnemy* enemy)
 {
 	m_deformEnemies.push_back(enemy);
 }
 
-void BattleManager::UnregisterDeformEnemy(DeformEnemy* enemy)
+void BattleManager::Unregister(DeformEnemy* enemy)
 {
 	auto it = std::remove(m_deformEnemies.begin(), m_deformEnemies.end(), enemy);
 	m_deformEnemies.erase(it, m_deformEnemies.end());
 }
 
-void BattleManager::RegisterUIPlayerLife(UIPlayerLife* uiPlayerLife)
+void BattleManager::Register(UIPlayerLife* uiPlayerLife)
 {
 	m_uiPlayerLife = uiPlayerLife;
 }
 
-void BattleManager::UnregisterUIPlayerLife()
+void BattleManager::Unregister(UIPlayerLife* uiPlayerLife)
 {
 	m_uiPlayerLife = nullptr;
 }
 
-void BattleManager::RegisterUIDamageFlash(UIDamageFlash* uiDamageFlash)
+void BattleManager::Register(UIDamageFlash* uiDamageFlash)
 {
 	m_uiDamageFlash = uiDamageFlash;
 }
 
-void BattleManager::UnregisterUIDamageFlash()
+void BattleManager::Unregister(UIDamageFlash* uiDamageFlash)
 {
 	m_uiDamageFlash = nullptr;
 }
 
-void BattleManager::RegisterUIBossLife(UIBossLife* uiBossLife)
+void BattleManager::Register(UIBossLife* uiBossLife)
 {
 	m_uiBossLife = uiBossLife;
 }
 
-void BattleManager::UnregisterUIBossLife()
+void BattleManager::Unregister(UIBossLife* uiBossLife)
 {
 	m_uiBossLife = nullptr;
 }
 
-void BattleManager::RegisterRocket(Rocket* rocket)
+void BattleManager::Register(Rocket* rocket)
 {
 	m_rocket = rocket;
 }
 
-void BattleManager::UnregisterRocket()
+void BattleManager::Unregister(Rocket* rocket)
 {
 	m_rocket = nullptr;
 }
 
-void BattleManager::RegisterTreasure(Treasure* treasure)
+void BattleManager::Register(Treasure* treasure)
 {
 	m_treasures.push_back(treasure);
 }
 
-void BattleManager::UnregisterTreasure(Treasure* treasure)
+void BattleManager::Unregister(Treasure* treasure)
 {
 	auto it = std::remove(m_treasures.begin(), m_treasures.end(), treasure);
 	m_treasures.erase(it, m_treasures.end());

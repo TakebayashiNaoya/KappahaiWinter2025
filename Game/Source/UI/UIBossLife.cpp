@@ -25,19 +25,10 @@ UIBossLife::UIBossLife()
 
 UIBossLife::~UIBossLife()
 {
-	// BattleManagerからボスライフUIの登録解除。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->UnregisterUIBossLife();
-	}
 }
 
 bool UIBossLife::Start()
 {
-	// BattleManagerにボスライフUIを登録。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->RegisterUIBossLife(this);
-	}
-
 	// ボス名テキストの初期化。
 	m_bossNameText.Init("Assets/sprite/Boss.dds", SCALE_NAME_TEXT.x, SCALE_NAME_TEXT.y);
 	m_bossNameText.SetPosition(POS_NAME_TEXT);

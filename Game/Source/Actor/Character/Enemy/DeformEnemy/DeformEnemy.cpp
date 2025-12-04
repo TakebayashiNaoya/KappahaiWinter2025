@@ -33,8 +33,6 @@ DeformEnemy::DeformEnemy()
 
 DeformEnemy::~DeformEnemy()
 {
-	// BattleManagerから敵を登録解除。
-	BattleManager::GetInstance()->UnregisterDeformEnemy(this);
 }
 
 
@@ -83,9 +81,6 @@ void DeformEnemy::Sliding()
 
 bool DeformEnemy::Start()
 {
-	// BattleManagerに敵を登録。
-	BattleManager::GetInstance()->RegisterDeformEnemy(this);
-
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

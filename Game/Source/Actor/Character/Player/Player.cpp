@@ -42,9 +42,6 @@ Player::Player()
 
 Player::~Player()
 {
-	// BattleManagerからプレイヤー登録を解除。
-	BattleManager::GetInstance()->UnregisterPlayer();
-
 	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
 	m_attackCollider = CollisionHitManager::DeleteCollider(m_attackCollider);
 }
@@ -176,9 +173,6 @@ void Player::StompJump()
 
 bool Player::Start()
 {
-	// BattleManagerにプレイヤーを登録。
-	BattleManager::GetInstance()->RegisterPlayer(this);
-
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 

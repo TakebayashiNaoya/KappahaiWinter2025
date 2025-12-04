@@ -19,7 +19,7 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr int MAX_LIFE = 10;										// 最大体力。
+	constexpr int MAX_LIFE = 1;										// 最大体力。
 
 	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
 	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
@@ -39,8 +39,6 @@ BossEnemy::BossEnemy()
 
 BossEnemy::~BossEnemy()
 {
-	// BattleManagerからボスを登録解除。
-	BattleManager::GetInstance()->UnregisterBoss();
 }
 
 
@@ -128,9 +126,6 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 
 bool BossEnemy::Start()
 {
-	// BattleManagerにボスを登録。
-	BattleManager::GetInstance()->RegisterBoss(this);
-
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BOSS_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
