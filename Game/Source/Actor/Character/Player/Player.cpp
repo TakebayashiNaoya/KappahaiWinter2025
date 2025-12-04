@@ -43,9 +43,7 @@ Player::Player()
 Player::~Player()
 {
 	// BattleManagerからプレイヤー登録を解除。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->UnregisterPlayer();
-	}
+	BattleManager::GetInstance()->UnregisterPlayer();
 
 	m_hurtCollider = CollisionHitManager::DeleteCollider(m_hurtCollider);
 	m_attackCollider = CollisionHitManager::DeleteCollider(m_attackCollider);
@@ -179,9 +177,7 @@ void Player::StompJump()
 bool Player::Start()
 {
 	// BattleManagerにプレイヤーを登録。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->RegisterPlayer(this);
-	}
+	BattleManager::GetInstance()->RegisterPlayer(this);
 
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, PLAYER_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
@@ -191,16 +187,13 @@ bool Player::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enPlayerState_Idle);
 
-	if (CollisionHitManager::GetInstance())
-	{
-		// やられ判定のコライダーを作成。
-		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_Player,
-			HURT_COLLIDER_RADIUS,
-			true
-		);
-	}
+	// やられ判定のコライダーを作成。
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_Player,
+		HURT_COLLIDER_RADIUS,
+		true
+	);
 
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
 		OnAnimationEvent(clipName, eventName);

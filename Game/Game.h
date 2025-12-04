@@ -1,10 +1,4 @@
 #pragma once
-#include "Level3DRender/LevelRender.h"
-
-
-class SceneManagerObject;
-class LoadingScreenObject;
-
 
 class Game : public IGameObject
 {
@@ -17,9 +11,4 @@ private:
 	bool Start()override final;
 	void Update()override final;
 	void Render(RenderContext& rc)override final;
-
-
-private:
-	SceneManagerObject* m_sceneManager = nullptr;
-	LoadingScreenObject* m_loadingScreen = nullptr;
 };

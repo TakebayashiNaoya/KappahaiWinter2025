@@ -67,9 +67,10 @@ void BattleManager::Update()
 		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
 	}
 
-	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
-
+	if (m_player != nullptr) {
+		// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
+		CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
+	}
 	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
 	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
@@ -93,7 +94,9 @@ void BattleManager::Update()
 	if (m_rocket && m_player) {
 		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
 		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
-			m_rocket->SetIsGooled(true);
+			if (m_rocket != nullptr) {
+				m_rocket->SetIsGooled(true);
+			}
 		}
 	}
 
@@ -105,8 +108,7 @@ void BattleManager::Update()
 			}
 			Vector3 lengthVec = treasure->GetPosition() - m_player->GetPosition();
 			if (lengthVec.Length() < TREASURE_SEARCH_RADIUS) {
-
-
+				treasure->SetIsOpened(true);
 			}
 		}
 	}

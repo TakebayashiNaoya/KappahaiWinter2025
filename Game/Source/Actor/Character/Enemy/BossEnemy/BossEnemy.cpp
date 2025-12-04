@@ -40,9 +40,7 @@ BossEnemy::BossEnemy()
 BossEnemy::~BossEnemy()
 {
 	// BattleManagerからボスを登録解除。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->UnregisterBoss();
-	}
+	BattleManager::GetInstance()->UnregisterBoss();
 }
 
 
@@ -131,9 +129,7 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 bool BossEnemy::Start()
 {
 	// BattleManagerにボスを登録。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->RegisterBoss(this);
-	}
+	BattleManager::GetInstance()->RegisterBoss(this);
 
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, BOSS_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
@@ -149,23 +145,20 @@ bool BossEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
-	if (CollisionHitManager::GetInstance())
-	{
-		// 攻撃判定のコライダーを作成。
-		m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_BossEnemy,
-			HIT_COLLIDER_RADIUS,
-			true
-		);
-		// やられ判定のコライダーを作成。
-		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_BossEnemy,
-			HURT_COLLIDER_RADIUS,
-			true
-		);
-	}
+	// 攻撃判定のコライダーを作成。
+	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BossEnemy,
+		HIT_COLLIDER_RADIUS,
+		true
+	);
+	// やられ判定のコライダーを作成。
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BossEnemy,
+		HURT_COLLIDER_RADIUS,
+		true
+	);
 
 	//アニメーションイベント用の関数を設定する。
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {

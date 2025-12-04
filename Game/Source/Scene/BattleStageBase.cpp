@@ -18,8 +18,8 @@ BattleStageBase::BattleStageBase()
 
 BattleStageBase::~BattleStageBase()
 {
-	DeleteGO(m_battleManager);
-	DeleteGO(m_collisionManager);
+	//DeleteGO(m_battleManager);
+	//DeleteGO(m_collisionManager);
 	DeleteGO(m_skyCube);
 	DeleteGO(m_inGameUI);
 	DeleteGO(m_gameCamera);
@@ -134,13 +134,13 @@ void BattleStageBase::InitObjects()
 
 void BattleStageBase::RegisterLoadingTasks()
 {
-	m_loadingTasks.push_back([this]() {
-		m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
-		});
+	//m_loadingTasks.push_back([this]() {
+	//	m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
+	//	});
 
-	m_loadingTasks.push_back([this]() {
-		m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
-		});
+	//m_loadingTasks.push_back([this]() {
+	//	m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
+	//	});
 
 	m_loadingTasks.push_back([this]() {
 		InitSky();

@@ -34,9 +34,7 @@ DeformEnemy::DeformEnemy()
 DeformEnemy::~DeformEnemy()
 {
 	// BattleManagerから敵を登録解除。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->UnregisterDeformEnemy(this);
-	}
+	BattleManager::GetInstance()->UnregisterDeformEnemy(this);
 }
 
 
@@ -86,9 +84,7 @@ void DeformEnemy::Sliding()
 bool DeformEnemy::Start()
 {
 	// BattleManagerに敵を登録。
-	if (auto bm = BattleManager::GetInstance()) {
-		bm->RegisterDeformEnemy(this);
-	}
+	BattleManager::GetInstance()->RegisterDeformEnemy(this);
 
 	// モデルとアニメーションを初期化。
 	InitModel(enAnimationClip_Num, TRANSFORM_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
@@ -96,23 +92,20 @@ bool DeformEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enDeformEnemyState_Idle);
 
-	if (CollisionHitManager::GetInstance())
-	{
-		// 攻撃判定のコライダーを作成。
-		m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_DeformEnemy,
-			HIT_COLLIDER_RADIUS,
-			true
-		);
-		// ゴーストオブジェクトを作成。
-		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_DeformEnemy,
-			HURT_COLLIDER_RADIUS,
-			true
-		);
-	}
+	// 攻撃判定のコライダーを作成。
+	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_DeformEnemy,
+		HIT_COLLIDER_RADIUS,
+		true
+	);
+	// ゴーストオブジェクトを作成。
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_DeformEnemy,
+		HURT_COLLIDER_RADIUS,
+		true
+	);
 
 	m_modelRender.Update();
 
