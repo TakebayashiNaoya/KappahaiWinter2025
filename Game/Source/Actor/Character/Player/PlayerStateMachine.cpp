@@ -6,7 +6,7 @@
 namespace
 {
 	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;	// 踏みつけ用コライダーの半径。
-	constexpr float JUMP_POWER = 40.0f;				// ジャンプパワー。
+	constexpr float JUMP_POWER = 30.0f;				// ジャンプパワー。
 	constexpr float STICK_DEAD_ZONE = 0.01f;		// スティックのデッドゾーン。
 	const float DASH_SPEED = 15.0f;					// ダッシュスピード。
 	const float WALK_SPEED = 10.0f;					// 歩くスピード。
