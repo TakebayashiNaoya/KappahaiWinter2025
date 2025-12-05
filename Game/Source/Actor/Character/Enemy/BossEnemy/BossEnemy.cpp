@@ -2,7 +2,6 @@
 #include "BossEnemy.h"
 #include "BossEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
-#include "Source/Battle/BattleManager.h"
 
 // ヘッダーのstatic宣言を消し、これをコンストラクタで定義すれば、同じクラスを使っても違うPLAYER_ANIMATION_OPTIONSを設定できる。
 // ただ、staticの方がメモリ効率は良いので今回はこの形。
@@ -20,7 +19,7 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr int MAX_LIFE = 10;										// 最大体力。
+	constexpr int MAX_LIFE = 1;										// 最大体力。
 
 	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
 	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
@@ -36,6 +35,10 @@ namespace
 BossEnemy::BossEnemy()
 {
 	m_stateMachine = std::make_unique<app::bossEnemy::BossEnemyStateMachine>(this);
+}
+
+BossEnemy::~BossEnemy()
+{
 }
 
 
@@ -62,7 +65,7 @@ void BossEnemy::UpdateCooldown()
 	m_cooldownTimer -= g_gameTime->GetFrameDeltaTime();
 }
 
-const bool BossEnemy::IsOnCooldown()const
+const bool BossEnemy::GetIsOnCooldown()const
 {
 	return m_cooldownTimer > 0.0f;
 }
@@ -137,23 +140,20 @@ bool BossEnemy::Start()
 	// 初期ステートを設定
 	m_stateMachine->InitializeState(enBossEnemyState_Idle);
 
-	if (CollisionHitManager::GetInstance())
-	{
-		// 攻撃判定のコライダーを作成。
-		m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_BossEnemy,
-			HIT_COLLIDER_RADIUS,
-			true
-		);
-		// やられ判定のコライダーを作成。
-		m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
-			this,
-			enCollisionType_BossEnemy,
-			HURT_COLLIDER_RADIUS,
-			true
-		);
-	}
+	// 攻撃判定のコライダーを作成。
+	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BossEnemy,
+		HIT_COLLIDER_RADIUS,
+		true
+	);
+	// やられ判定のコライダーを作成。
+	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
+		this,
+		enCollisionType_BossEnemy,
+		HURT_COLLIDER_RADIUS,
+		true
+	);
 
 	//アニメーションイベント用の関数を設定する。
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {
@@ -166,7 +166,7 @@ bool BossEnemy::Start()
 void BossEnemy::Update()
 {
 	// ポーズ中または戦闘終了時は更新しない。
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

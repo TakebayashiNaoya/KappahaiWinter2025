@@ -242,6 +242,7 @@
     <ClCompile Include="Source\Actor\Character\Types.cpp" />
     <ClCompile Include="Source\Actor\Object\Rocket\Rocket.cpp" />
     <ClCompile Include="Source\Actor\Object\Spawner\Spawner.cpp" />
+    <ClCompile Include="Source\Actor\Object\Treasure\Treasure.cpp" />
     <ClCompile Include="Source\Actor\Planet\BossPlanet.cpp" />
     <ClCompile Include="Source\Actor\Planet\FirstPlanet.cpp" />
     <ClCompile Include="Source\Actor\Planet\PlanetBase.cpp" />
@@ -261,6 +262,7 @@
     <ClCompile Include="Source\UI\UIDamageFlash.cpp" />
     <ClCompile Include="Source\UI\UIGameClear.cpp" />
     <ClCompile Include="Source\UI\UIGameOver.cpp" />
+    <ClCompile Include="Source\UI\UIGear.cpp" />
     <ClCompile Include="Source\UI\UIInGame.cpp" />
     <ClCompile Include="Source\UI\UIPlayerLife.cpp" />
     <ClCompile Include="Source\UI\UIResultBase.cpp" />
@@ -291,6 +293,7 @@
     <ClInclude Include="Source\Actor\Character\Types.h" />
     <ClInclude Include="Source\Actor\Object\Rocket\Rocket.h" />
     <ClInclude Include="Source\Actor\Object\Spawner\Spawner.h" />
+    <ClInclude Include="Source\Actor\Object\Treasure\Treasure.h" />
     <ClInclude Include="Source\Actor\Planet\BossPlanet.h" />
     <ClInclude Include="Source\Actor\Planet\FirstPlanet.h" />
     <ClInclude Include="Source\Actor\Planet\PlanetBase.h" />
@@ -305,11 +308,13 @@
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\Title.h" />
     <ClInclude Include="Source\Sound\SoundManager.h" />
+    <ClInclude Include="Source\UI\TextTemplate.h" />
     <ClInclude Include="Source\UI\UIBossLife.h" />
     <ClInclude Include="Source\UI\UIControls.h" />
     <ClInclude Include="Source\UI\UIDamageFlash.h" />
     <ClInclude Include="Source\UI\UIGameClear.h" />
     <ClInclude Include="Source\UI\UIGameOver.h" />
+    <ClInclude Include="Source\UI\UIGear.h" />
     <ClInclude Include="Source\UI\UIInGame.h" />
     <ClInclude Include="Source\UI\UIPlayerLife.h" />
     <ClInclude Include="Source\UI\UIResultBase.h" />

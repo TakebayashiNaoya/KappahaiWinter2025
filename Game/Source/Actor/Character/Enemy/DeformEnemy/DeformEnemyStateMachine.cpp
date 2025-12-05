@@ -41,7 +41,7 @@ namespace app
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
-			if (GetOwner<DeformEnemy>()->IsFoundPlayer()) {
+			if (GetOwner<DeformEnemy>()->GetIsFoundPlayer()) {
 				requestStateId = enDeformEnemyState_Escape;
 				return true;
 			}
@@ -77,11 +77,11 @@ namespace app
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
-			if (GetOwner<DeformEnemy>()->IsDeformed()) {
+			if (GetOwner<DeformEnemy>()->GetIsDeformed()) {
 				requestStateId = enDeformEnemyState_Transform;
 				return true;
 			}
-			if (!GetOwner<DeformEnemy>()->IsFoundPlayer()) {
+			if (!GetOwner<DeformEnemy>()->GetIsFoundPlayer()) {
 				requestStateId = enDeformEnemyState_Idle;
 				return true;
 			}
@@ -116,7 +116,7 @@ namespace app
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
-			if (GetOwner<DeformEnemy>()->IsSliding()) {
+			if (GetOwner<DeformEnemy>()->GetIsSliding()) {
 				requestStateId = enDeformEnemyState_Slide;
 				return true;
 			}
@@ -155,7 +155,7 @@ namespace app
 				requestStateId = enDeformEnemyState_Die;
 				return true;
 			}
-			if (!GetOwner<DeformEnemy>()->IsSliding()) {
+			if (!GetOwner<DeformEnemy>()->GetIsSliding()) {
 				requestStateId = enDeformEnemyState_Transform;
 				return true;
 			}
@@ -170,7 +170,6 @@ namespace app
 
 		void DieState::Enter()
 		{
-			DeleteGO(GetOwner<DeformEnemy>());
 		}
 
 

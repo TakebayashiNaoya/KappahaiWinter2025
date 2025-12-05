@@ -1,12 +1,19 @@
 #include "stdafx.h"
 #include "UIDamageFlash.h"
 #include "LoadingScreen.h"
-#include "Source/Battle/BattleManager.h"
 
 namespace
 {
 	const float SPRITE_SIZE_W = 1920.0f;
 	const float SPRITE_SIZE_H = 1080.0f;
+}
+
+UIDamageFlash::UIDamageFlash()
+{
+}
+
+UIDamageFlash::~UIDamageFlash()
+{
 }
 
 bool UIDamageFlash::Start()
@@ -26,7 +33,7 @@ void UIDamageFlash::Render(RenderContext& rc)
 		return;
 	}
 
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

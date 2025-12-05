@@ -2,7 +2,6 @@
 #include "GameCamera.h"
 #include "Source/Actor/Character/Player/Player.h"
 #include "Source/Scene/SceneManager.h"
-#include "Source/Battle/BattleManager.h"
 
 #if _DEBUG
 #define AddjustConst
@@ -21,6 +20,13 @@ bool GameCamera::Start()
 	m_toCameraPos.Set(0.0f, 500.0f, -700.0f);
 	m_player = FindGO<Player>("Player");
 
+	m_springCamera.Init(
+		*g_camera3D,		//ばねカメラの処理を行うカメラを指定する。
+		1000.0f,			//カメラの移動速度の最大値。
+		true,				//カメラと地形とのあたり判定を取るかどうかのフラグ。trueだとあたり判定を行う。
+		5.0f				//カメラに設定される球体コリジョンの半径。第３引数がtrueの時に有効になる。
+	);
+
 	g_camera3D->SetNear(1.0f);
 	g_camera3D->SetFar(20000.0f);
 
@@ -30,11 +36,11 @@ bool GameCamera::Start()
 void GameCamera::Update()
 {
 	// シーン切り替え中は更新しない。
-	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+	if (SceneManager::GetInstance()->GetIsSceneChangeRequested()) {
 		return;
 	}
 
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 
@@ -75,17 +81,35 @@ void GameCamera::Update()
 		playerAdditionalRotation.Apply(m_toCameraPos);
 	}
 
-	// プレイヤーの位置と回転後の相対ベクトルからカメラの位置を計算
-	Vector3 desiredCameraPos = playerPos + m_toCameraPos;
+	// 1. プレイヤーの足元の位置（アンカー）を計算する
+	Vector3 anchorPos = playerPos; // デフォルトはプレイヤー位置
+	Vector3 rayStart = playerPos + up * 50.0f;
+	Vector3 rayEnd = Vector3::Zero;      // 下方向（重力方向）へレイを飛ばす
+	Vector3 hitPos = Vector3::Zero;
 
-	// カメラ位置の更新
+	// 地面が見つかったら、その場所を基準にする
+	if (PhysicsWorld::GetInstance()->RayTest(rayStart, rayEnd, hitPos)) {
+		anchorPos = hitPos;
+	}
+
+
+	// 2. カメラの位置を計算する
+	// 修正前： Vector3 desiredCameraPos = playerPos + m_toCameraPos;
+	// 修正後： アンカー（地面）を基準にオフセットを足す
+	Vector3 desiredCameraPos = anchorPos + m_toCameraPos;
+
+
+	// 3. 注視点（ターゲット）を計算する
+	// 修正前： Vector3 target = playerPos + up * 100.0f;
+	// 修正後： アンカー（地面）を基準に高さを足す
+	Vector3 target = anchorPos + up * 100.0f;
+
+
+	// 4. 計算結果を反映
 	m_cameraPos = desiredCameraPos;
 
-	// 注視点の計算
-	Vector3 target = playerPos + up * 100.0f;
-
-	g_camera3D->SetPosition(m_cameraPos);
-	g_camera3D->SetTarget(target);
 	g_camera3D->SetUp(up);
-	g_camera3D->Update();
+	m_springCamera.SetPosition(m_cameraPos);
+	m_springCamera.SetTarget(target);
+	m_springCamera.Update();
 }

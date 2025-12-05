@@ -41,11 +41,11 @@ namespace app
 				requestStateId = enBasicEnemyState_Die;
 				return true;
 			}
-			if (GetOwner<BasicEnemy>()->IsFoundPlayer()) {
+			if (GetOwner<BasicEnemy>()->GetIsFoundPlayer()) {
 				requestStateId = enBasicEnemyState_Chase;
 				return true;
 			}
-			if (GetOwner<BasicEnemy>()->IsOnCoolDown()) {
+			if (GetOwner<BasicEnemy>()->GetIsOnCoolDown()) {
 				requestStateId = enBasicEnemyState_CoolDown;
 				return true;
 			}
@@ -84,11 +84,11 @@ namespace app
 				return true;
 			}
 			// プレイヤーが一定距離外に出たら待機状態へ移行
-			if (!GetOwner<BasicEnemy>()->IsFoundPlayer()) {
+			if (!GetOwner<BasicEnemy>()->GetIsFoundPlayer()) {
 				requestStateId = enBasicEnemyState_Idle;
 				return true;
 			}
-			if (GetOwner<BasicEnemy>()->IsOnCoolDown()) {
+			if (GetOwner<BasicEnemy>()->GetIsOnCoolDown()) {
 				requestStateId = enBasicEnemyState_CoolDown;
 				return true;
 			}
@@ -125,7 +125,7 @@ namespace app
 				return true;
 			}
 			// クールダウンが終わったら歩き状態へ移行
-			if (!GetOwner<BasicEnemy>()->IsOnCoolDown()) {
+			if (!GetOwner<BasicEnemy>()->GetIsOnCoolDown()) {
 				requestStateId = enBasicEnemyState_Idle;
 				return true;
 			}
@@ -141,7 +141,6 @@ namespace app
 
 		void DieState::Enter()
 		{
-			DeleteGO(GetOwner<BasicEnemy>());
 		}
 
 

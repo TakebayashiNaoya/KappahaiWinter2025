@@ -7,7 +7,7 @@ public:
 	virtual ~UIResultBase() {}
 
 	// ‹¤’Ê‚ÌI—¹”»’èƒtƒ‰ƒOæ“¾
-	const bool IsEnd() const
+	const bool GetIsEnd() const
 	{
 		return m_isEnd;
 	}

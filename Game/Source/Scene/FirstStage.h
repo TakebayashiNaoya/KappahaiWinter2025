@@ -2,9 +2,9 @@
 #include "Source/Scene/BattleStageBase.h"
 
 class FirstPlanet;
-class BasicEnemy;
-class DeformEnemy;
+class Treasure;
 class Rocket;
+class UIGear;
 
 
 class FirstStage :public BattleStageBase
@@ -25,8 +25,8 @@ private:
 
 private:
 	FirstPlanet* m_firstStage = nullptr;
-	std::vector<BasicEnemy*> m_basicEnemies;
-	std::vector<DeformEnemy*> m_deformEnemies;
+	std::vector<Treasure*> m_treasures;
 	Rocket* m_rocket = nullptr;
+	UIGear* m_uiGear = nullptr;
 };
 

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "UIBossLife.h"
 #include "LoadingScreen.h"
-#include "Source/Battle/BattleManager.h"
 
 namespace
 {
@@ -91,7 +90,7 @@ void UIBossLife::Render(RenderContext& rc)
 		return;
 	}
 
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

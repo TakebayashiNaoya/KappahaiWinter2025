@@ -6,7 +6,6 @@
 #include "Source/UI/UIGameClear.h"
 #include "Source/Camera/GameCamera.h"
 #include "Source/UI/UIInGame.h"
-#include "Source/Battle/BattleManager.h"
 #include "Source/Collision/CollisionManager.h"
 #include "LoadingScreen.h"
 #include "nature/SkyCube.h"
@@ -14,23 +13,22 @@
 BattleStageBase::BattleStageBase()
 {
 	BattleManager::SetIsBattleFinish(false);
+	BattleManager::SetIsStopCollisionManager(false);
 	RegisterLoadingTasks();
 }
 
 BattleStageBase::~BattleStageBase()
 {
-	DeleteGO(m_battleManager);
-	DeleteGO(m_collisionManager);
-	DeleteGO(m_skyCube);
-	DeleteGO(m_inGameUI);
-	DeleteGO(m_gameCamera);
-	DeleteGO(m_player);
+	BattleManager::GetInstance()->DestroyAllEnemies();
 
-	// ※PlayerやBossEnemyの破棄(DeleteGO)は
-	// これまで通り各ステージ(InitLevel)で作ったものを
-	// 各ステージのデストラクタで破棄するか、
-	// ここで破棄するか統一する必要があります。
-	// 今回は安全のため「作った場所（子クラス）」で破棄する想定のままにします。
+	DeleteGO(m_skyCube);
+
+	DeleteGO(m_inGameUI);
+
+	DeleteGO(m_gameCamera);
+
+	BattleManager::GetInstance()->Unregister(m_player);
+	DeleteGO(m_player);
 }
 
 bool BattleStageBase::Start()
@@ -61,7 +59,7 @@ void BattleStageBase::Update()
 
 		// 2.相打ちにならないようにコリジョンマネージャーを破棄する。
 	case enBattlePhase_BattleFinish:
-		DeleteGO(m_collisionManager);
+		BattleManager::SetIsStopCollisionManager(true);
 		m_battlePhase = enBattlePhase_WaitFinishAnimation;
 		break;
 
@@ -70,13 +68,13 @@ void BattleStageBase::Update()
 		//   ボスの死亡アニメーションが終わったらゲームクリアへ。
 	case enBattlePhase_WaitFinishAnimation:
 		if (m_result == enResult_PlayerLose) {
-			if (m_player && m_player->IsDead()) {
+			if (m_player && m_player->GetIsDead()) {
 				BattleManager::SetIsBattleFinish(true);
 				m_battlePhase = enBattlePhase_GameOver;
 			}
 		}
 		else if (m_result == enResult_PlayerWin) {
-			if (m_bossEnemy && m_bossEnemy->IsDead()) {
+			if (m_bossEnemy && m_bossEnemy->GetIsDead()) {
 				BattleManager::SetIsBattleFinish(true);
 				m_battlePhase = enBattlePhase_GameClear;
 			}
@@ -101,7 +99,7 @@ void BattleStageBase::Update()
 
 		// 5.ゲームオーバー、またはゲームクリアUIの終了を待ってタイトルへ戻る。
 	case enBattlePhase_WaitEnd:
-		if (m_uiResult->IsEnd()) {
+		if (m_uiResult->GetIsEnd()) {
 			// ロード画面へ移行。
 			if (LoadingScreen::GetState() != LoadingScreen::enState_Loading) {
 				LoadingScreen::ChangeState(LoadingScreen::enState_Loading);
@@ -135,13 +133,13 @@ void BattleStageBase::InitObjects()
 
 void BattleStageBase::RegisterLoadingTasks()
 {
-	m_loadingTasks.push_back([this]() {
-		m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
-		});
+	//m_loadingTasks.push_back([this]() {
+	//	m_battleManager = NewGO<BattleManagerObject>(0, "BattleManagerObject");
+	//	});
 
-	m_loadingTasks.push_back([this]() {
-		m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
-		});
+	//m_loadingTasks.push_back([this]() {
+	//	m_collisionManager = NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
+	//	});
 
 	m_loadingTasks.push_back([this]() {
 		InitSky();

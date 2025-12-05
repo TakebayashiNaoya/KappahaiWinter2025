@@ -9,12 +9,15 @@
 #include "Source/UI/UIDamageFlash.h"
 #include "Source/UI/UIBossLife.h"
 #include "Source/Actor/Object/Rocket/Rocket.h"
+#include "Source/Actor/Object/Treasure/Treasure.h"
+#include "Source/UI/UIGear.h"
 
 
 namespace
 {
 	constexpr float ENEMY_SEARCH_RADIUS = 500.0f;	// プレイヤー検出半径
-	constexpr float ROCKET_SEARCH_RADIUS = 800.0f;	// ロケットのプレイヤー検出半径
+	constexpr float ROCKET_SEARCH_RADIUS = 500.0f;	// ロケットのプレイヤー検出半径
+	constexpr float TREASURE_SEARCH_RADIUS = 200.0f;	// 宝箱のプレイヤー検出半径
 
 	/// <summary>
 	/// プレイヤーがエネミーに近づいたら、エネミーにプレイヤーの座標を伝え、発見フラグを立てる。
@@ -45,77 +48,256 @@ namespace
 			}
 		}
 	}
+
+	/// <summary>
+	/// 死亡しているエネミーをDeleteGOし、リストからも削除するテンプレート関数
+	/// </summary>
+	template <class T>
+	void UpdateAndRemoveDeadEnemies(std::vector<T*>& enemies)
+	{
+		auto it = enemies.begin();
+		while (it != enemies.end()) {
+			auto* enemy = *it;
+			// エネミーが存在し、かつ死んでいる場合
+			if (enemy && enemy->IsDying()) {
+				DeleteGO(enemy);        // メモリ削除予約
+				it = enemies.erase(it); // リストから削除して、イテレータを進める
+			}
+			else {
+				++it; // 死んでいなければ次の要素へ
+			}
+		}
+	}
 }
 
 
 BattleManager* BattleManager::m_instance = nullptr;
 bool BattleManager::m_isBattleFinish = false;
+bool BattleManager::m_isStopCollisionManager = false;
 
 
 void BattleManager::Update()
 {
 	// シーン切り替えリクエストがある場合、バトル処理を全てスキップ。
-	if (SceneManager::GetInstance()->IsSceneChangeRequested()) {
+	if (SceneManager::GetInstance()->GetIsSceneChangeRequested()) {
 		return;
 	}
 
+	// 死亡しているエネミーをDeleteGOし、リストからも削除。
+	UpdateAndRemoveDeadEnemies(m_basicEnemies);
+	UpdateAndRemoveDeadEnemies(m_deformEnemies);
 
-	// キャラの数は少なく、FindGOs内で最適化されているため、毎フレーム取得しても問題ないと判断。
-	Player* player = FindGO<Player>("Player");
-	if (player == nullptr) {
-		return;
+	// ボスエネミーにプレイヤーの座標を伝える。
+	if (m_bossEnemy && m_player) {
+		m_bossEnemy->SetIsFoundPlayer(true, m_player->GetPosition());
 	}
 
+	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
+	CheckEnemyDetection<BasicEnemy>(m_player, m_basicEnemies, ENEMY_SEARCH_RADIUS);
+
+	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
+	CheckEnemyDetection<DeformEnemy>(m_player, m_deformEnemies, ENEMY_SEARCH_RADIUS);
 
 	// プレイヤーのライフをUIに反映。
-	UIPlayerLife* playerHpUI = FindGO<UIPlayerLife>("UIPlayerLife");
-	if (playerHpUI) {
-		playerHpUI->SetPlayerHp(player->GetLife());
+	if (m_uiPlayerLife && m_player) {
+		m_uiPlayerLife->SetPlayerHp(m_player->GetLife());
 	}
-
 
 	// ダメージフラッシュUIにプレイヤーのダメージ状態を反映。
-	UIDamageFlash* damageFlashUI = FindGO<UIDamageFlash>("UIDamageFlash");
-	if (damageFlashUI) {
-		damageFlashUI->SetPlayerHp(player->GetLife());
+	if (m_uiDamageFlash && m_player) {
+		m_uiDamageFlash->SetPlayerHp(m_player->GetLife());
+	}
+
+	// ボスのライフをUIに反映。
+	if (m_uiBossLife && m_bossEnemy) {
+		m_uiBossLife->SetMaxLife(m_bossEnemy->GetMaxLife());
+		m_uiBossLife->SetCurrentLife(m_bossEnemy->GetLife());
 	}
 
 
-	Rocket* rocket = FindGO<Rocket>("Rocket");
-	if (rocket) {
-		Vector3 lengthVec = rocket->GetPosition() - player->GetPosition();
-		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
-			rocket->SetIsGooled(true);
+
+	// プレイヤーが宝箱に近づいたら、宝箱を開ける。
+	if (m_player) {
+		for (auto* treasure : m_treasures) {
+			if (treasure == nullptr) {
+				continue;
+			}
+			else if (treasure->GetIsOpened()) {
+				continue;
+			}
+
+			Vector3 lengthVec = treasure->GetPosition() - m_player->GetPosition();
+			if (lengthVec.Length() < TREASURE_SEARCH_RADIUS) {
+				treasure->SetIsOpened(true);
+				m_gotGearCount++;
+			}
 		}
 	}
 
-
-	// プレイヤーがベーシックエネミーに近づいたら、ベーシックエネミーにプレイヤーの座標を伝える。
-	std::vector<BasicEnemy*> basicEnemys = FindGOs<BasicEnemy>("BasicEnemy");
-	CheckEnemyDetection<BasicEnemy>(player, basicEnemys, ENEMY_SEARCH_RADIUS);
-
-
-	// プレイヤーが変形エネミーに近づいたら、変形エネミーにプレイヤーの座標を伝える。
-	std::vector<DeformEnemy*> transformEnemys = FindGOs<DeformEnemy>("DeformEnemy");
-	CheckEnemyDetection<DeformEnemy>(player, transformEnemys, ENEMY_SEARCH_RADIUS);
-
-
-	// ボスエネミーにプレイヤーの座標を伝える。
-	BossEnemy* bossEnemy = FindGO<BossEnemy>("BossEnemy");
-	if (bossEnemy && player) {
-		bossEnemy->SetIsFoundPlayer(true, player->GetPosition());
+	// ギアの取得数をUIに反映。
+	if (m_uiGear) {
+		m_uiGear->SetMaxGearCount(m_maxGearCount);
+		m_uiGear->SetGotGearCount(m_gotGearCount);
 	}
 
+	// ギアを全て集めたらロケットを発射可能にする。
+	if (m_maxGearCount > 0 && m_gotGearCount == m_maxGearCount) {
+		m_canLaunch = true;
+	}
+	else {
+		m_canLaunch = false;
+	}
 
-	// ボスのライフをUIに反映。
-	UIBossLife* bossHpUI = FindGO<UIBossLife>("UIBossLife");
-	if (bossHpUI && bossEnemy) {
-		bossHpUI->SetMaxLife(bossEnemy->GetMaxLife());
-		bossHpUI->SetCurrentLife(bossEnemy->GetLife());
+	// プレイヤーがロケットに近づいたら、ロケットをゴール状態にする。
+	if (m_rocket && m_player && m_canLaunch) {
+		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
+		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
+			if (m_rocket != nullptr) {
+				m_rocket->SetIsGooled(true);
+				m_maxGearCount = 0;
+				m_gotGearCount = 0;
+				m_canLaunch = false;
+			}
+		}
 	}
 }
 
 
+void BattleManager::DestroyAllEnemies()
+{
+	// 基本エネミーの削除
+	for (auto* enemy : m_basicEnemies) {
+		if (enemy) {
+			DeleteGO(enemy);
+		}
+	}
+	m_basicEnemies.clear();
+
+	// 変形エネミーの削除
+	for (auto* enemy : m_deformEnemies) {
+		if (enemy) {
+			DeleteGO(enemy);
+		}
+	}
+	m_deformEnemies.clear();
+
+	// ※ボスなどはステージ個別の管理でよければそのままでもOKですが、
+	// ここでまとめて消す設計にしても構いません。
+}
+
+
+void BattleManager::Register(Player* player)
+{
+	m_player = player;
+}
+
+void BattleManager::Unregister(Player* player)
+{
+	m_player = nullptr;
+}
+
+
+void BattleManager::Register(BossEnemy* boss)
+{
+	m_bossEnemy = boss;
+}
+
+void BattleManager::Unregister(BossEnemy* boss)
+{
+	m_bossEnemy = nullptr;
+}
+
+
+void BattleManager::Register(BasicEnemy* enemy)
+{
+	m_basicEnemies.push_back(enemy);
+}
+
+void BattleManager::Unregister(BasicEnemy* enemy)
+{
+	auto it = std::remove(m_basicEnemies.begin(), m_basicEnemies.end(), enemy);
+	m_basicEnemies.erase(it, m_basicEnemies.end());
+}
+
+
+void BattleManager::Register(DeformEnemy* enemy)
+{
+	m_deformEnemies.push_back(enemy);
+}
+
+void BattleManager::Unregister(DeformEnemy* enemy)
+{
+	auto it = std::remove(m_deformEnemies.begin(), m_deformEnemies.end(), enemy);
+	m_deformEnemies.erase(it, m_deformEnemies.end());
+}
+
+
+void BattleManager::Register(UIPlayerLife* uiPlayerLife)
+{
+	m_uiPlayerLife = uiPlayerLife;
+}
+
+void BattleManager::Unregister(UIPlayerLife* uiPlayerLife)
+{
+	m_uiPlayerLife = nullptr;
+}
+
+
+void BattleManager::Register(UIDamageFlash* uiDamageFlash)
+{
+	m_uiDamageFlash = uiDamageFlash;
+}
+
+void BattleManager::Unregister(UIDamageFlash* uiDamageFlash)
+{
+	m_uiDamageFlash = nullptr;
+}
+
+
+void BattleManager::Register(UIBossLife* uiBossLife)
+{
+	m_uiBossLife = uiBossLife;
+}
+
+void BattleManager::Unregister(UIBossLife* uiBossLife)
+{
+	m_uiBossLife = nullptr;
+}
+
+
+void BattleManager::Register(UIGear* uiGear)
+{
+	m_uiGear = uiGear;
+}
+
+void BattleManager::Unregister(UIGear* uiGear)
+{
+	m_uiGear = nullptr;
+}
+
+
+void BattleManager::Register(Rocket* rocket)
+{
+	m_rocket = rocket;
+}
+
+void BattleManager::Unregister(Rocket* rocket)
+{
+	m_rocket = nullptr;
+}
+
+
+void BattleManager::Register(Treasure* treasure)
+{
+	m_treasures.push_back(treasure);
+	m_maxGearCount++;
+}
+
+void BattleManager::Unregister(Treasure* treasure)
+{
+	auto it = std::remove(m_treasures.begin(), m_treasures.end(), treasure);
+	m_treasures.erase(it, m_treasures.end());
+}
 
 
 

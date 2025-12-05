@@ -14,6 +14,7 @@ class BasicEnemy : public Enemy
 {
 public:
 	BasicEnemy();
+	~BasicEnemy();
 
 	/// <summary>
 	/// アニメーションのクリップを表す列挙型です。
@@ -40,7 +41,7 @@ public:
 	/// クールダウン状態かどうかを取得します。
 	/// </summary>
 	/// <returns> クールダウン状態であれば true。</returns>
-	const bool IsOnCoolDown() const
+	const bool GetIsOnCoolDown() const
 	{
 		return m_isCoolDown;
 	}

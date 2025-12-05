@@ -12,12 +12,12 @@ public:
 		enState_None
 	};
 
-	// ¥¥¥ À‘•‚ğ .cpp ‚ÖˆÚ“®‚·‚é‚½‚ßAéŒ¾‚Ì‚İ‚É•ÏX ¥¥¥
+
 	static void StartLoading();
 	static void FinishLoading();
 	static void ChangeState(EnState state);
 	static const EnState GetState();
-	// £££ •ÏX‚±‚±‚Ü‚Å £££
+
 
 private:
 	enum EnImageParts
@@ -68,7 +68,7 @@ public:
 	{
 		return m_instance;
 	}
-	static bool IsAvailable()
+	static bool GetIsAvailable()
 	{
 		return m_instance != nullptr;
 	}

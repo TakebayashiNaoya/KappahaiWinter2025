@@ -12,6 +12,7 @@ UIInGame::UIInGame()
 
 UIInGame::~UIInGame()
 {
+	BattleManager::GetInstance()->Unregister(m_uiPlayerLife);
 	DeleteGO(m_uiPlayerLife);
 	DeleteGO(m_uiDamageFlash);
 	DeleteGO(m_uiControls);
@@ -20,6 +21,8 @@ UIInGame::~UIInGame()
 bool UIInGame::Start()
 {
 	m_uiPlayerLife = NewGO<UIPlayerLife>(0, "UIPlayerLife");
+	BattleManager::GetInstance()->Register(m_uiPlayerLife);
+
 	m_uiDamageFlash = NewGO<UIDamageFlash>(0, "UIDamageFlash");
 	m_uiControls = NewGO<UIControls>(0, "UIControls");
 

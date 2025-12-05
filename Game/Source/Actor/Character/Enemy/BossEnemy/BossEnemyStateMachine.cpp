@@ -47,7 +47,7 @@ namespace app
 		bool IdleState::RequestState(int& requestStateId)
 		{
 			// 被弾していたら被弾状態へ移行。
-			if (GetOwner<BossEnemy>()->IsAttacked()) {
+			if (GetOwner<BossEnemy>()->GetIsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
 				return true;
 			}
@@ -101,13 +101,13 @@ namespace app
 		bool CooldownState::RequestState(int& requestStateId)
 		{
 			// 被弾していたら被弾状態へ移行。
-			if (GetOwner<BossEnemy>()->IsAttacked()) {
+			if (GetOwner<BossEnemy>()->GetIsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
 				return true;
 			}
 
 			// クールダウン中は状態遷移しない。
-			if (GetOwner<BossEnemy>()->IsOnCooldown()) {
+			if (GetOwner<BossEnemy>()->GetIsOnCooldown()) {
 				return false;
 			}
 
@@ -143,7 +143,7 @@ namespace app
 		bool WalkState::RequestState(int& requestStateId)
 		{
 			// 被弾していたら被弾状態へ移行。
-			if (GetOwner<BossEnemy>()->IsAttacked()) {
+			if (GetOwner<BossEnemy>()->GetIsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
 				return true;
 			}
@@ -190,7 +190,7 @@ namespace app
 		bool RunState::RequestState(int& requestStateId)
 		{
 			// 被弾していたら被弾状態へ移行。
-			if (GetOwner<BossEnemy>()->IsAttacked()) {
+			if (GetOwner<BossEnemy>()->GetIsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
 				return true;
 			}
@@ -231,13 +231,13 @@ namespace app
 		bool AttackState::RequestState(int& requestStateId)
 		{
 			// 被弾していたら被弾状態へ移行。
-			if (GetOwner<BossEnemy>()->IsAttacked()) {
+			if (GetOwner<BossEnemy>()->GetIsAttacked()) {
 				requestStateId = enBossEnemyState_Damage;
 				return true;
 			}
 
 			// 攻撃アニメーションが終了したらクールダウン状態へ移行。
-			if (GetOwner<BossEnemy>()->IsPlayingAnimation() == false) {
+			if (GetOwner<BossEnemy>()->GetIsPlayingAnimation() == false) {
 				requestStateId = enBossEnemyState_Cooldown;
 				return true;
 			}
@@ -290,7 +290,7 @@ namespace app
 			}
 
 			// ダメージアニメーションが終了したら待機状態へ移行。
-			if (GetOwner<BossEnemy>()->IsPlayingAnimation() == false) {
+			if (GetOwner<BossEnemy>()->GetIsPlayingAnimation() == false) {
 				requestStateId = enBossEnemyState_Idle;
 				return true;
 			}
@@ -314,7 +314,7 @@ namespace app
 		void DeadState::Update()
 		{
 			// 死亡アニメーションが終了したら死亡フラグを立てる。
-			if (GetOwner<BossEnemy>()->IsPlayingAnimation() == false) {
+			if (GetOwner<BossEnemy>()->GetIsPlayingAnimation() == false) {
 				GetOwner<BossEnemy>()->SetIsDead(true);
 			}
 		}

@@ -1,4 +1,5 @@
 #pragma once
+#include "Source/Actor/Actor.h"  // æ‚ÉActor‚ğ’m‚é
 
 class Rocket : public Actor
 {
@@ -8,7 +9,7 @@ public:
 
 
 public:
-	const bool IsGooled() const
+	const bool GetIsGooled() const
 	{
 		return m_isGooled;
 	}

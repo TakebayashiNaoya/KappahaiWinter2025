@@ -78,7 +78,7 @@ public:
 	/// 地面に向かってレイを飛ばし、当たった座標と自分の座標の距離が一定未満なら接地していると判定します。
 	/// </summary>
 	/// <returns>接地していれば true、そうでなければ false を示す。</returns>
-	const bool& IsOnGround();
+	bool GetIsOnGround();
 
 
 	/// <summary>
@@ -102,7 +102,7 @@ public:
 	/// 攻撃されているかどうかを取得します。
 	/// </summary>
 	/// <returns> 攻撃されている場合はtrue、されていない場合はfalseを返す。</returns>
-	const bool IsAttacked() const
+	const bool GetIsAttacked() const
 	{
 		return m_isAttacked;
 	}
@@ -132,8 +132,12 @@ public:
 	{
 		m_isDying = isDead;
 	}
+	void IsDying(const bool isDying)
+	{
+		m_isDying = isDying;
+	}
 
-	const bool IsDead() const
+	const bool GetIsDead() const
 	{
 		return m_isDead;
 	}
@@ -161,7 +165,7 @@ public:
 	/// アニメーションが再生中かどうかを返します。
 	/// </summary>
 	/// <returns>アニメーションが再生中であれば true、そうでなければ false を返します。</returns>
-	const bool IsPlayingAnimation() const
+	const bool GetIsPlayingAnimation() const
 	{
 		return m_modelRender.IsPlayingAnimation();
 	};

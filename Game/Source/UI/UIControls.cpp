@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "UIControls.h"
 #include "LoadingScreen.h"
-#include "Source/Battle/BattleManager.h"
 
 
 namespace
@@ -54,7 +53,7 @@ void UIControls::Render(RenderContext& rc)
 		return;
 	}
 
-	if (BattleManager::IsBattleFinish()) {
+	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
 

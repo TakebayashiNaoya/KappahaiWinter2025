@@ -58,6 +58,9 @@
     <Filter Include="Source\Sound">
       <UniqueIdentifier>{b7623839-f957-449b-b341-e4c136088142}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actor\Object\Treasure">
+      <UniqueIdentifier>{4b1fc9b2-fd22-47d1-8d73-9a577e14dd5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -184,6 +187,12 @@
     <ClCompile Include="Source\Sound\SoundManager.cpp">
       <Filter>Source\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Actor\Object\Treasure\Treasure.cpp">
+      <Filter>Source\Actor\Object\Treasure</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\UIGear.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -308,6 +317,15 @@
     </ClInclude>
     <ClInclude Include="Source\Sound\SoundManager.h">
       <Filter>Source\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Actor\Object\Treasure\Treasure.h">
+      <Filter>Source\Actor\Object\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIGear.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\TextTemplate.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

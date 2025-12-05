@@ -2,20 +2,21 @@
 #include "Game.h"
 #include "Source/Scene/SceneManager.h"
 #include "LoadingScreen.h"
+#include "Source/Collision/CollisionManager.h"
 
 
 Game::Game()
 {
-	m_sceneManager = NewGO<SceneManagerObject>(0, "SceneManagerObject");
-	m_loadingScreen = NewGO<LoadingScreenObject>(0, "LoadingScreenObject");
+	NewGO<SceneManagerObject>(0, "SceneManagerObject");
+	NewGO<LoadingScreenObject>(0, "LoadingScreenObject");
 	NewGO<SoundManagerObject>(0, "SoundManagerObject");
+	NewGO<BattleManagerObject>(0, "BattleManagerObject");
+	NewGO<CollisionManagerObject>(0, "CollisionManagerObject");
 }
 
 
 Game::~Game()
 {
-	DeleteGO(m_sceneManager);
-	DeleteGO(m_loadingScreen);
 }
 
 

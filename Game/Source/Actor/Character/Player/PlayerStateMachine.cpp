@@ -6,7 +6,7 @@
 namespace
 {
 	constexpr float STOMP_COLLIDER_RADIUS = 40.0f;	// 踏みつけ用コライダーの半径。
-	constexpr float JUMP_POWER = 40.0f;				// ジャンプパワー。
+	constexpr float JUMP_POWER = 30.0f;				// ジャンプパワー。
 	constexpr float STICK_DEAD_ZONE = 0.01f;		// スティックのデッドゾーン。
 	const float DASH_SPEED = 15.0f;					// ダッシュスピード。
 	const float WALK_SPEED = 10.0f;					// 歩くスピード。
@@ -70,7 +70,7 @@ namespace app
 
 		bool IdleState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->IsAttacked()) {
+			if (GetOwner<Player>()->GetIsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -87,7 +87,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->IsOnGround()) {
+			if (!GetOwner<Player>()->GetIsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -123,7 +123,7 @@ namespace app
 
 		bool app::player::WalkState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->IsAttacked()) {
+			if (GetOwner<Player>()->GetIsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -146,7 +146,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->IsOnGround()) {
+			if (!GetOwner<Player>()->GetIsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -187,7 +187,7 @@ namespace app
 
 		bool app::player::RunState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->IsAttacked()) {
+			if (GetOwner<Player>()->GetIsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
@@ -209,7 +209,7 @@ namespace app
 				return true;
 			}
 
-			if (!GetOwner<Player>()->IsOnGround()) {
+			if (!GetOwner<Player>()->GetIsOnGround()) {
 				requestStateId = enPlayerState_Jump;
 				return true;
 			}
@@ -266,12 +266,12 @@ namespace app
 
 		bool app::player::JumpState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->IsAttacked()) {
+			if (GetOwner<Player>()->GetIsAttacked()) {
 				requestStateId = enPlayerState_KnockBack;
 				return true;
 			}
 
-			if (GetOwner<Player>()->IsOnGround()) {
+			if (GetOwner<Player>()->GetIsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;
@@ -320,7 +320,7 @@ namespace app
 
 		bool app::player::KnockBackState::RequestState(int& requestStateId)
 		{
-			if (GetOwner<Player>()->IsAttacked()) {
+			if (GetOwner<Player>()->GetIsAttacked()) {
 				return false;
 			}
 
@@ -329,7 +329,7 @@ namespace app
 				return true;
 			}
 
-			if (GetOwner<Player>()->IsOnGround()) {
+			if (GetOwner<Player>()->GetIsOnGround()) {
 				if (IsLeftStick()) {
 					if (g_pad[0]->IsPress(enButtonB)) {
 						requestStateId = enPlayerState_Run;
@@ -365,7 +365,7 @@ namespace app
 
 		void app::player::DieState::Update()
 		{
-			if (GetOwner<Player>()->IsPlayingAnimation() == false) {
+			if (GetOwner<Player>()->GetIsPlayingAnimation() == false) {
 				GetOwner<Player>()->SetIsDead(true);
 			}
 		}
