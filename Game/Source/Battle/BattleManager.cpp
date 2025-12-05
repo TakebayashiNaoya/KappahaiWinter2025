@@ -15,7 +15,7 @@
 namespace
 {
 	constexpr float ENEMY_SEARCH_RADIUS = 500.0f;	// プレイヤー検出半径
-	constexpr float ROCKET_SEARCH_RADIUS = 800.0f;	// ロケットのプレイヤー検出半径
+	constexpr float ROCKET_SEARCH_RADIUS = 500.0f;	// ロケットのプレイヤー検出半径
 	constexpr float TREASURE_SEARCH_RADIUS = 200.0f;	// 宝箱のプレイヤー検出半径
 
 	/// <summary>
