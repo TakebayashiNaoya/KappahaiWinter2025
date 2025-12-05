@@ -242,6 +242,7 @@
     <ClCompile Include="Source\Actor\Character\Types.cpp" />
     <ClCompile Include="Source\Actor\Object\Rocket\Rocket.cpp" />
     <ClCompile Include="Source\Actor\Object\Spawner\Spawner.cpp" />
+    <ClCompile Include="Source\Actor\Object\Treasure\Treasure.cpp" />
     <ClCompile Include="Source\Actor\Planet\BossPlanet.cpp" />
     <ClCompile Include="Source\Actor\Planet\FirstPlanet.cpp" />
     <ClCompile Include="Source\Actor\Planet\PlanetBase.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="Source\Actor\Character\Types.h" />
     <ClInclude Include="Source\Actor\Object\Rocket\Rocket.h" />
     <ClInclude Include="Source\Actor\Object\Spawner\Spawner.h" />
+    <ClInclude Include="Source\Actor\Object\Treasure\Treasure.h" />
     <ClInclude Include="Source\Actor\Planet\BossPlanet.h" />
     <ClInclude Include="Source\Actor\Planet\FirstPlanet.h" />
     <ClInclude Include="Source\Actor\Planet\PlanetBase.h" />
