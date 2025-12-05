@@ -8,6 +8,7 @@ class DeformEnemy;
 class UIPlayerLife;
 class UIDamageFlash;
 class UIBossLife;
+class UIGear;
 class Rocket;
 class Treasure;
 
@@ -109,6 +110,10 @@ public:
 	void Register(UIBossLife* uiBossLife);
 	void Unregister(UIBossLife* uiBossLife);
 
+	// ギアUI用
+	void Register(UIGear* uiGear);
+	void Unregister(UIGear* uiGear);
+
 	// ロケット用
 	void Register(Rocket* rocket);
 	void Unregister(Rocket* rocket);
@@ -117,7 +122,7 @@ public:
 	void Register(Treasure* treasure);
 	void Unregister(Treasure* treasure);
 
-	// その他汎用用
+	// その他汎用
 	template<typename T>
 	void Register(T* object)
 	{
@@ -142,6 +147,10 @@ private:
 	UIPlayerLife* m_uiPlayerLife = nullptr;
 	UIDamageFlash* m_uiDamageFlash = nullptr;
 	UIBossLife* m_uiBossLife = nullptr;
+	UIGear* m_uiGear = nullptr;
+	int m_gotGearCount = 0;
+	int m_maxGearCount = 0;
+	bool m_canLaunch = false;
 
 	Rocket* m_rocket = nullptr;
 	std::vector<Treasure*> m_treasures;

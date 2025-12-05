@@ -4,6 +4,10 @@
 class Treasure : public Actor
 {
 public:
+	const bool GetIsOpened() const
+	{
+		return m_isOpened;
+	}
 	void SetIsOpened(const bool isOpened)
 	{
 		m_isOpened = isOpened;

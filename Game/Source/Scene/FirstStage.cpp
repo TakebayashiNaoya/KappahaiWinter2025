@@ -7,6 +7,7 @@
 #include "Source/Actor/Object/Rocket/Rocket.h"
 #include "LoadingScreen.h"
 #include "Source/Actor/Object/Treasure/Treasure.h"
+#include "Source/UI/UIGear.h"
 
 
 FirstStage::FirstStage()
@@ -18,6 +19,9 @@ FirstStage::FirstStage()
 FirstStage::~FirstStage()
 {
 	DeleteGO(m_firstStage);
+
+	BattleManager::GetInstance()->Unregister(m_uiGear);
+	DeleteGO(m_uiGear);
 
 	BattleManager::GetInstance()->Unregister(m_rocket);
 	DeleteGO(m_rocket);
@@ -38,7 +42,9 @@ bool FirstStage::Start()
 	// ロード明けで音量が上がるため、一旦音量を0にしておく。
 	SoundManager::SetVolume(enSoundList_FirstStageBGM, 0.0f);
 
-	//NewGO<Treasure>(0, "Treasure");
+	m_uiGear = NewGO<UIGear>(0, "UIGear");
+	BattleManager::GetInstance()->Register(m_uiGear);
+
 	return true;
 }
 

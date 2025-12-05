@@ -262,6 +262,7 @@
     <ClCompile Include="Source\UI\UIDamageFlash.cpp" />
     <ClCompile Include="Source\UI\UIGameClear.cpp" />
     <ClCompile Include="Source\UI\UIGameOver.cpp" />
+    <ClCompile Include="Source\UI\UIGear.cpp" />
     <ClCompile Include="Source\UI\UIInGame.cpp" />
     <ClCompile Include="Source\UI\UIPlayerLife.cpp" />
     <ClCompile Include="Source\UI\UIResultBase.cpp" />
@@ -307,11 +308,13 @@
     <ClInclude Include="Source\Scene\SceneManager.h" />
     <ClInclude Include="Source\Scene\Title.h" />
     <ClInclude Include="Source\Sound\SoundManager.h" />
+    <ClInclude Include="Source\UI\TextTemplate.h" />
     <ClInclude Include="Source\UI\UIBossLife.h" />
     <ClInclude Include="Source\UI\UIControls.h" />
     <ClInclude Include="Source\UI\UIDamageFlash.h" />
     <ClInclude Include="Source\UI\UIGameClear.h" />
     <ClInclude Include="Source\UI\UIGameOver.h" />
+    <ClInclude Include="Source\UI\UIGear.h" />
     <ClInclude Include="Source\UI\UIInGame.h" />
     <ClInclude Include="Source\UI\UIPlayerLife.h" />
     <ClInclude Include="Source\UI\UIResultBase.h" />

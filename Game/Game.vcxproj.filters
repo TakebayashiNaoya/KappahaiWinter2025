@@ -190,6 +190,9 @@
     <ClCompile Include="Source\Actor\Object\Treasure\Treasure.cpp">
       <Filter>Source\Actor\Object\Treasure</Filter>
     </ClCompile>
+    <ClCompile Include="Source\UI\UIGear.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -317,6 +320,12 @@
     </ClInclude>
     <ClInclude Include="Source\Actor\Object\Treasure\Treasure.h">
       <Filter>Source\Actor\Object\Treasure</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\UIGear.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\TextTemplate.h">
+      <Filter>Source\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

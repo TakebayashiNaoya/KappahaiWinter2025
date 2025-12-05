@@ -10,6 +10,7 @@
 #include "Source/UI/UIBossLife.h"
 #include "Source/Actor/Object/Rocket/Rocket.h"
 #include "Source/Actor/Object/Treasure/Treasure.h"
+#include "Source/UI/UIGear.h"
 
 
 namespace
@@ -113,15 +114,7 @@ void BattleManager::Update()
 		m_uiBossLife->SetCurrentLife(m_bossEnemy->GetLife());
 	}
 
-	// プレイヤーがロケットに近づいたら、ロケットをゴール状態にする。
-	if (m_rocket && m_player) {
-		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
-		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
-			if (m_rocket != nullptr) {
-				m_rocket->SetIsGooled(true);
-			}
-		}
-	}
+
 
 	// プレイヤーが宝箱に近づいたら、宝箱を開ける。
 	if (m_player) {
@@ -129,13 +122,46 @@ void BattleManager::Update()
 			if (treasure == nullptr) {
 				continue;
 			}
+			else if (treasure->GetIsOpened()) {
+				continue;
+			}
+
 			Vector3 lengthVec = treasure->GetPosition() - m_player->GetPosition();
 			if (lengthVec.Length() < TREASURE_SEARCH_RADIUS) {
 				treasure->SetIsOpened(true);
+				m_gotGearCount++;
+			}
+		}
+	}
+
+	// ギアの取得数をUIに反映。
+	if (m_uiGear) {
+		m_uiGear->SetMaxGearCount(m_maxGearCount);
+		m_uiGear->SetGotGearCount(m_gotGearCount);
+	}
+
+	// ギアを全て集めたらロケットを発射可能にする。
+	if (m_maxGearCount > 0 && m_gotGearCount == m_maxGearCount) {
+		m_canLaunch = true;
+	}
+	else {
+		m_canLaunch = false;
+	}
+
+	// プレイヤーがロケットに近づいたら、ロケットをゴール状態にする。
+	if (m_rocket && m_player && m_canLaunch) {
+		Vector3 lengthVec = m_rocket->GetPosition() - m_player->GetPosition();
+		if (lengthVec.Length() < ROCKET_SEARCH_RADIUS) {
+			if (m_rocket != nullptr) {
+				m_rocket->SetIsGooled(true);
+				m_maxGearCount = 0;
+				m_gotGearCount = 0;
+				m_canLaunch = false;
 			}
 		}
 	}
 }
+
 
 void BattleManager::DestroyAllEnemies()
 {
@@ -159,6 +185,7 @@ void BattleManager::DestroyAllEnemies()
 	// ここでまとめて消す設計にしても構いません。
 }
 
+
 void BattleManager::Register(Player* player)
 {
 	m_player = player;
@@ -169,6 +196,7 @@ void BattleManager::Unregister(Player* player)
 	m_player = nullptr;
 }
 
+
 void BattleManager::Register(BossEnemy* boss)
 {
 	m_bossEnemy = boss;
@@ -178,6 +206,7 @@ void BattleManager::Unregister(BossEnemy* boss)
 {
 	m_bossEnemy = nullptr;
 }
+
 
 void BattleManager::Register(BasicEnemy* enemy)
 {
@@ -190,6 +219,7 @@ void BattleManager::Unregister(BasicEnemy* enemy)
 	m_basicEnemies.erase(it, m_basicEnemies.end());
 }
 
+
 void BattleManager::Register(DeformEnemy* enemy)
 {
 	m_deformEnemies.push_back(enemy);
@@ -201,6 +231,7 @@ void BattleManager::Unregister(DeformEnemy* enemy)
 	m_deformEnemies.erase(it, m_deformEnemies.end());
 }
 
+
 void BattleManager::Register(UIPlayerLife* uiPlayerLife)
 {
 	m_uiPlayerLife = uiPlayerLife;
@@ -210,6 +241,7 @@ void BattleManager::Unregister(UIPlayerLife* uiPlayerLife)
 {
 	m_uiPlayerLife = nullptr;
 }
+
 
 void BattleManager::Register(UIDamageFlash* uiDamageFlash)
 {
@@ -221,6 +253,7 @@ void BattleManager::Unregister(UIDamageFlash* uiDamageFlash)
 	m_uiDamageFlash = nullptr;
 }
 
+
 void BattleManager::Register(UIBossLife* uiBossLife)
 {
 	m_uiBossLife = uiBossLife;
@@ -230,6 +263,18 @@ void BattleManager::Unregister(UIBossLife* uiBossLife)
 {
 	m_uiBossLife = nullptr;
 }
+
+
+void BattleManager::Register(UIGear* uiGear)
+{
+	m_uiGear = uiGear;
+}
+
+void BattleManager::Unregister(UIGear* uiGear)
+{
+	m_uiGear = nullptr;
+}
+
 
 void BattleManager::Register(Rocket* rocket)
 {
@@ -241,9 +286,11 @@ void BattleManager::Unregister(Rocket* rocket)
 	m_rocket = nullptr;
 }
 
+
 void BattleManager::Register(Treasure* treasure)
 {
 	m_treasures.push_back(treasure);
+	m_maxGearCount++;
 }
 
 void BattleManager::Unregister(Treasure* treasure)
