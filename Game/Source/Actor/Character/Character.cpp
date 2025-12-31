@@ -14,38 +14,127 @@ namespace
 
 	const std::string MODEL_FILE_PATH = "Assets/modelData/Character/";
 	const std::string MODEL_EXTENSION = ".tkm";
+
+	/// <summary>
+	/// レイキャストのコールバッククラス。
+	/// </summary>
+	struct MyRayResultCallback : public btCollisionWorld::RayResultCallback
+	{
+		Vector3 hitPos;					// rayが当たった位置。
+		Vector3 hitNormal;				// rayが当たったポリゴンの法線。
+		Vector3 rayStart;				// rayの開始位置。
+		Vector3 rayEnd;					// rayの終了位置。
+		Vector3 upDirection;			// 上方向ベクトル。
+		bool	isHit = false;			// 当たったかどうか。
+		float	dist = FLT_MAX;			// 当たった距離の最小値。
+		float	maxHitAngle = Math::PI;	// 検知する最大角度（デフォルトは180度＝すべて検知）
+
+		btScalar addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace) override
+		{
+			// 地面以外に当たった場合は無視する。
+			if (rayResult.m_collisionObject->getCollisionFlags() != enCollisionAttr_Ground) {
+				return 1.0f;
+			}
+
+			// ポインタキャストで法線の取得。
+			// NOTE: 無理やり型を変換してコピーするため、安全ではない書き方なので注意。
+			Vector3 hitNormalTmp = *(Vector3*)&rayResult.m_hitNormalLocal;
+
+			// 安全な書き方（メンバーごとのコピー）
+			//btVector3& btVec = rayResult.m_hitNormalLocal;
+			//Vector3 hitNormalTmp;
+			//hitNormalTmp.x = btVec.x();
+			//hitNormalTmp.y = btVec.y();
+			//hitNormalTmp.z = btVec.z();
+
+			float dot = hitNormalTmp.Dot(upDirection);
+
+			// 内積値のプランク。
+			if (dot > 1.0f) {
+				dot = 1.0f;
+			}
+			if (dot < -1.0f) {
+				dot = -1.0f;
+			}
+
+			// 角度計算
+			float angle = acosf(dot);
+			angle = fabsf(angle);
+
+			// 変数(maxHitAngle)と比較する。
+			if (angle < maxHitAngle)
+			{
+				isHit = true;
+				Vector3 hitPosTmp;
+				hitPosTmp.Lerp(rayResult.m_hitFraction, rayStart, rayEnd);
+				Vector3 vDist = hitPosTmp - rayStart;
+				float distTmp = vDist.Length();
+
+				// 最小距離の更新。
+				if (dist > distTmp) {
+					hitPos = hitPosTmp;
+					hitNormal = hitNormalTmp;
+					dist = distTmp;
+				}
+			}
+			return rayResult.m_hitFraction;
+		}
+	};
+
+	/// <summary>
+	/// 指定した開始点から終了点までレイを飛ばし、最小距離かつ条件を満たす衝突点を検出します。
+	/// 内部で `MyRayResultCallback` を使い、`upDirection` と法線のなす角が `maxAngle` 以下のもののみをヒットとして扱います。
+	/// また、開始点と終了点がほぼ同一の場合は処理を行わず false を返します。
+	/// </summary>
+	/// <param name="rayStart">レイの開始座標。</param>
+	/// <param name="rayEnd">レイの終了座標。</param>
+	/// <param name="hitPosition">ヒットした位置を格納する出力引数（ヒットしなければ未変更のまま）。</param>
+	/// <param name="outNormal">ヒットしたポリゴンの法線を格納する出力引数。</param>
+	/// <param name="upDirection">比較用の上方向ベクトル（通常はキャラクターの上方向）。</param>
+	/// <param name="maxAngle">許容する最大角度（ラジアン）。この角度より大きい法線は無視される。既定は Math::PI（すべて許可）。</param>
+	/// <returns>ヒットした場合は true、ヒットしなければ false を返す。</returns>
+	bool RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPosition, Vector3& outNormal, const Vector3& upDirection, float maxAngle = Math::PI)
+	{
+		if ((rayStart - rayEnd).LengthSq() <= 0.01f) {
+			return false;
+		}
+
+		MyRayResultCallback rayCallback;
+		rayCallback.rayStart = rayStart;
+		rayCallback.rayEnd = rayEnd;
+		rayCallback.upDirection = upDirection;
+		rayCallback.maxHitAngle = maxAngle;
+
+		PhysicsWorld::GetInstance()->RayTest(rayStart, rayEnd, &rayCallback);
+		if (rayCallback.isHit) {
+			hitPosition = rayCallback.hitPos;
+			outNormal = rayCallback.hitNormal;
+			return true;
+		}
+		return false;
+	}
 }
 
 /// <summary>
-/// 地面に向かってレイを飛ばし、
-/// 当たった座標と自分の座標の距離が一定未満、
-/// あるいはレイが当たらなけらば接地していると判定します。
+/// 地面に向かってレイを飛ばし、当たった座標と自分の座標の距離が一定未満なら接地していると判定します。
 /// </summary>
 bool Character::GetIsOnGround()
 {
 	// 移動処理でhitPositionをm_positionに代入しており、レイの判定が不安定になるため、rayStartをm_positionから少し離す。
-	Vector3 rayStart = m_position + m_upDirection * 0.1f;
+	Vector3 rayStart = m_position + m_upDirection * 5.0f;
+	Vector3 rayEnd = m_planetCenter;
 	Vector3 hitPosition = Vector3::Zero;
 
-	if (PhysicsWorld::GetInstance()->RayTest(rayStart, m_planetCenter, hitPosition)) {
-		// レイが当たっていれば最後に当たった座標を記録。
-		m_lastHitPosition = hitPosition;
-
+	// インスタンスメソッドとしてPhysicsWorldのGetInstance()を使い、RayTestを呼び出す
+	if (PhysicsWorld::GetInstance()->RayTest(rayStart, rayEnd, hitPosition)) {
 		// キャラクター座標と当たった座標の距離を計算。
 		Vector3 DistanceToGround = m_position - hitPosition;
 		// 距離が一定未満なら接地していると判定。
 		if (DistanceToGround.Length() < 2.0f) {
 			return true;
 		}
-
 		return false;
 	}
-	// レイが当たっていない場合は地面下にいると判定し、最後にレイが当たった座標に戻す。
-	else {
-		//m_position = m_lastHitPosition;
-		//return true;
-	}
-
 	return false;
 }
 
@@ -219,19 +308,217 @@ const Vector3 Character::CalcVerticalVelocity()
 /// </summary>
 void Character::ComputePosition()
 {
-	Vector3 rayStartPos = m_position + m_upDirection * 10.0f;	// 少し上からレイを飛ばす。
-	Vector3 rayEndPos = m_position + m_moveSpeed;				// 移動先までレイを飛ばす。
+	// moveSpeedを分解
+	Vector3 totalMove = m_moveSpeed;				// 全体の移動量
+	Vector3 up = m_upDirection;						// 上方向（重力の逆）
+	float verticalComponent = totalMove.Dot(up);	// 上方向の成分だけ抽出
+	Vector3 vertMove = up * verticalComponent;		// 垂直移動ベクトル
+	Vector3 horiMove = totalMove - vertMove;		// 水平移動ベクトル（＝全体 - 垂直）
 
-	// レイが地面に当たったら、その位置に移動させる。
-	Vector3 hitPos = Vector3::Zero;
-	if (PhysicsWorld::GetInstance()->RayTest(rayStartPos, rayEndPos, hitPos)) {
-		// 地面にぶつかった
-		m_position = hitPos;
-		// ジャンプ終了
-		m_initialJumpSpeed = 0.0f;
-		m_fallTimer = 0.0f;
-		return;
+	// 2. 水平移動処理
+	if (horiMove.LengthSq() > 0.0001f)
+	{
+		const float WALKABLE_SLOPE_LIMIT = Math::PI * 0.4f; // 登れる角度
+		const float CHAR_RADIUS = 15.0f;					// 体の厚み（半径）
+		const float SKIN_WIDTH = 1.0f;						// 壁の手前の余白
+		const float BACK_CHECK_DIST = 5.0f;					// 埋まり防止の引き撃ち距離
+		// 埋まり時の押し出し係数。
+		// 壁の表面ぴったりに移動させると壁の中に入ってしまう恐れがあるため、少し余分に壁から離すための補正値。
+		const float RECOVERY_BUFFER = 1.0f;
+
+		Vector3 currentPos = m_position;
+
+
+		// --- 【第1段階】本来の移動方向へのトライ ---
+		Vector3 attemptMove = horiMove;	// 水平移動のみを対象にする。
+		bool needSlide = false;			// 滑り処理が必要かどうかのフラグ。
+
+		// 水平移動量がある場合のみ処理。
+		float moveDist = attemptMove.Length();
+		if (moveDist > 0.0001f)
+		{
+			// 水平移動の方向ベクトルを保存。
+			Vector3 dir = attemptMove;
+			dir.Normalize();
+
+			// 足元からレイを飛ばすと段差に引っかかるので、少し高い位置（腰など）から飛ばす。
+			Vector3 rayOriginOffset = up * 30.0f;
+			// startPos：現在地から少し「後ろ」に引いた座標。
+			// NOTE：すでに壁に少しめり込んでいた場合、現在地から飛ばすと壁の裏側から飛ばすことになり、検知できないため。
+			Vector3 startPos = currentPos + rayOriginOffset - (dir * BACK_CHECK_DIST);
+			// checkLength：レイの長さ。
+			// 式：引き撃ち分 + 移動したい距離 + 体の半径 + 余白
+			// NOTE：中心が壁に到達する前に止めたいので、「体の半径分」余分に先読みする必要があります。
+			float checkLength = BACK_CHECK_DIST + moveDist + CHAR_RADIUS + SKIN_WIDTH;
+			// endPos：レイの終点。
+			Vector3 endPos = startPos + (dir * checkLength);
+
+			// rayが当たった座標を受け取る変数と、rayが当たったポリゴンの法線を受け取る変数を用意。
+			Vector3 hitPos, hitNormal;
+
+			if (RayTest(startPos, endPos, hitPos, hitNormal, up))
+			{
+				// 壁までの距離を算出。
+				// distFromCurrent: 「本来の現在地（中心）」から「壁の表面」までの距離
+				// 計算式：(レイの全長 - 引き撃ち分)
+				float distFromCurrent = (hitPos - startPos).Length() - BACK_CHECK_DIST;
+				// availableDistance: 「実際に進める距離」
+				// 計算式: 壁までの距離 - 体の半径
+				// NOTE：体の表面が壁に触れるところで止めるため。
+				float availableDistance = distFromCurrent - CHAR_RADIUS;
+
+				// 埋まったとき（体の表面の座標が壁の裏側になったとき）に、押し出す処理。
+				// 法線方向に、埋まっている分と、少し余分に押し出す。
+				if (availableDistance < 0.0f) {
+					float penetrationDepth = -availableDistance;
+					currentPos += hitNormal * (penetrationDepth + RECOVERY_BUFFER);
+					availableDistance = 0.0f;
+				}
+
+				// upとrayが当たったポリゴンの法線との角度をクランプ・計算する。
+				float dot = hitNormal.Dot(up);
+				if (dot > 1.0f) {
+					dot = 1.0f;
+				}
+				else if (dot < -1.0f) {
+					dot = -1.0f;
+				}
+				float slopeAngle = acosf(dot);
+
+				// 角度が登れる角度よりも急なら「壁」とみなす。
+				if (slopeAngle > WALKABLE_SLOPE_LIMIT)
+				{
+					// 壁の手前まで移動
+					float actualMove = max(0.0f, availableDistance - SKIN_WIDTH);
+					Vector3 moveVec = dir * actualMove;
+					currentPos += moveVec;
+
+					// 本来の移動ベクトルから、実際に移動した分を引き、移動できなかった分を計算する。
+					Vector3 currentRemaining = attemptMove - moveVec;
+
+					// 移動できなかった分を、法線方向に投影して引き算を行う。
+					float d = currentRemaining.Dot(hitNormal);
+					if (d < 0.0f) {
+						attemptMove = currentRemaining - hitNormal * d;
+						// 張り付き防止に少しだけ法線方向に移動させる。
+						attemptMove += hitNormal * 0.1f;
+					}
+					else {
+						attemptMove = currentRemaining;
+					}
+
+					// 滑り移動を行うフラグを立てる
+					needSlide = true;
+				}
+				else {
+					// 登れるのでそのまま進んで終了
+					currentPos += attemptMove;
+					needSlide = false;
+				}
+			}
+			else {
+				// 障害物なし：そのまま進んで終了
+				currentPos += attemptMove;
+				needSlide = false;
+			}
+		}
+
+		// 直前の移動で滑り処理が必要になった場合、滑り先のチェックを行う。
+		// 途中までは直前の処理と同じ。
+		if (needSlide && attemptMove.LengthSq() > 0.0001f)
+		{
+			moveDist = attemptMove.Length();
+			Vector3 dir = attemptMove;
+			dir.Normalize();
+
+			Vector3 rayOriginOffset = up * 30.0f;
+			Vector3 startPos = currentPos + rayOriginOffset - (dir * BACK_CHECK_DIST);
+			float checkLength = BACK_CHECK_DIST + moveDist + CHAR_RADIUS + SKIN_WIDTH;
+			Vector3 endPos = startPos + (dir * checkLength);
+			Vector3 hitPos, hitNormal;
+
+			if (RayTest(startPos, endPos, hitPos, hitNormal, up))
+			{
+				float distFromCurrent = (hitPos - startPos).Length() - BACK_CHECK_DIST;
+				float availableDistance = distFromCurrent - CHAR_RADIUS;
+
+				if (availableDistance < 0.0f) {
+					float penetrationDepth = -availableDistance;
+					currentPos += hitNormal * (penetrationDepth + RECOVERY_BUFFER);
+					availableDistance = 0.0f;
+				}
+
+				float dot = hitNormal.Dot(up);
+				if (dot > 1.0f) {
+					dot = 1.0f;
+				}
+				else if (dot < -1.0f) {
+					dot = -1.0f;
+				}
+				float slopeAngle = acosf(dot);
+
+				if (slopeAngle > WALKABLE_SLOPE_LIMIT) {
+					// 壁の手前まで移動して停止
+					// ※ループしないので、ここで移動は打ち止め（角で止まる挙動）
+					float actualMove = max(0.0f, availableDistance - SKIN_WIDTH);
+					currentPos += dir * actualMove;
+				}
+				else {
+					// 坂とみなし、登る。
+					currentPos += attemptMove;
+				}
+			}
+			else
+			{
+				// 障害物なし：スライド移動完了
+				currentPos += attemptMove;
+			}
+		}
+
+		// 最終位置を確定
+		m_position = currentPos;
 	}
-	// 地面にぶつからなかったら、そのまま移動させる。
-	m_position = rayEndPos;
+
+	// 垂直移動。
+	Vector3 rayStartPos = m_position + up * 30.0f;
+	Vector3 rayEndPos = m_position + vertMove - (up * 5.0f);
+	Vector3 hitPos, hitNormal;
+
+	if (RayTest(rayStartPos, rayEndPos, hitPos, hitNormal, up, Math::PI))
+	{
+		float dot = hitNormal.Dot(up);
+		if (dot > 1.0f) {
+			dot = 1.0f;
+		}
+		if (dot < -1.0f) {
+			dot = -1.0f;
+		}
+		float angle = acosf(dot);
+
+		const float WALKABLE_LIMIT = Math::PI * 0.4f;
+
+		if (angle <= WALKABLE_LIMIT) {
+			m_position = hitPos;
+			m_initialJumpSpeed = 0.0f;
+			m_fallTimer = 0.0f;
+			vertMove = Vector3::Zero;
+		}
+		else {
+			m_position = hitPos;
+			Vector3 slideVector = vertMove - hitNormal * vertMove.Dot(hitNormal);
+			vertMove = slideVector;
+		}
+	}
+	else
+	{
+		m_position += vertMove;
+	}
+
+	// 微小な移動量なら、強制的にゼロにする
+	if (horiMove.Length() <= 0.0001f) {
+		horiMove = Vector3::Zero;
+	}
+
+	// 垂直移動と合成する
+	m_moveSpeed = horiMove + vertMove;
 }

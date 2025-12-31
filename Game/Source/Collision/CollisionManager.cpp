@@ -398,7 +398,7 @@ CollisionObject* CollisionHitManager::CreateCollider(
 
 
 CollisionObject* CollisionHitManager::CreateCollider(
-	Character* ins, const EnCollisionType type, const float radius, const bool isTrigger)
+	Character* ins, const EnCollisionType type, const float radius, const int index)
 {
 	// ゴーストオブジェクトを作成。
 	CollisionObject* collider = new CollisionObject();
@@ -412,7 +412,7 @@ CollisionObject* CollisionHitManager::CreateCollider(
 	m_instance->Register(type, collider, ins);
 
 	// RayTestで無視するかどうかを設定。
-	m_instance->SetIsTrigger(collider, isTrigger);
+	m_instance->SetIsTrigger(collider, index);
 
 	return collider;
 }
@@ -475,11 +475,11 @@ CollisionObject* CollisionHitManager::DeleteCollider(CollisionObject* collider)
 	return nullptr;
 }
 
-void CollisionHitManager::SetIsTrigger(CollisionObject* collider, bool isTrigger)
+void CollisionHitManager::SetIsTrigger(CollisionObject* collider, int index)
 {
 	if (collider) {
 		// true(トリガー)なら 1、false(通常)なら 0 をセット
-		collider->GetbtCollisionObject().setUserIndex(isTrigger ? 1 : 0);
+		collider->GetbtCollisionObject().setUserIndex(index);
 	}
 }
 

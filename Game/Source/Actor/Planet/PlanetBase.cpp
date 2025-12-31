@@ -33,4 +33,5 @@ void PlanetBase::InitModel(const std::string filePath, const Vector3 position)
 	m_modelRender.SetTRS(position, m_rotation, m_scale);
 	m_modelRender.Update();
 	physicsStaticObject.CreateFromModel(m_modelRender.GetModel(), m_modelRender.GetModel().GetWorldMatrix());
+	physicsStaticObject.GetbtCollisionObject()->setCollisionFlags(enCollisionAttr_Ground);
 }

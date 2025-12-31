@@ -186,7 +186,7 @@ bool Player::Start()
 		this,
 		enCollisionType_Player,
 		HURT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Player
 	);
 
 	m_modelRender.AddAnimationEvent([&](const wchar_t* clipName, const wchar_t* eventName) {

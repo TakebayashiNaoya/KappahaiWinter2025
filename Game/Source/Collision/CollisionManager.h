@@ -142,7 +142,7 @@ public:
 	/// <param name="type"> 作成するコライダーの種類を指定する列挙型（EnCollisionType）。</param>
 	/// <param name="size"> 球の半径。</param>
 	/// <returns> コライダーのポインタ。</returns>
-	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const bool isTrigger);
+	CollisionObject* CreateCollider(Character* ins, const EnCollisionType type, const float radius, const int index);
 	/// <summary>
 	/// カプセル型のコライダーを生成し、コリジョンヒットマネージャーに登録します。
 	/// </summary>
@@ -172,7 +172,7 @@ public:
 	/// </summary>
 	/// <param name="collider"> 属性IDを設定するコライダーのポインタ。</param>
 	/// <param name="isTrigger"> trueならトリガー、falseなら通常のコライダー。</param>
-	void SetIsTrigger(CollisionObject* collider, bool isTrigger);
+	void SetIsTrigger(CollisionObject* collider, int index);
 
 	/**
 	 * シングルトン関連

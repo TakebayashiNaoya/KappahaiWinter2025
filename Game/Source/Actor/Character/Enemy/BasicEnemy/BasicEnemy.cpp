@@ -1,10 +1,10 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "BasicEnemy.h"
 #include "BasicEnemyStateMachine.h"
 #include "Source/Collision/CollisionManager.h"
 
-// ƒwƒbƒ_[‚ÌstaticéŒ¾‚ğÁ‚µA‚±‚ê‚ğƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å’è‹`‚·‚ê‚ÎA“¯‚¶ƒNƒ‰ƒX‚ğg‚Á‚Ä‚àˆá‚¤PLAYER_ANIMATION_OPTIONS‚ğİ’è‚Å‚«‚éB
-// ‚½‚¾Astatic‚Ì•û‚ªƒƒ‚ƒŠŒø—¦‚Í—Ç‚¢‚Ì‚Å¡‰ñ‚Í‚±‚ÌŒ`B
+// ãƒ˜ãƒƒãƒ€ãƒ¼ã®staticå®£è¨€ã‚’æ¶ˆã—ã€ã“ã‚Œã‚’ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§å®šç¾©ã™ã‚Œã°ã€åŒã˜ã‚¯ãƒ©ã‚¹ã‚’ä½¿ã£ã¦ã‚‚é•ã†PLAYER_ANIMATION_OPTIONSã‚’è¨­å®šã§ãã‚‹ã€‚
+// ãŸã ã€staticã®æ–¹ãŒãƒ¡ãƒ¢ãƒªåŠ¹ç‡ã¯è‰¯ã„ã®ã§ä»Šå›ã¯ã“ã®å½¢ã€‚
 const Character::AnimationOption BasicEnemy::BASIC_ENEMY_ANIMATION_OPTIONS[] = {
    {"Wolf/idle",	true},
    {"Wolf/walk", true},
@@ -16,11 +16,11 @@ namespace
 	const std::string MODEL_PATH = "Wolf/wolf";
 	constexpr float MODEL_SCALE = 70.0f;
 
-	constexpr float HIT_COLLIDER_RADIUS = 50.0f;					// “–‚½‚èƒRƒ‰ƒCƒ_[‚ÌƒTƒCƒYB
-	constexpr float HURT_COLLIDER_RADIUS = 100.0f;					// ‚â‚ç‚êƒRƒ‰ƒCƒ_[‚ÌƒTƒCƒYB
-	constexpr float COLLIDER_OFFSET = 50.0f;						// ƒS[ƒXƒgƒIƒuƒWƒFƒNƒg‚ÌƒIƒtƒZƒbƒg’lB
+	constexpr float HIT_COLLIDER_RADIUS = 50.0f;					// å½“ãŸã‚Šã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚ºã€‚
+	constexpr float HURT_COLLIDER_RADIUS = 100.0f;					// ã‚„ã‚‰ã‚Œã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®ã‚µã‚¤ã‚ºã€‚
+	constexpr float COLLIDER_OFFSET = 50.0f;						// ã‚´ãƒ¼ã‚¹ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ•ã‚»ãƒƒãƒˆå€¤ã€‚
 
-	constexpr float RUN_SPEED = 8.0f;								// ‘–‚é‘¬“x
+	constexpr float RUN_SPEED = 8.0f;								// èµ°ã‚‹é€Ÿåº¦
 }
 
 BasicEnemy::BasicEnemy()
@@ -33,22 +33,22 @@ BasicEnemy::~BasicEnemy()
 }
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ÉŒü‚©‚Á‚Ä‘–‚è‚Ü‚·B
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«å‘ã‹ã£ã¦èµ°ã‚Šã¾ã™ã€‚
 /// </summary>
 void BasicEnemy::ChasePlayer()
 {
-	// …•½•ûŒü‚É‘¬“x‰ÁZB
+	// æ°´å¹³æ–¹å‘ã«é€Ÿåº¦åŠ ç®—ã€‚
 	m_moveSpeed += CalcHorizontalVelocity(RUN_SPEED);
 
-	// ‚’¼•ûŒü‚É‘¬“x‰ÁZB
+	// å‚ç›´æ–¹å‘ã«é€Ÿåº¦åŠ ç®—ã€‚
 	m_moveSpeed += CalcVerticalVelocity();
 
-	// ˆÚ“®‘¬“x‚©‚çÀ•WXVB
+	// ç§»å‹•é€Ÿåº¦ã‹ã‚‰åº§æ¨™æ›´æ–°ã€‚
 	ComputePosition();
 }
 
 /// <summary>
-/// ƒN[ƒ‹ƒ_ƒEƒ“‚ğƒJƒEƒ“ƒgƒ_ƒEƒ“‚µ‚Ü‚·B
+/// ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ã‚’ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã—ã¾ã™ã€‚
 /// </summary>
 void BasicEnemy::CoolDownCount()
 {
@@ -62,26 +62,26 @@ void BasicEnemy::CoolDownCount()
 
 bool BasicEnemy::Start()
 {
-	// ƒ‚ƒfƒ‹‚ÆƒAƒjƒ[ƒVƒ‡ƒ“‚ğ‰Šú‰»B
+	// ãƒ¢ãƒ‡ãƒ«ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åˆæœŸåŒ–ã€‚
 	InitModel(enAnimationClip_Num, BASIC_ENEMY_ANIMATION_OPTIONS, MODEL_PATH, MODEL_SCALE);
 
-	// ‰ŠúƒXƒe[ƒg‚ğİ’è
+	// åˆæœŸã‚¹ãƒ†ãƒ¼ãƒˆã‚’è¨­å®š
 	m_stateMachine->InitializeState(enBasicEnemyState_Idle);
 
-	// UŒ‚”»’è‚ÌƒRƒ‰ƒCƒ_[‚ğì¬B
+	// æ”»æ’ƒåˆ¤å®šã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆã€‚
 	m_hitCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_BasicEnemy,
 		HIT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Enemy
 	);
 
-	// ‚â‚ç‚ê”»’è‚ÌƒRƒ‰ƒCƒ_[‚ğì¬B
+	// ã‚„ã‚‰ã‚Œåˆ¤å®šã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ä½œæˆã€‚
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_BasicEnemy,
 		HURT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Enemy
 	);
 
 	m_modelRender.Update();
@@ -90,7 +90,7 @@ bool BasicEnemy::Start()
 
 void BasicEnemy::Update()
 {
-	// ƒ|[ƒY’†‚Ü‚½‚Íí“¬I—¹‚ÍXV‚µ‚È‚¢B
+	// ãƒãƒ¼ã‚ºä¸­ã¾ãŸã¯æˆ¦é—˜çµ‚äº†æ™‚ã¯æ›´æ–°ã—ãªã„ã€‚
 	if (BattleManager::GetIsBattleFinish()) {
 		return;
 	}
@@ -98,7 +98,7 @@ void BasicEnemy::Update()
 
 	m_moveSpeed = Vector3::Zero;
 
-	//u˜f¯‚Ì’†S¨ƒLƒƒƒ‰v‚ÌƒxƒNƒgƒ‹‚ğŒvZ‚µA³‹K‰»‚µ‚Ü‚·B
+	//ã€Œæƒ‘æ˜Ÿã®ä¸­å¿ƒâ†’ã‚­ãƒ£ãƒ©ã€ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨ˆç®—ã—ã€æ­£è¦åŒ–ã—ã¾ã™ã€‚
 	UpdateUpDirection();
 
 	m_stateMachine->Update();

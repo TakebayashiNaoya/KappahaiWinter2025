@@ -92,14 +92,14 @@ bool DeformEnemy::Start()
 		this,
 		enCollisionType_DeformEnemy,
 		HIT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Enemy
 	);
 	// ゴーストオブジェクトを作成。
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_DeformEnemy,
 		HURT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Enemy
 	);
 
 	m_modelRender.Update();

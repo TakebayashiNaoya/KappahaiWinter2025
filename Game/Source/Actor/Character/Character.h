@@ -223,7 +223,6 @@ protected:
 	float		m_speedBeforeJump = 0.0f;							// ジャンプ前の移動速度。
 	float		m_initialJumpSpeed = 0.0f;							// ジャンプ速度。
 	float		m_fallTimer = 0.0f;									// 落下時間。
-	Vector3		m_lastHitPosition = Vector3::Zero;					// 最後に地面に接地した位置。
 
 	//---移動・回転関連---//
 	Vector3     m_moveSpeed = Vector3::Zero;						// 移動速度。

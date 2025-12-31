@@ -19,7 +19,7 @@ namespace
 	const std::string MODEL_PATH = "Bear/bear";
 	constexpr float MODEL_SCALE = 200.0f;
 
-	constexpr int MAX_LIFE = 1;										// 最大体力。
+	constexpr int MAX_LIFE = 10;										// 最大体力。
 
 	constexpr float COLLIDER_OFFSET = 100.0f;							// ボディコライダーのオフセット値。
 	constexpr float HIT_COLLIDER_RADIUS = 100.0f;						// 当たりコライダーのサイズ。
@@ -97,7 +97,7 @@ void BossEnemy::OnAnimationEvent(const wchar_t* clipName, const wchar_t* eventNa
 			this,
 			enCollisionType_BossEnemy,
 			ATTACK_RADIUS,
-			true
+			app::EnCollisionAttr::enCollisionAttr_Enemy
 		);
 
 		Vector3 attackPosition = m_position + m_attackDirection * ATTACK_RANGE;
@@ -145,14 +145,14 @@ bool BossEnemy::Start()
 		this,
 		enCollisionType_BossEnemy,
 		HIT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Enemy
 	);
 	// やられ判定のコライダーを作成。
 	m_hurtCollider = CollisionHitManager::GetInstance()->CreateCollider(
 		this,
 		enCollisionType_BossEnemy,
 		HURT_COLLIDER_RADIUS,
-		true
+		app::EnCollisionAttr::enCollisionAttr_Enemy
 	);
 
 	//アニメーションイベント用の関数を設定する。

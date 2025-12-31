@@ -9,3 +9,16 @@ using namespace nsK2Engine;
 // ’Ç‰Á
 #include "Source/Sound/SoundManager.h"
 #include "Source/Battle/BattleManager.h"
+
+
+
+
+// @todo for test
+namespace app
+{
+	enum EnCollisionAttr
+	{
+		enCollisionAttr_Player = enCollisionAttr_User,
+		enCollisionAttr_Enemy,
+	};
+}

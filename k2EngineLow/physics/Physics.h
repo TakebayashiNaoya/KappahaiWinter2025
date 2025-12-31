@@ -133,6 +133,8 @@ namespace nsK2EngineLow {
 		bool RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const;
 
 
+		void RayTest(const Vector3& rayStart, const Vector3& rayEnd, btCollisionWorld::RayResultCallback* cb) const;
+
 
 		/*!
 		* @brief	コリジョンオブジェクトをワールドに登録。

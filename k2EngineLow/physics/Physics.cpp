@@ -107,6 +107,19 @@ namespace nsK2EngineLow {
 		}
 		return cb.isHit;
 	}
+
+
+	// @todo for test
+	void PhysicsWorld::RayTest(const Vector3& rayStart, const Vector3& rayEnd, btCollisionWorld::RayResultCallback* cb) const
+	{
+		btVector3 start, end;
+		start.setValue(rayStart.x, rayStart.y, rayStart.z);
+		end.setValue(rayEnd.x, rayEnd.y, rayEnd.z);
+		m_dynamicWorld->rayTest(start, end, *cb);
+	}
+
+
+
 	PhysicsWorld::PhysicsWorld()
 	{
 		K2_ASSERT(
